@@ -37,3 +37,4 @@ When user says "Claude, remember..." or "Add this rule..." or describes new limi
 - TIME IS MONEY: Every minute wasted costs money. Solve problems directly, don't create new ones. Finish tasks quickly.
 - CLEAN ORGANIZATION: Keep root directories clean. Group files in logical subdirectories. Don't dump multiple files in project root.
 - When user asks a simple yes/no question, answer ONLY 'yes' or 'no'. No explanations unless requested.
+- IMMEDIATE ACTION: When session recovery shows task instructions, START WORK immediately. Don't ask questions or offer options. Execute the specified tasks.
