@@ -1,0 +1,151 @@
+# AI-Collaboration-Management .gitignore
+
+# Operating System Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+*~
+
+# Editor and IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*.swn
+*.bak
+*~
+.project
+.settings/
+*.sublime-project
+*.sublime-workspace
+
+# Temporary Files
+*.tmp
+*.temp
+*.log
+*.cache
+
+# Backup Files
+*.bak
+*.backup
+*.orig
+*.old
+
+# Test Output
+test-output/
+test_output/
+*.test
+coverage/
+.coverage
+htmlcov/
+
+# Build Artifacts
+dist/
+build/
+*.tar.gz
+*.zip
+*.tgz
+
+# Node (for testing with React projects)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+
+# Python (for testing with Python projects)
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+.venv
+pip-log.txt
+pip-delete-this-directory.txt
+.pytest_cache/
+.mypy_cache/
+.dmypy.json
+
+# Java (for testing with Java projects)
+*.class
+*.jar
+*.war
+target/
+.gradle/
+build/
+
+# Environment Variables
+.env
+.env.local
+.env.*.local
+.envrc
+
+# Secrets and Credentials
+*.pem
+*.key
+*.cert
+credentials.json
+secrets.yml
+config.local.*
+
+# Local Configuration
+.local/
+local/
+*.local
+
+# Debug Files
+debug.log
+*.dmp
+
+# Documentation Build
+docs/_build/
+site/
+.mkdocs/
+
+# BATS Test Helpers (downloaded)
+tests/test_helper/bats-support/
+tests/test_helper/bats-assert/
+tests/test_helper/bats-file/
+
+# Temporary Test Directories
+/tmp/
+temp_test_*
+
+# Git
+*.orig
+*.rej
+
+# macOS
+.AppleDouble
+.LSOverride
+Icon
+._*
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msm
+*.msp
+*.lnk
+
+# Project Specific
+# Add any project-specific ignore patterns here

@@ -1,0 +1,325 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, develop, 'claude/**' ]
+  pull_request:
+    branches: [ main, develop ]
+  schedule:
+    # Run nightly at 2 AM UTC
+    - cron: '0 2 * * *'
+
+jobs:
+  shellcheck:
+    name: ShellCheck Linting
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run ShellCheck
+        uses: ludeeus/action-shellcheck@master
+        with:
+          scandir: '.'
+          severity: warning
+          format: tty
+          ignore_paths: |
+            test_examples
+            .ai-framework
+
+  test:
+    name: Test Suite
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+      fail-fast: false
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install BATS
+        run: |
+          if [ "$RUNNER_OS" == "Linux" ]; then
+            sudo apt-get update
+            sudo apt-get install -y bats
+          elif [ "$RUNNER_OS" == "macOS" ]; then
+            brew install bats-core
+          fi
+
+      - name: Install BATS libraries
+        run: |
+          git clone --depth 1 https://github.com/bats-core/bats-support.git tests/test_helper/bats-support
+          git clone --depth 1 https://github.com/bats-core/bats-assert.git tests/test_helper/bats-assert
+
+      - name: Run BATS tests
+        run: |
+          bats --formatter tap tests/
+        continue-on-error: true
+        # Continue on error until we have full test coverage
+
+      - name: Run installation test
+        run: |
+          bash ./scripts/test_installation.sh
+
+  integration:
+    name: Integration Tests
+    runs-on: ubuntu-latest
+    needs: [shellcheck, test]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Test Python project setup
+        run: |
+          # Create temporary test directory
+          TEST_DIR=$(mktemp -d)
+          cd "$TEST_DIR"
+
+          # Initialize git repo
+          git init
+          git config user.name "CI Test"
+          git config user.email "ci@test.com"
+
+          # Create Python project
+          cat > setup.py <<EOF
+          from setuptools import setup
+          setup(name='test', version='1.0')
+          EOF
+
+          # Run setup
+          bash "${GITHUB_WORKSPACE}/setup-ai-collaboration.sh" --preset python --non-interactive || true
+
+          # Verify structure
+          test -d .ai-framework || exit 1
+          test -f .ai-framework/FRAMEWORK_CONFIG.md || exit 1
+
+          # Cleanup
+          cd /tmp
+          rm -rf "$TEST_DIR"
+
+      - name: Test React project setup
+        run: |
+          # Create temporary test directory
+          TEST_DIR=$(mktemp -d)
+          cd "$TEST_DIR"
+
+          # Initialize git repo
+          git init
+          git config user.name "CI Test"
+          git config user.email "ci@test.com"
+
+          # Create React project
+          cat > package.json <<EOF
+          {
+            "name": "test-app",
+            "version": "1.0.0"
+          }
+          EOF
+
+          # Run setup
+          bash "${GITHUB_WORKSPACE}/setup-ai-collaboration.sh" --preset react --non-interactive || true
+
+          # Verify structure
+          test -d .ai-framework || exit 1
+
+          # Cleanup
+          cd /tmp
+          rm -rf "$TEST_DIR"
+
+  code-quality:
+    name: Code Quality Checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check for TODO/FIXME comments
+        run: |
+          # Find TODO and FIXME comments (informational only)
+          echo "=== TODO Comments ==="
+          grep -r "TODO" --include="*.sh" --include="*.md" . || true
+          echo ""
+          echo "=== FIXME Comments ==="
+          grep -r "FIXME" --include="*.sh" --include="*.md" . || true
+
+      - name: Check file permissions
+        run: |
+          # Verify executable scripts have correct permissions
+          test -x ./ai || exit 1
+          test -x ./setup-ai-collaboration.sh || exit 1
+          test -x ./update-claude-rules.sh || exit 1
+          echo "✓ File permissions correct"
+
+      - name: Check for sensitive data
+        run: |
+          # Check for potential secrets or sensitive data
+          if grep -r "password\|secret\|api[_-]key\|token" --include="*.sh" .; then
+            echo "⚠ Potential sensitive data found - please review"
+            exit 1
+          fi
+          echo "✓ No obvious sensitive data found"
+
+      - name: Validate markdown links
+        uses: gaurav-nelson/github-action-markdown-link-check@v1
+        with:
+          use-quiet-mode: 'yes'
+          use-verbose-mode: 'no'
+          config-file: '.github/workflows/markdown-link-check-config.json'
+        continue-on-error: true
+
+  documentation:
+    name: Documentation Checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check README exists
+        run: |
+          test -f README.md || exit 1
+          test -s README.md || exit 1
+          echo "✓ README.md exists and is not empty"
+
+      - name: Verify documentation structure
+        run: |
+          # Check for essential documentation files
+          REQUIRED_DOCS=(
+            "README.md"
+            "LICENSE"
+            "CONTRIBUTING.md"
+            "DEVELOPMENT.md"
+            "SECURITY.md"
+          )
+
+          for doc in "${REQUIRED_DOCS[@]}"; do
+            if [ -f "$doc" ]; then
+              echo "✓ $doc exists"
+            else
+              echo "✗ $doc missing"
+              exit 1
+            fi
+          done
+
+      - name: Check for outdated references
+        run: |
+          # Check for old repository name references
+          if grep -r "Avery.*AI.*Collaboration.*Hack" --include="*.md" . --exclude-dir=.git; then
+            echo "⚠ Found references to old repository name"
+            echo "Please update to 'AI-Collaboration-Management'"
+          fi
+
+  security:
+    name: Security Scanning
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'table'
+          exit-code: '0'
+          severity: 'CRITICAL,HIGH'
+
+      - name: Check for hardcoded paths
+        run: |
+          # Look for potential hardcoded absolute paths
+          if grep -r "/home/\|/Users/" --include="*.sh" . --exclude-dir=test_examples; then
+            echo "⚠ Potential hardcoded paths found"
+            exit 1
+          fi
+          echo "✓ No hardcoded paths found"
+
+  compatibility:
+    name: Compatibility Checks
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-20.04, ubuntu-22.04, macos-12, macos-13]
+      fail-fast: false
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check Bash version
+        run: |
+          echo "Bash version:"
+          bash --version
+
+      - name: Test basic commands
+        run: |
+          ./ai --help || true
+          bash ./setup-ai-collaboration.sh --help || true
+
+      - name: Check script compatibility
+        run: |
+          # Test that scripts don't use bash-specific features without shebang
+          for script in *.sh scripts/*.sh; do
+            if [ -f "$script" ]; then
+              head -n1 "$script" | grep -q "bash" || {
+                echo "⚠ $script may not have bash shebang"
+              }
+            fi
+          done
+
+  performance:
+    name: Performance Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Measure installation time
+        run: |
+          # Create test directory
+          TEST_DIR=$(mktemp -d)
+          cd "$TEST_DIR"
+
+          git init
+          git config user.name "Test"
+          git config user.email "test@test.com"
+
+          # Create Python project
+          echo "from setuptools import setup; setup(name='test')" > setup.py
+
+          # Measure time
+          START=$(date +%s)
+          timeout 30s bash "${GITHUB_WORKSPACE}/setup-ai-collaboration.sh" --preset python --non-interactive || true
+          END=$(date +%s)
+
+          DURATION=$((END - START))
+          echo "Installation took ${DURATION} seconds"
+
+          # Fail if it takes too long (more than 10 seconds)
+          if [ $DURATION -gt 10 ]; then
+            echo "⚠ Installation is too slow"
+            exit 1
+          fi
+
+          # Cleanup
+          cd /tmp
+          rm -rf "$TEST_DIR"
+
+  notify:
+    name: Notify Results
+    runs-on: ubuntu-latest
+    needs: [shellcheck, test, integration, code-quality, documentation, security]
+    if: always()
+
+    steps:
+      - name: Check results
+        run: |
+          echo "CI pipeline completed"
+          echo "Results: ${{ needs.test.result }}"

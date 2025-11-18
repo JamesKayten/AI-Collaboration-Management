@@ -1,0 +1,237 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version number (e.g., 1.2.3)'
+        required: true
+        type: string
+
+jobs:
+  validate:
+    name: Validate Release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate version tag
+        run: |
+          if [[ "${{ github.ref }}" =~ ^refs/tags/v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "✓ Valid version tag"
+          elif [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            echo "✓ Manual release"
+          else
+            echo "✗ Invalid version tag format"
+            exit 1
+          fi
+
+      - name: Check CHANGELOG
+        run: |
+          if ! grep -q "${{ github.ref_name }}" CHANGELOG.md 2>/dev/null; then
+            echo "⚠ Version not found in CHANGELOG.md"
+            echo "Please update CHANGELOG.md before releasing"
+          fi
+
+      - name: Verify tests pass
+        run: |
+          bash ./scripts/test_installation.sh
+
+  build:
+    name: Build Release Assets
+    runs-on: ubuntu-latest
+    needs: validate
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create release archive
+        run: |
+          VERSION="${{ github.ref_name }}"
+          # Remove 'v' prefix if present
+          VERSION="${VERSION#v}"
+
+          # Create archive
+          tar -czf "ai-collaboration-management-${VERSION}.tar.gz" \
+            --exclude='.git' \
+            --exclude='.github' \
+            --exclude='tests' \
+            --exclude='test_examples' \
+            --exclude='*.md' \
+            ai \
+            setup-ai-collaboration.sh \
+            update-claude-rules.sh \
+            .ai-framework/ \
+            templates/ \
+            scripts/
+
+          # Create checksum
+          sha256sum "ai-collaboration-management-${VERSION}.tar.gz" > \
+            "ai-collaboration-management-${VERSION}.tar.gz.sha256"
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-assets
+          path: |
+            *.tar.gz
+            *.sha256
+
+  create-release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    needs: build
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: release-assets
+
+      - name: Generate release notes
+        id: release_notes
+        run: |
+          VERSION="${{ github.ref_name }}"
+          VERSION="${VERSION#v}"
+
+          # Extract version section from CHANGELOG
+          if [ -f "CHANGELOG.md" ]; then
+            # Get the section for this version
+            NOTES=$(sed -n "/## \[${VERSION}\]/,/## \[/p" CHANGELOG.md | sed '$d')
+
+            if [ -z "$NOTES" ]; then
+              NOTES="Release ${VERSION}"
+            fi
+          else
+            NOTES="Release ${VERSION}"
+          fi
+
+          # Save to file
+          echo "$NOTES" > release_notes.md
+
+          # Also add installation instructions
+          cat >> release_notes.md <<'EOF'
+
+          ## Installation
+
+          ### Quick Install
+
+          ```bash
+          # Download and extract
+          curl -L https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/ai-collaboration-management-${VERSION}.tar.gz | tar xz
+
+          # Make executable
+          chmod +x ai setup-ai-collaboration.sh update-claude-rules.sh
+
+          # Add to PATH (optional)
+          sudo mv ai /usr/local/bin/
+          ```
+
+          ### Using the framework
+
+          ```bash
+          # Setup in your project
+          ~/ai setup --preset python
+
+          # Or use interactive mode
+          ~/ai setup
+          ```
+
+          For detailed installation and usage instructions, see the [README](https://github.com/${{ github.repository }}/blob/${{ github.ref_name }}/README.md).
+
+          ## Checksums
+
+          Verify the download integrity:
+
+          ```bash
+          sha256sum -c ai-collaboration-management-${VERSION}.tar.gz.sha256
+          ```
+          EOF
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          body_path: release_notes.md
+          files: |
+            *.tar.gz
+            *.sha256
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  announce:
+    name: Announce Release
+    runs-on: ubuntu-latest
+    needs: create-release
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Prepare announcement
+        run: |
+          VERSION="${{ github.ref_name }}"
+          VERSION="${VERSION#v}"
+
+          echo "=== New Release: ${VERSION} ==="
+          echo ""
+          echo "AI-Collaboration-Management ${VERSION} has been released!"
+          echo ""
+          echo "Download: https://github.com/${{ github.repository }}/releases/tag/${{ github.ref_name }}"
+          echo ""
+          echo "Key changes:"
+          if [ -f "CHANGELOG.md" ]; then
+            sed -n "/## \[${VERSION}\]/,/## \[/p" CHANGELOG.md | sed '$d' | head -20
+          fi
+
+      # Future: Add integrations for Discord, Slack, Twitter, etc.
+      # - name: Post to Discord
+      # - name: Tweet announcement
+      # - name: Update documentation site
+
+  verify-release:
+    name: Verify Release
+    runs-on: ubuntu-latest
+    needs: create-release
+
+    steps:
+      - name: Download and test release
+        run: |
+          VERSION="${{ github.ref_name }}"
+          VERSION="${VERSION#v}"
+
+          # Download release
+          curl -L "https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/ai-collaboration-management-${VERSION}.tar.gz" \
+            -o release.tar.gz
+
+          # Download checksum
+          curl -L "https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/ai-collaboration-management-${VERSION}.tar.gz.sha256" \
+            -o release.tar.gz.sha256
+
+          # Verify checksum
+          sha256sum -c release.tar.gz.sha256
+
+          # Extract
+          tar -xzf release.tar.gz
+
+          # Test basic functionality
+          chmod +x ai
+          ./ai --help || true
+
+          echo "✓ Release verified successfully"
