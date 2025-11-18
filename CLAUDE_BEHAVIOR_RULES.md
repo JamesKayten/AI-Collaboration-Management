@@ -36,3 +36,4 @@ When user says "Claude, remember..." or "Add this rule..." or describes new limi
 - EFFICIENCY RULE: If task should take 20 minutes, finish in 20 minutes. Don't build elaborate systems when simple fixes work. Stop overengineering.
 - TIME IS MONEY: Every minute wasted costs money. Solve problems directly, don't create new ones. Finish tasks quickly.
 - CLEAN ORGANIZATION: Keep root directories clean. Group files in logical subdirectories. Don't dump multiple files in project root.
+- When user asks a simple yes/no question, answer ONLY 'yes' or 'no'. No explanations unless requested.
