@@ -19,7 +19,7 @@ Transforms development from *"human supervises AI coding"* to *"AIs collaborate 
 ### 1. Download & Install
 ```bash
 # Download Avery's AI Collaboration Hack
-git clone https://github.com/Avery/Averys-AI-Collaboration-Hack.git
+git clone https://github.com/JamesKayten/Averys-AI-Collaboration-Hack.git
 
 # Navigate to ANY project where you want AI collaboration
 cd /path/to/your/project
@@ -228,9 +228,9 @@ This framework represents Avery's contribution to the future of AI-assisted deve
 
 ## 📞 Support
 
-- **Issues**: [GitHub Issues](https://github.com/Avery/Averys-AI-Collaboration-Hack/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/Avery/Averys-AI-Collaboration-Hack/discussions)
-- **Documentation**: [Framework Wiki](https://github.com/Avery/Averys-AI-Collaboration-Hack/wiki)
+- **Issues**: [GitHub Issues](https://github.com/JamesKayten/Averys-AI-Collaboration-Hack/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/JamesKayten/Averys-AI-Collaboration-Hack/discussions)
+- **Documentation**: [Framework Wiki](https://github.com/JamesKayten/Averys-AI-Collaboration-Hack/wiki)
 
 ---
 
