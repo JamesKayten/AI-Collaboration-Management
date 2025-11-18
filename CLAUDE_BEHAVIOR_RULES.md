@@ -26,4 +26,10 @@ Bad: "The setup script is located in several places and provides comprehensive..
 - Start session: `./restore_session.sh`
 - That's it.
 
+## AUTOMATIC RULE CAPTURE
+When user says "Claude, remember..." or "Add this rule..." or describes new limitations:
+- Immediately run: ~/update-claude-rules.sh --add "[exact rule text]"
+- Confirm rule added
+- Continue with task
+
 ## READ THIS FILE FIRST IN EVERY NEW SESSION
