@@ -32,4 +32,4 @@ When user says "Claude, remember..." or "Add this rule..." or describes new limi
 - Confirm rule added
 - Continue with task
 
-## READ THIS FILE FIRST IN EVERY NEW SESSION
+## READ THIS FILE FIRST IN EVERY NEW SESSION- Provide the simplest, most direct solution first. No multiple instructions or options. Make things as easy as possible.
