@@ -4,8 +4,10 @@
 *Created by Avery - The framework that transforms AI development*
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Framework Version](https://img.shields.io/badge/Version-2.0_Professional-blue.svg)](https://github.com/ai-collaboration-framework/releases)
-[![Compatibility](https://img.shields.io/badge/Compatibility-Universal-green.svg)]()
+[![Framework Version](https://img.shields.io/badge/Version-2.0_Professional-blue.svg)](https://github.com/JamesKayten/AI-Collaboration-Management/releases)
+[![CI Status](https://img.shields.io/github/actions/workflow/status/JamesKayten/AI-Collaboration-Management/ci.yml?label=CI)](https://github.com/JamesKayten/AI-Collaboration-Management/actions)
+[![Compatibility](https://img.shields.io/badge/Compatibility-Universal-green.svg)](https://github.com/JamesKayten/AI-Collaboration-Management)
+[![Contributions Welcome](https://img.shields.io/badge/Contributions-Welcome-brightgreen.svg)](CONTRIBUTING.md)
 
 ## 🎯 What Is This?
 
@@ -18,14 +20,14 @@ Transforms development from *"human supervises AI coding"* to *"AIs collaborate 
 
 ### 1. Download & Install
 ```bash
-# Download Avery's AI Collaboration Hack
-git clone https://github.com/JamesKayten/Averys-AI-Collaboration-Hack.git
+# Clone the AI Collaboration Framework
+git clone https://github.com/JamesKayten/AI-Collaboration-Management.git
 
 # Navigate to ANY project where you want AI collaboration
 cd /path/to/your/project
 
 # Run the installer
-../Averys-AI-Collaboration-Hack/install.sh
+../AI-Collaboration-Management/setup-ai-collaboration.sh
 ```
 
 ### 2. Customize for Your Project
@@ -259,9 +261,10 @@ This framework represents Avery's contribution to the future of AI-assisted deve
 
 ## 📞 Support
 
-- **Issues**: [GitHub Issues](https://github.com/JamesKayten/Averys-AI-Collaboration-Hack/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/JamesKayten/Averys-AI-Collaboration-Hack/discussions)
-- **Documentation**: [Framework Wiki](https://github.com/JamesKayten/Averys-AI-Collaboration-Hack/wiki)
+- **Issues**: [GitHub Issues](https://github.com/JamesKayten/AI-Collaboration-Management/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/JamesKayten/AI-Collaboration-Management/discussions)
+- **Documentation**: [Full Documentation](docs/)
+- **Contributing**: [Contribution Guide](CONTRIBUTING.md)
 
 ---
 
