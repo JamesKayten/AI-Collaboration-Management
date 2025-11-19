@@ -16,7 +16,25 @@ No slash commands. No remembering syntax. Just talk naturally.
 
 ---
 
-## Quick Start: Make Any Phrase Run Any Script
+## Add Your Own Phrase (3 Questions, Done)
+
+**Run this script:**
+
+```bash
+./add-phrase.sh
+```
+
+**It asks 3 simple questions:**
+
+1. What phrase do you want to use? → **"shit's ready"**
+2. What should it do? → **"./verify_test.sh"**
+3. Short description? → **"Verify framework test"**
+
+**Done. Now say "shit's ready" and it runs.**
+
+---
+
+## Quick Start: Make Any Phrase Run Any Script (Manual Method)
 
 **Create a command in 30 seconds:**
 
