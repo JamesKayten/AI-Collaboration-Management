@@ -49,14 +49,21 @@ fi
 LATEST_REPORT=$(find "$REPORTS_DIR" -name "AI_REPORT_*.md" -type f -printf '%T@ %p\n' 2>/dev/null | sort -rn | head -1 | cut -d' ' -f2-)
 
 if [ -z "$LATEST_REPORT" ]; then
+    # Get current branch and remote
+    CURRENT_BRANCH=$(git branch --show-current 2>/dev/null || echo "main")
+    GIT_REMOTE=$(git config --get remote.origin.url 2>/dev/null | sed 's/.*github.com[:/]\(.*\)\.git/\1/' || echo "repository")
+
     echo -e "${GREEN}✅ No validation reports found${NC}"
     echo -e "   Everything appears to be clean!"
     echo ""
     echo -e "${BLUE}💡 Standard OCC activation command:${NC}"
     echo ""
     echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-    echo -e "${GREEN}Check .ai-framework/communications/ for latest report and address any issues${NC}"
+    echo -e "${GREEN}Pull latest changes from GitHub branch ${CURRENT_BRANCH} and check .ai-framework/communications/ for any new reports or updates.${NC}"
     echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    echo ""
+    echo -e "${BLUE}📍 Repository:${NC} ${GIT_REMOTE}"
+    echo -e "${BLUE}🌿 Branch:${NC} ${CURRENT_BRANCH}"
     echo ""
 else
     # Report found
@@ -75,20 +82,28 @@ else
     echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
     echo ""
 
+    # Get current branch and remote
+    CURRENT_BRANCH=$(git branch --show-current 2>/dev/null || echo "main")
+    GIT_REMOTE=$(git config --get remote.origin.url 2>/dev/null | sed 's/.*github.com[:/]\(.*\)\.git/\1/' || echo "repository")
+
     echo -e "${YELLOW}⚠️  ACTION REQUIRED ⚠️${NC}"
     echo ""
     echo -e "${BLUE}📋 Copy this command and paste into Browser Claude:${NC}"
     echo ""
     echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-    echo -e "${GREEN}Check .ai-framework/communications/reports/${REPORT_NAME} and address all violations${NC}"
+    echo -e "${GREEN}Pull latest changes from GitHub branch ${CURRENT_BRANCH}, then check .ai-framework/communications/reports/${REPORT_NAME} and address all violations. When done, commit your fixes and response to .ai-framework/communications/responses/ and push to GitHub.${NC}"
     echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    echo ""
+    echo -e "${BLUE}📍 Repository:${NC} ${GIT_REMOTE}"
+    echo -e "${BLUE}🌿 Branch:${NC} ${CURRENT_BRANCH}"
     echo ""
 fi
 
 echo -e "${BLUE}🔄 After OCC completes fixes:${NC}"
 echo -e "   1. OCC will create response in .ai-framework/communications/responses/"
-echo -e "   2. Run 'work ready' in terminal to re-validate"
-echo -e "   3. If clean, Local AI will merge automatically"
+echo -e "   2. OCC will commit and push changes to GitHub"
+echo -e "   3. Run 'work ready' in terminal (after pulling) to re-validate"
+echo -e "   4. If clean, Local AI will merge automatically"
 echo ""
 
 # Check for existing responses
