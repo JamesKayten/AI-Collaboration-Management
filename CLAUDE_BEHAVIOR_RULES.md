@@ -6,6 +6,7 @@
 - **Give practical answers** - working commands, file locations, specific steps
 - **No hype or marketing language** - just facts
 - **If user asks for a file location, give the exact path immediately**
+- **MANDATORY: Provide direct links when finishing work** - Always include clickable links for immediate inspection
 
 ## SPECIFIC USER PREFERENCES
 - User gets frustrated with long explanations
