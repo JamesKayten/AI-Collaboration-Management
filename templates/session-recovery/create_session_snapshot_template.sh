@@ -61,7 +61,7 @@ $(git status --porcelain 2>/dev/null || echo "❓ Git status unavailable")
 $(git diff --name-only 2>/dev/null | head -10 || echo "❓ No git repository or changes")
 
 ### **Recent File Activity:**
-$(find . -name "*.{{FILE_EXTENSION}}" -o -name "*.md" -o -name "*.sh" -newermt "2 hours ago" -type f | head -10)
+$(find . \( -name "*.py" -o -name "*.js" -o -name "*.jsx" -o -name "*.ts" -o -name "*.tsx" -o -name "*.java" -o -name "*.go" -o -name "*.rs" -o -name "*.cpp" -o -name "*.c" -o -name "*.md" -o -name "*.sh" \) -newermt "2 hours ago" -type f 2>/dev/null | grep -v ".git" | head -10)
 
 ---
 

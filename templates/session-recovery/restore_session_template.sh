@@ -10,11 +10,23 @@ echo "============================="
 echo "📁 Project: {{PROJECT_NAME}}"
 echo
 
-# Show Claude behavior rules (always use central copy)
-if [ -f "/Volumes/User_Smallfavor/Users/Smallfavor/Documents/AI-Collaboration-Management/CLAUDE_BEHAVIOR_RULES.md" ]; then
+# Show Claude behavior rules (search common locations)
+RULES_FILE=""
+for path in \
+    "$HOME/AI-Collaboration-Management/CLAUDE_BEHAVIOR_RULES.md" \
+    "$HOME/Documents/AI-Collaboration-Management/CLAUDE_BEHAVIOR_RULES.md" \
+    "$(git rev-parse --show-toplevel 2>/dev/null)/../AI-Collaboration-Management/CLAUDE_BEHAVIOR_RULES.md" \
+    "/etc/ai-framework/CLAUDE_BEHAVIOR_RULES.md"; do
+    if [ -f "$path" ]; then
+        RULES_FILE="$path"
+        break
+    fi
+done
+
+if [ -n "$RULES_FILE" ]; then
     echo "🤖 CLAUDE BEHAVIOR RULES (READ FIRST):"
     echo "======================================"
-    cat "/Volumes/User_Smallfavor/Users/Smallfavor/Documents/AI-Collaboration-Management/CLAUDE_BEHAVIOR_RULES.md"
+    cat "$RULES_FILE"
     echo
 fi
 

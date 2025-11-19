@@ -1,0 +1,17 @@
+# Session Recovery - Personal State Files
+# These contain personal work state and should not be committed
+SESSION_EXIT_SNAPSHOT.md
+.ai-framework/session-recovery/CURRENT_SESSION_STATE.md
+
+# Keep templates (don't ignore these)
+!templates/session-recovery/*.md
+!templates/session-recovery/CURRENT_SESSION_STATE_TEMPLATE.md
+
+# Common development files
+*.swp
+*.swo
+*~
+.DS_Store
+.vscode/
+.idea/
+*.log
