@@ -314,14 +314,20 @@ echo "Max File Size: $MAX_FILE_SIZE lines"
 echo "Test Coverage: $TEST_COVERAGE%"
 echo "Validation Tools: $VALIDATION_TOOLS"
 
-# Create framework structure
+# Create framework structure (v2.0 Professional)
 echo ""
 echo "📁 Creating framework structure..."
-mkdir -p "$REPO_ROOT/docs/ai_communication"
+mkdir -p "$REPO_ROOT/.ai-framework/communications/reports"
+mkdir -p "$REPO_ROOT/.ai-framework/communications/responses"
+mkdir -p "$REPO_ROOT/.ai-framework/communications/updates"
+mkdir -p "$REPO_ROOT/.ai-framework/rules"
+mkdir -p "$REPO_ROOT/.ai-framework/project-state"
+mkdir -p "$REPO_ROOT/.ai-framework/framework-docs"
 
 # Generate customized AI_WORKFLOW.md with project-specific configuration
 echo "📄 Generating AI_WORKFLOW.md..."
-cat > "$REPO_ROOT/docs/AI_WORKFLOW.md" << EOF
+mkdir -p "$REPO_ROOT/.ai-framework/framework-docs"
+cat > "$REPO_ROOT/.ai-framework/framework-docs/AI_WORKFLOW.md" << EOF
 # AI Collaboration Workflow for $PROJECT_NAME
 
 ## Project Configuration
@@ -337,9 +343,9 @@ When you say **"work ready"**, Local AI should execute this automated workflow:
 
 ### 1. Check AI Communications
 **FIRST:** Check for communications from Online AI
-- Check \`docs/ai_communication/\` for new files since last run
-- Process any \`AI_RESPONSE_*.md\` files (fixes completed)
-- Process any \`AI_UPDATE_*.md\` files (general updates/questions)
+- Check \`.ai-framework/communications/\` for new files since last run
+- Process any \`AI_RESPONSE_*.md\` files in \`responses/\` (fixes completed)
+- Process any \`AI_UPDATE_*.md\` files in \`updates/\` (general updates/questions)
 - Report AI communications to user
 
 ### 2. Repository Branch Inspection
@@ -363,7 +369,7 @@ Apply $PROJECT_NAME-specific validation rules:
 ### 4. Violation Response
 If violations found:
 - **STOP** merge process immediately
-- Create \`docs/ai_communication/AI_REPORT_YYYY-MM-DD.md\`
+- Create \`.ai-framework/communications/reports/AI_REPORT_YYYY-MM-DD.md\`
 - Include specific remediation instructions
 - Notify user with OCC activation command
 
@@ -388,7 +394,7 @@ EOF
 
 # Generate customized VALIDATION_RULES.md
 echo "📄 Generating VALIDATION_RULES.md..."
-cat > "$REPO_ROOT/docs/ai_communication/VALIDATION_RULES.md" << EOF
+cat > "$REPO_ROOT/.ai-framework/rules/VALIDATION_RULES.md" << EOF
 # Validation Rules for $PROJECT_NAME
 
 ## Project Configuration
@@ -420,7 +426,7 @@ $(generate_project_specific_rules)
 ## Override Instructions
 To modify these rules:
 1. Edit this file directly
-2. Run \`git add docs/\` and \`git commit -m "Update validation rules"\`
+2. Run \`git add .ai-framework/\` and \`git commit -m "Update validation rules"\`
 3. The AIs will use your updated rules immediately
 
 ---
@@ -430,14 +436,42 @@ EOF
 
 # Copy remaining template files with customization
 echo "📄 Installing remaining framework files..."
-cp "$SCRIPT_DIR/templates/ai_communication_README.md" "$REPO_ROOT/docs/ai_communication/README.md"
-cp "$SCRIPT_DIR/templates/FRAMEWORK_OVERVIEW.md" "$REPO_ROOT/docs/AI_COLLABORATION_FRAMEWORK.md"
+cp "$SCRIPT_DIR/templates/ai_communication_README.md" "$REPO_ROOT/.ai-framework/communications/README.md"
+cp "$SCRIPT_DIR/templates/FRAMEWORK_OVERVIEW.md" "$REPO_ROOT/.ai-framework/framework-docs/FRAMEWORK_OVERVIEW.md"
+
+# Create PROJECT_STATE.md
+cat > "$REPO_ROOT/.ai-framework/project-state/PROJECT_STATE.md" << 'PSEOF'
+# Project State
+
+**Last Updated**: $(date)
+**Project**: $PROJECT_NAME
+**Type**: $PROJECT_TYPE
+
+## Current Status
+
+- Framework installed and configured
+- Ready for AI collaboration
+
+## Completed Features
+
+- Initial framework setup
+
+## In Progress
+
+- (Add current work here)
+
+## Next Steps
+
+- Begin feature development with AI collaboration
+- Test validation workflow
+- Customize rules as needed
+PSEOF
 
 # Replace placeholders in copied files
 if [[ "$OSTYPE" == "darwin"* ]]; then
-    sed -i '' "s/{{PROJECT_NAME}}/$PROJECT_NAME/g" "$REPO_ROOT/docs/ai_communication/README.md"
+    sed -i '' "s/{{PROJECT_NAME}}/$PROJECT_NAME/g" "$REPO_ROOT/.ai-framework/communications/README.md"
 else
-    sed -i "s/{{PROJECT_NAME}}/$PROJECT_NAME/g" "$REPO_ROOT/docs/ai_communication/README.md"
+    sed -i "s/{{PROJECT_NAME}}/$PROJECT_NAME/g" "$REPO_ROOT/.ai-framework/communications/README.md"
 fi
 
 # Deploy Repository-Based AI Collaboration (Cross-Environment)
@@ -524,7 +558,7 @@ echo "   Tools: $VALIDATION_TOOLS"
 echo ""
 echo "🚀 Ready for cross-environment AI collaboration with:"
 echo "   'work ready' (Local AI command)"
-echo "   'Check docs/ai_communication/ for latest report' (Online AI)"
+echo "   'Check .ai-framework/communications/ for latest report' (Online AI)"
 echo ""
 echo "📁 Repository-Based AI Communication:"
 echo "   .ai/README.md - Start here for any AI instance"
@@ -533,7 +567,7 @@ echo "   .ai/CURRENT_TASK.md - Current assignment"
 echo "   Works in any environment (macOS, Linux, containers)"
 echo ""
 echo "🔧 Customize further by editing:"
-echo "   docs/ai_communication/VALIDATION_RULES.md"
+echo "   .ai-framework/rules/VALIDATION_RULES.md"
 echo "   .ai/BEHAVIOR_RULES.md"
 echo "   .ai/CURRENT_TASK.md"
 echo ""
