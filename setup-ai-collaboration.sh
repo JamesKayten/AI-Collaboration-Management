@@ -1,15 +1,15 @@
 #!/bin/bash
 
 # AI COLLABORATION FRAMEWORK SETUP
-# Purpose: Set up AI-to-AI collaboration with session recovery for any project
-# Features: Cross-platform AI communication, validation rules, session management
+# Purpose: Set up cross-environment AI-to-AI collaboration for any project
+# Features: Repository-based communication, validation rules, universal compatibility
 # Compatible: React, Python, Java, Data Science, and more
 
 set -e
 
 echo "🚀 AI COLLABORATION FRAMEWORK SETUP"
 echo "===================================="
-echo "📋 Sets up AI-to-AI collaboration + session recovery for your project"
+echo "📋 Sets up cross-environment AI-to-AI collaboration for your project"
 echo
 
 # Default values
@@ -26,10 +26,10 @@ show_help() {
     echo "Usage: $0 [OPTIONS]"
     echo ""
     echo "🎯 WHAT THIS DOES:"
-    echo "   • Sets up AI-to-AI collaboration between Local AI (Terminal) and Online AI (Browser)"
-    echo "   • Deploys session recovery system (no more lost context!)"
+    echo "   • Sets up cross-environment AI-to-AI collaboration (Local AI, OCC, Claude Code, etc.)"
+    echo "   • Deploys repository-based communication system (works in any environment)"
     echo "   • Creates project validation rules and communication structure"
-    echo "   • Enables cross-platform AI workflow with 'work ready' automation"
+    echo "   • Enables universal AI workflow with immediate task execution"
     echo ""
     echo "📋 CONFIGURE WITH:"
     echo ""
@@ -440,82 +440,79 @@ else
     sed -i "s/{{PROJECT_NAME}}/$PROJECT_NAME/g" "$REPO_ROOT/docs/ai_communication/README.md"
 fi
 
-# Deploy Session Recovery System (NEW - Standard for all projects)
-echo "📸 Installing session recovery system..."
-mkdir -p "$REPO_ROOT/.ai-framework/session-recovery"
+# Deploy Repository-Based AI Collaboration (Cross-Environment)
+echo "🤖 Installing repository-based AI collaboration..."
+mkdir -p "$REPO_ROOT/.ai"
 
-# Determine file extension for project type
-FILE_EXTENSION=""
-case "$LANGUAGE" in
-    python) FILE_EXTENSION="py" ;;
-    javascript|typescript) FILE_EXTENSION="js" ;;
-    java) FILE_EXTENSION="java" ;;
-    go) FILE_EXTENSION="go" ;;
-    rust) FILE_EXTENSION="rs" ;;
-    *) FILE_EXTENSION="*" ;;
-esac
+# Deploy repository-based AI collaboration files
+cp "$SCRIPT_DIR/templates/.ai/README_TEMPLATE.md" "$REPO_ROOT/.ai/README.md"
+cp "$SCRIPT_DIR/templates/.ai/BEHAVIOR_RULES_TEMPLATE.md" "$REPO_ROOT/.ai/BEHAVIOR_RULES.md"
+cp "$SCRIPT_DIR/templates/.ai/CURRENT_TASK_TEMPLATE.md" "$REPO_ROOT/.ai/CURRENT_TASK.md"
 
-# Deploy session recovery scripts with customization
-cp "$SCRIPT_DIR/templates/session-recovery/restore_session_template.sh" "$REPO_ROOT/restore_session.sh"
-cp "$SCRIPT_DIR/templates/session-recovery/create_session_snapshot_template.sh" "$REPO_ROOT/create_session_snapshot.sh"
-cp "$SCRIPT_DIR/templates/session-recovery/REBOOT_QUICK_START_TEMPLATE.md" "$REPO_ROOT/.ai-framework/session-recovery/REBOOT_QUICK_START.md"
-cp "$SCRIPT_DIR/templates/session-recovery/CURRENT_SESSION_STATE_TEMPLATE.md" "$REPO_ROOT/.ai-framework/session-recovery/CURRENT_SESSION_STATE.md"
+# Deploy enhanced task framework files (OCC improvements)
+cp "$SCRIPT_DIR/templates/.ai/STATUS_TEMPLATE" "$REPO_ROOT/.ai/STATUS"
+cp "$SCRIPT_DIR/templates/.ai/FRAMEWORK_USAGE.md" "$REPO_ROOT/.ai/FRAMEWORK_USAGE.md"
+cp "$SCRIPT_DIR/templates/.ai/TCC_QUICK_REFERENCE.md" "$REPO_ROOT/.ai/TCC_QUICK_REFERENCE.md"
+cp "$SCRIPT_DIR/templates/.ai/CURRENT_TASK.md.TEMPLATE" "$REPO_ROOT/.ai/CURRENT_TASK.md.TEMPLATE"
+cp "$SCRIPT_DIR/templates/.ai/check-tasks.sh" "$REPO_ROOT/.ai/check-tasks.sh"
+chmod +x "$REPO_ROOT/.ai/check-tasks.sh"
 
-# Make scripts executable
-chmod +x "$REPO_ROOT/restore_session.sh"
-chmod +x "$REPO_ROOT/create_session_snapshot.sh"
-
-# Replace placeholders in session recovery files
+# Replace placeholders in AI collaboration files
 # Escape special characters for sed
 PROJECT_TYPE_ESCAPED=$(echo "$PROJECT_TYPE" | sed 's/[\/&]/\\&/g')
 PROJECT_NAME_ESCAPED=$(echo "$PROJECT_NAME" | sed 's/[\/&]/\\&/g')
 VALIDATION_TOOLS_ESCAPED=$(echo "$VALIDATION_TOOLS" | sed 's/[\/&]/\\&/g')
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
-    sed -i '' "s/{{PROJECT_NAME}}/$PROJECT_NAME_ESCAPED/g" "$REPO_ROOT/restore_session.sh"
-    sed -i '' "s/{{PROJECT_NAME}}/$PROJECT_NAME_ESCAPED/g" "$REPO_ROOT/create_session_snapshot.sh"
-    sed -i '' "s/{{PROJECT_TYPE}}/$PROJECT_TYPE_ESCAPED/g" "$REPO_ROOT/restore_session.sh"
-    sed -i '' "s/{{PROJECT_TYPE}}/$PROJECT_TYPE_ESCAPED/g" "$REPO_ROOT/create_session_snapshot.sh"
-    sed -i '' "s/{{VALIDATION_TOOLS}}/$VALIDATION_TOOLS_ESCAPED/g" "$REPO_ROOT/create_session_snapshot.sh"
-    sed -i '' "s/{{FILE_EXTENSION}}/$FILE_EXTENSION/g" "$REPO_ROOT/create_session_snapshot.sh"
+    sed -i '' "s/{{PROJECT_NAME}}/$PROJECT_NAME_ESCAPED/g" "$REPO_ROOT/.ai/README.md"
+    sed -i '' "s/{{PROJECT_TYPE}}/$PROJECT_TYPE_ESCAPED/g" "$REPO_ROOT/.ai/README.md"
+    sed -i '' "s/{{LANGUAGE}}/$LANGUAGE/g" "$REPO_ROOT/.ai/README.md"
+    sed -i '' "s/{{MAX_FILE_SIZE}}/$MAX_FILE_SIZE/g" "$REPO_ROOT/.ai/README.md"
+    sed -i '' "s/{{TEST_COVERAGE}}/$TEST_COVERAGE/g" "$REPO_ROOT/.ai/README.md"
+    sed -i '' "s/{{VALIDATION_TOOLS}}/$VALIDATION_TOOLS_ESCAPED/g" "$REPO_ROOT/.ai/README.md"
 
-    sed -i '' "s/{{PROJECT_NAME}}/$PROJECT_NAME_ESCAPED/g" "$REPO_ROOT/.ai-framework/session-recovery/REBOOT_QUICK_START.md"
-    sed -i '' "s/{{PROJECT_TYPE}}/$PROJECT_TYPE_ESCAPED/g" "$REPO_ROOT/.ai-framework/session-recovery/REBOOT_QUICK_START.md"
-    sed -i '' "s/{{PROJECT_PATH}}/$(echo "$REPO_ROOT" | sed 's/[\/&]/\\&/g')/g" "$REPO_ROOT/.ai-framework/session-recovery/REBOOT_QUICK_START.md"
-    sed -i '' "s/{{MAX_FILE_SIZE}}/$MAX_FILE_SIZE/g" "$REPO_ROOT/.ai-framework/session-recovery/REBOOT_QUICK_START.md"
-    sed -i '' "s/{{TEST_COVERAGE}}/$TEST_COVERAGE/g" "$REPO_ROOT/.ai-framework/session-recovery/REBOOT_QUICK_START.md"
-    sed -i '' "s/{{VALIDATION_TOOLS}}/$VALIDATION_TOOLS_ESCAPED/g" "$REPO_ROOT/.ai-framework/session-recovery/REBOOT_QUICK_START.md"
+    sed -i '' "s/{{PROJECT_TYPE}}/$PROJECT_TYPE_ESCAPED/g" "$REPO_ROOT/.ai/BEHAVIOR_RULES.md"
+    sed -i '' "s/{{MAX_FILE_SIZE}}/$MAX_FILE_SIZE/g" "$REPO_ROOT/.ai/BEHAVIOR_RULES.md"
+    sed -i '' "s/{{TEST_COVERAGE}}/$TEST_COVERAGE/g" "$REPO_ROOT/.ai/BEHAVIOR_RULES.md"
+    sed -i '' "s/{{VALIDATION_TOOLS}}/$VALIDATION_TOOLS_ESCAPED/g" "$REPO_ROOT/.ai/BEHAVIOR_RULES.md"
 
-    sed -i '' "s/{{PROJECT_NAME}}/$PROJECT_NAME_ESCAPED/g" "$REPO_ROOT/.ai-framework/session-recovery/CURRENT_SESSION_STATE.md"
-    sed -i '' "s/{{PROJECT_TYPE}}/$PROJECT_TYPE_ESCAPED/g" "$REPO_ROOT/.ai-framework/session-recovery/CURRENT_SESSION_STATE.md"
-    sed -i '' "s/{{PROJECT_PATH}}/$(echo "$REPO_ROOT" | sed 's/[\/&]/\\&/g')/g" "$REPO_ROOT/.ai-framework/session-recovery/CURRENT_SESSION_STATE.md"
-    sed -i '' "s/{{MAX_FILE_SIZE}}/$MAX_FILE_SIZE/g" "$REPO_ROOT/.ai-framework/session-recovery/CURRENT_SESSION_STATE.md"
-    sed -i '' "s/{{TEST_COVERAGE}}/$TEST_COVERAGE/g" "$REPO_ROOT/.ai-framework/session-recovery/CURRENT_SESSION_STATE.md"
-    sed -i '' "s/{{VALIDATION_TOOLS}}/$VALIDATION_TOOLS_ESCAPED/g" "$REPO_ROOT/.ai-framework/session-recovery/CURRENT_SESSION_STATE.md"
+    sed -i '' "s/{{PROJECT_NAME}}/$PROJECT_NAME_ESCAPED/g" "$REPO_ROOT/.ai/CURRENT_TASK.md"
+    sed -i '' "s/{{PROJECT_TYPE}}/$PROJECT_TYPE_ESCAPED/g" "$REPO_ROOT/.ai/CURRENT_TASK.md"
+    sed -i '' "s/{{LANGUAGE}}/$LANGUAGE/g" "$REPO_ROOT/.ai/CURRENT_TASK.md"
+    sed -i '' "s/{{MAX_FILE_SIZE}}/$MAX_FILE_SIZE/g" "$REPO_ROOT/.ai/CURRENT_TASK.md"
+    sed -i '' "s/{{TEST_COVERAGE}}/$TEST_COVERAGE/g" "$REPO_ROOT/.ai/CURRENT_TASK.md"
+    sed -i '' "s/{{VALIDATION_TOOLS}}/$VALIDATION_TOOLS_ESCAPED/g" "$REPO_ROOT/.ai/CURRENT_TASK.md"
+
+    # Replace placeholders in STATUS file (OCC framework enhancement)
+    sed -i '' "s/{{PROJECT_NAME}}/$PROJECT_NAME_ESCAPED/g" "$REPO_ROOT/.ai/STATUS"
+    sed -i '' "s/{{TIMESTAMP}}/$(date -u +%Y-%m-%dT%H:%M:%SZ)/g" "$REPO_ROOT/.ai/STATUS"
 else
-    sed -i "s/{{PROJECT_NAME}}/$PROJECT_NAME_ESCAPED/g" "$REPO_ROOT/restore_session.sh"
-    sed -i "s/{{PROJECT_NAME}}/$PROJECT_NAME_ESCAPED/g" "$REPO_ROOT/create_session_snapshot.sh"
-    sed -i "s/{{PROJECT_TYPE}}/$PROJECT_TYPE_ESCAPED/g" "$REPO_ROOT/restore_session.sh"
-    sed -i "s/{{PROJECT_TYPE}}/$PROJECT_TYPE_ESCAPED/g" "$REPO_ROOT/create_session_snapshot.sh"
-    sed -i "s/{{VALIDATION_TOOLS}}/$VALIDATION_TOOLS_ESCAPED/g" "$REPO_ROOT/create_session_snapshot.sh"
-    sed -i "s/{{FILE_EXTENSION}}/$FILE_EXTENSION/g" "$REPO_ROOT/create_session_snapshot.sh"
+    sed -i "s/{{PROJECT_NAME}}/$PROJECT_NAME_ESCAPED/g" "$REPO_ROOT/.ai/README.md"
+    sed -i "s/{{PROJECT_TYPE}}/$PROJECT_TYPE_ESCAPED/g" "$REPO_ROOT/.ai/README.md"
+    sed -i "s/{{LANGUAGE}}/$LANGUAGE/g" "$REPO_ROOT/.ai/README.md"
+    sed -i "s/{{MAX_FILE_SIZE}}/$MAX_FILE_SIZE/g" "$REPO_ROOT/.ai/README.md"
+    sed -i "s/{{TEST_COVERAGE}}/$TEST_COVERAGE/g" "$REPO_ROOT/.ai/README.md"
+    sed -i "s/{{VALIDATION_TOOLS}}/$VALIDATION_TOOLS_ESCAPED/g" "$REPO_ROOT/.ai/README.md"
 
-    sed -i "s/{{PROJECT_NAME}}/$PROJECT_NAME_ESCAPED/g" "$REPO_ROOT/.ai-framework/session-recovery/REBOOT_QUICK_START.md"
-    sed -i "s/{{PROJECT_TYPE}}/$PROJECT_TYPE_ESCAPED/g" "$REPO_ROOT/.ai-framework/session-recovery/REBOOT_QUICK_START.md"
-    sed -i "s/{{PROJECT_PATH}}/$(echo "$REPO_ROOT" | sed 's/[\/&]/\\&/g')/g" "$REPO_ROOT/.ai-framework/session-recovery/REBOOT_QUICK_START.md"
-    sed -i "s/{{MAX_FILE_SIZE}}/$MAX_FILE_SIZE/g" "$REPO_ROOT/.ai-framework/session-recovery/REBOOT_QUICK_START.md"
-    sed -i "s/{{TEST_COVERAGE}}/$TEST_COVERAGE/g" "$REPO_ROOT/.ai-framework/session-recovery/REBOOT_QUICK_START.md"
-    sed -i "s/{{VALIDATION_TOOLS}}/$VALIDATION_TOOLS_ESCAPED/g" "$REPO_ROOT/.ai-framework/session-recovery/REBOOT_QUICK_START.md"
+    sed -i "s/{{PROJECT_TYPE}}/$PROJECT_TYPE_ESCAPED/g" "$REPO_ROOT/.ai/BEHAVIOR_RULES.md"
+    sed -i "s/{{MAX_FILE_SIZE}}/$MAX_FILE_SIZE/g" "$REPO_ROOT/.ai/BEHAVIOR_RULES.md"
+    sed -i "s/{{TEST_COVERAGE}}/$TEST_COVERAGE/g" "$REPO_ROOT/.ai/BEHAVIOR_RULES.md"
+    sed -i "s/{{VALIDATION_TOOLS}}/$VALIDATION_TOOLS_ESCAPED/g" "$REPO_ROOT/.ai/BEHAVIOR_RULES.md"
 
-    sed -i "s/{{PROJECT_NAME}}/$PROJECT_NAME_ESCAPED/g" "$REPO_ROOT/.ai-framework/session-recovery/CURRENT_SESSION_STATE.md"
-    sed -i "s/{{PROJECT_TYPE}}/$PROJECT_TYPE_ESCAPED/g" "$REPO_ROOT/.ai-framework/session-recovery/CURRENT_SESSION_STATE.md"
-    sed -i "s/{{PROJECT_PATH}}/$(echo "$REPO_ROOT" | sed 's/[\/&]/\\&/g')/g" "$REPO_ROOT/.ai-framework/session-recovery/CURRENT_SESSION_STATE.md"
-    sed -i "s/{{MAX_FILE_SIZE}}/$MAX_FILE_SIZE/g" "$REPO_ROOT/.ai-framework/session-recovery/CURRENT_SESSION_STATE.md"
-    sed -i "s/{{TEST_COVERAGE}}/$TEST_COVERAGE/g" "$REPO_ROOT/.ai-framework/session-recovery/CURRENT_SESSION_STATE.md"
-    sed -i "s/{{VALIDATION_TOOLS}}/$VALIDATION_TOOLS_ESCAPED/g" "$REPO_ROOT/.ai-framework/session-recovery/CURRENT_SESSION_STATE.md"
+    sed -i "s/{{PROJECT_NAME}}/$PROJECT_NAME_ESCAPED/g" "$REPO_ROOT/.ai/CURRENT_TASK.md"
+    sed -i "s/{{PROJECT_TYPE}}/$PROJECT_TYPE_ESCAPED/g" "$REPO_ROOT/.ai/CURRENT_TASK.md"
+    sed -i "s/{{LANGUAGE}}/$LANGUAGE/g" "$REPO_ROOT/.ai/CURRENT_TASK.md"
+    sed -i "s/{{MAX_FILE_SIZE}}/$MAX_FILE_SIZE/g" "$REPO_ROOT/.ai/CURRENT_TASK.md"
+    sed -i "s/{{TEST_COVERAGE}}/$TEST_COVERAGE/g" "$REPO_ROOT/.ai/CURRENT_TASK.md"
+    sed -i "s/{{VALIDATION_TOOLS}}/$VALIDATION_TOOLS_ESCAPED/g" "$REPO_ROOT/.ai/CURRENT_TASK.md"
+
+    # Replace placeholders in STATUS file (OCC framework enhancement)
+    sed -i "s/{{PROJECT_NAME}}/$PROJECT_NAME_ESCAPED/g" "$REPO_ROOT/.ai/STATUS"
+    sed -i "s/{{TIMESTAMP}}/$(date -u +%Y-%m-%dT%H:%M:%SZ)/g" "$REPO_ROOT/.ai/STATUS"
 fi
 
-echo "✅ Session Recovery System installed!"
+echo "✅ Repository-based AI collaboration installed!"
+echo "✅ Enhanced task framework (OCC improvements) installed!"
 echo "✅ Installation complete!"
 echo ""
 echo "📋 Your Custom Configuration:"
@@ -525,26 +522,29 @@ echo "   Max File Size: $MAX_FILE_SIZE lines"
 echo "   Test Coverage: $TEST_COVERAGE%"
 echo "   Tools: $VALIDATION_TOOLS"
 echo ""
-echo "🚀 Ready for AI collaboration with:"
+echo "🚀 Ready for cross-environment AI collaboration with:"
 echo "   'work ready' (Local AI command)"
 echo "   'Check docs/ai_communication/ for latest report' (Online AI)"
 echo ""
-echo "📸 Session Recovery System ready:"
-echo "   './create_session_snapshot.sh' (End session - capture exact state)"
-echo "   './restore_session.sh' (Start session - instant recovery)"
-echo "   No more time wasted figuring out where you left off!"
+echo "📁 Repository-Based AI Communication:"
+echo "   .ai/README.md - Start here for any AI instance"
+echo "   .ai/BEHAVIOR_RULES.md - Working style requirements"
+echo "   .ai/CURRENT_TASK.md - Current assignment"
+echo "   Works in any environment (macOS, Linux, containers)"
 echo ""
 echo "🔧 Customize further by editing:"
 echo "   docs/ai_communication/VALIDATION_RULES.md"
-echo "   .ai-framework/session-recovery/REBOOT_QUICK_START.md"
+echo "   .ai/BEHAVIOR_RULES.md"
+echo "   .ai/CURRENT_TASK.md"
 echo ""
 echo "💡 Pro tip: Use presets next time with:"
 echo "   $0 --preset python --max-file-size 250"
 echo ""
-echo "⚡ Standard Operating Procedure:"
-echo "   1. Work on project"
-echo "   2. End session: './create_session_snapshot.sh'"
-echo "   3. Start session: './restore_session.sh'"
-echo "   4. Continue exactly where you left off!"
+echo "⚡ Cross-Environment AI Workflow:"
+echo "   1. Any AI reads .ai/README.md and .ai/CURRENT_TASK.md"
+echo "   2. AI executes tasks immediately - no exploration required"
+echo "   3. AI updates .ai/CURRENT_TASK.md when completed"
+echo "   4. Universal compatibility across all environments"
 echo ""
-echo "🎯 Avery's AI Collaboration Hack + Session Recovery configured for $PROJECT_NAME!"
+echo "🎯 Avery's AI Collaboration Framework configured for $PROJECT_NAME!"
+echo "🌍 Universal: Works with Local AI, OCC, Claude Code, and more!"
