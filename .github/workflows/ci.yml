@@ -28,12 +28,27 @@ jobs:
             test_examples
             .ai-framework
 
+  markdown-lint:
+    name: Markdown Linting
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Markdown Lint
+        uses: nosborn/github-action-markdown-cli@v3.3.0
+        with:
+          files: .
+          config_file: .markdownlint.json
+          ignore_files: node_modules/
+
   test:
     name: Test Suite
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest]
+<<<<<<< HEAD
       fail-fast: false
 
     steps:
@@ -315,7 +330,7 @@ jobs:
   notify:
     name: Notify Results
     runs-on: ubuntu-latest
-    needs: [shellcheck, test, integration, code-quality, documentation, security]
+    needs: [shellcheck, markdown-lint, test, integration, code-quality, documentation, security]
     if: always()
 
     steps:
