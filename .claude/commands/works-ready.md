@@ -17,7 +17,7 @@ You are TCC (Terminal Claude Code). OCC has pushed fixes. Validate and integrate
    - Merge to main branch
    - **Update local working directory** (checkout main and pull)
    - Create `AI_REPORT_SUCCESS.md` confirming completion
-   - Report: "✅ Validated, merged, and synced to local"
+   - Report: "✅ Repo and local files synced"
 4. **If validation FAILS:**
    - Create new `AI_REPORT_[DATE].md` with remaining violations
    - Keep local on current branch
@@ -74,6 +74,11 @@ This ensures the user's local files match GitHub, so they can:
 
 Success:
 ```
+✅ Repo and local files synced
+```
+
+Detailed Success (if user asks for details):
+```
 ✅ VALIDATION PASSED
 - All checks completed successfully
 - Merged to main branch
@@ -90,4 +95,6 @@ Failure:
 - Waiting for OCC fixes
 ```
 
-**Report to user:** Clear status of validation, merge, and local sync.
+**Report to user:**
+- On success: Simply "✅ Repo and local files synced"
+- On failure: Detailed list of validation errors
