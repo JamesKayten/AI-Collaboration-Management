@@ -23,6 +23,7 @@
 - Test one change at a time with full verification
 - Kill running processes before testing new builds
 - Verify changes work in the actual runtime environment
+- **For frontend testing:** Follow mandatory protocols in `/rules/FRONTEND_TESTING_RULES.md`
 
 ### 3. COMMUNICATION STANDARDS
 - Use TodoWrite tool for all multi-step tasks (3+ steps)
