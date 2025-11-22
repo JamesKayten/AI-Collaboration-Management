@@ -31,3 +31,6 @@ Creating /merge-to-main with file size compliance checks
 ### 21:41:44 - Checkpoint
 **Status:** Created /merge-to-main command with file size validation
 
+### 21:53:43 - Checkpoint
+**Status:** Updated /merge-to-main to use PR workflow instead of direct merge
+
