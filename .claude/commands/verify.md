@@ -2,21 +2,70 @@
 description: Verify OCC/TCC framework collaboration test results
 ---
 
-Run the framework test verification script to confirm AI collaboration worked:
+Verify that framework validation and collaboration workflows are functioning correctly.
+
+## Verification Steps
+
+### 1. Repository Sync Verification
 
 ```bash
-cd /tmp/SimpleCP
-git fetch origin claude/fix-validation-issues-1763591690
-git checkout claude/fix-validation-issues-1763591690
-
-# Verify file size compliance
-wc -l backend/clipboard_manager.py
-
-# Verify Flake8 compliance
-flake8 backend/api/endpoints.py --max-line-length=88
-
-# Show OCC response
-cat docs/ai_communication/AI_RESPONSE_2025-11-19.md
+# Verify pre-work sync
+bash .ai-framework/scripts/pre-work-sync.sh
 ```
 
-Report results to user.
+Expected: Shows "PRE-WORK SYNC COMPLETE ✅"
+
+### 2. File Size Compliance Check
+
+```bash
+# Get current branch
+CURRENT_BRANCH=$(git branch --show-current)
+
+# Check file size compliance against main
+bash .ai-framework/scripts/check-file-sizes.sh origin/main
+```
+
+Expected: Shows "✅ All files comply with size limits"
+
+### 3. Verify Session Logging
+
+```bash
+# Check for session logs
+source .ai-framework/scripts/session-logging.sh
+check_incomplete_session
+```
+
+### 4. Check Recent AI Communication
+
+```bash
+# Show recent collaboration logs (if they exist)
+if [ -f .ai-framework/logs/sync.log ]; then
+  echo "Recent sync activity:"
+  tail -10 .ai-framework/logs/sync.log
+fi
+
+# Show session logs if available
+if [ -d .ai-framework/session-logs ]; then
+  echo ""
+  echo "Recent session logs:"
+  ls -lt .ai-framework/session-logs/ | head -5
+fi
+```
+
+### 5. Verify Slash Commands
+
+```bash
+# List available slash commands
+echo "Available slash commands:"
+ls -1 .claude/commands/*.md | sed 's|.claude/commands/||' | sed 's|.md$||'
+```
+
+## Success Criteria
+
+✅ All checks pass with no errors
+✅ Repository is synced with remote
+✅ All files comply with size limits
+✅ Framework scripts are functional
+✅ Collaboration infrastructure is in place
+
+Report results to user with specific pass/fail status for each check.

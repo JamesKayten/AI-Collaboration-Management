@@ -51,8 +51,8 @@ Complete documentation for the AI-Collaboration-Management framework.
 | Document | Description | Audience |
 |----------|-------------|----------|
 | [README](../README.md) | Complete feature overview | All users |
-| [Browser Claude Tasks](../BROWSER_CLAUDE_TASKS.md) | Browser AI workflows | All users |
-| [Session Recovery SOP](../SESSION_RECOVERY_SOP.md) | Recovery procedures | All users |
+| [Browser Claude Tasks](workflows/BROWSER_CLAUDE_TASKS.md) | Browser AI workflows | All users |
+| [Session Recovery SOP](guides/SESSION_RECOVERY_SOP.md) | Recovery procedures | All users |
 | [FAQ](guides/FAQ.md) | Common questions | All users |
 
 ### Development
@@ -60,26 +60,26 @@ Complete documentation for the AI-Collaboration-Management framework.
 | Document | Description | Audience |
 |----------|-------------|----------|
 | [Contributing](../CONTRIBUTING.md) | Contribution guidelines | Contributors |
-| [Development Guide](../DEVELOPMENT.md) | Development standards | Contributors |
-| [Code Standards](../CODE_STANDARDS.md) | Style guide | Contributors |
+| [Development Guide](development/DEVELOPMENT.md) | Development standards | Contributors |
+| [Code Standards](development/CODE_STANDARDS.md) | Style guide | Contributors |
 | [Testing Guide](../tests/README.md) | Testing framework | Contributors |
 
 ### Project Management
 
 | Document | Description | Audience |
 |----------|-------------|----------|
-| [Governance](../GOVERNANCE.md) | Project governance | Maintainers |
-| [Releases](../RELEASES.md) | Release process | Maintainers |
-| [Security](../SECURITY.md) | Security policies | All |
-| [Project State](../PROJECT_STATE.md) | Current status | All |
+| [Governance](GOVERNANCE.md) | Project governance | Maintainers |
+| [Releases](development/RELEASES.md) | Release process | Maintainers |
+| [Security](SECURITY.md) | Security policies | All |
+| [Project State](../.ai-framework/project-state/PROJECT_STATE.md) | Current status | All |
 
 ### Reference
 
 | Document | Description | Audience |
 |----------|-------------|----------|
-| [Changelog](./CHANGELOG.md) | Version history | All |
+| [Changelog](../CHANGELOG.md) | Version history | All |
 | [Troubleshooting](guides/TROUBLESHOOTING.md) | Problem solutions | All users |
-| [Roadmap](../COLLABORATION_ROADMAP.md) | Future plans | All |
+| [Roadmap](ai-collaboration/COLLABORATION_ROADMAP.md) | Future plans | All |
 
 ## Document Status
 
@@ -261,6 +261,6 @@ Documentation should be reviewed:
 
 ---
 
-**Last Updated:** 2025-11-18
+**Last Updated:** 2025-11-22
 
 **Questions?** Open a [GitHub Discussion](../../discussions)
