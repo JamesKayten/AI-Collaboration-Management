@@ -10,17 +10,46 @@
 
 ## 🚀 MANDATORY STARTUP SEQUENCE
 
+### 0. SESSION CONTINUITY CHECK (FIRST - Before anything else)
+
+**REQUIRED COMMANDS:**
+```bash
+source .ai-framework/scripts/session-logging.sh
+check_incomplete_session
+```
+
+**Purpose:** Check for incomplete session from today (disconnection recovery)
+
+**If incomplete session found:**
+```bash
+get_last_state 50  # Show last 50 lines of session log
+```
+
+**Then ask user:**
+"Incomplete session detected. Options:
+1. Resume from last checkpoint
+2. View full log
+3. Start fresh
+
+Which would you like?"
+
+**If no incomplete session:** Proceed to step 1
+
+---
+
 ### 1. RULES ACKNOWLEDGMENT
 **Command Pattern:** `"Rules confirmed - holistic approach enabled"`
 
 **Required Actions:**
-- Read and acknowledge GENERAL_AI_RULES.md
-- Confirm understanding of holistic approach requirement
+- Read and acknowledge GENERAL_AI_RULES.md (VERIFICATION-FIRST section)
+- Read and acknowledge REPOSITORY_SYNC_PROTOCOL.md
+- Confirm understanding of mandatory verification requirements
 - Report any rule conflicts or ambiguities
 
 **Expected Response:**
 ```
 ✅ Rules confirmed - holistic approach enabled
+✅ Verification-first protocol acknowledged
 📋 Startup protocol: [PROJECT_NAME] - [STATUS]
 ```
 
@@ -54,20 +83,51 @@ cat .ai/NATURAL_LANGUAGE_COMMANDS.md  # Check available shortcuts
 
 ---
 
-### 3. REPOSITORY SYNC VERIFICATION
+### 3. REPOSITORY SYNC VERIFICATION (MANDATORY SCRIPT EXECUTION)
 
-**Commands:**
+**REQUIRED COMMAND:**
 ```bash
-git status                  # Check for uncommitted changes
-git fetch                   # Update remote tracking
-git log --oneline -5        # Recent commit history
-git branch -v              # Current branch and sync status
+bash .ai-framework/scripts/pre-work-sync.sh
 ```
 
-**Required Verification:**
-- ✅ Working tree clean OR document uncommitted changes
-- ✅ Remote branch exists and is tracked
-- ✅ Local is up-to-date with remote OR explain divergence
+**MUST SHOW COMPLETE OUTPUT** including:
+- All verification steps (1-8)
+- Final status: "PRE-WORK SYNC COMPLETE"
+- Sync status: SYNCED or NEW_BRANCH
+- Commit hash
+
+**Example Required Output:**
+```
+$ bash .ai-framework/scripts/pre-work-sync.sh
+==========================================
+PRE-WORK SYNC PROTOCOL
+==========================================
+
+Step 1: Verifying git repository...
+✅ Git repository confirmed
+
+Step 2: Checking current status...
+On branch main
+Your branch is up to date with 'origin/main'.
+
+...
+[FULL OUTPUT REQUIRED]
+...
+
+==========================================
+PRE-WORK SYNC COMPLETE
+==========================================
+Status: ✅ SUCCESS
+```
+
+**NON-COMPLIANCE:**
+- ❌ Saying "I synced the repository" without showing script output
+- ❌ Running script but not showing complete output
+- ❌ Skipping sync because "I'll do it later"
+
+**BLOCKING RULE:**
+If pre-work-sync.sh fails, TCC/OCC CANNOT proceed with work.
+Must show error and request user intervention.
 
 ---
 
