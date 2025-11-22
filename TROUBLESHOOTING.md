@@ -256,6 +256,222 @@ chmod +x install.sh
 2. Use file-specific validation instead of whole-repository scans
 3. Split large files before using framework
 
+## TCC (Terminal Control Center) Issues
+
+### TCC Installation Fails
+
+**Problem**: TCC installation script fails or doesn't complete.
+
+**Solutions**:
+1. Check you have internet connectivity:
+   ```bash
+   ping github.com
+   ```
+2. Verify curl is installed:
+   ```bash
+   which curl
+   # If not installed:
+   sudo apt install curl  # Ubuntu/Debian
+   sudo yum install curl  # CentOS/RHEL
+   ```
+3. Try manual installation:
+   ```bash
+   # Clone framework manually
+   cd ~
+   git clone https://github.com/JamesKayten/AI-Collaboration-Management.git
+
+   # Run installation script directly
+   cd AI-Collaboration-Management/tcc-setup
+   bash install-tcc.sh
+   ```
+4. Check installation log for specific errors:
+   ```bash
+   # Re-run with verbose output
+   bash -x install-tcc.sh
+   ```
+
+### TCC Commands Not Found
+
+**Problem**: After installation, `tcc-status` and other commands don't work.
+
+**Solutions**:
+1. Make sure you've initialized TCC in current session:
+   ```bash
+   source ~/tcc-init.sh
+   ```
+2. Check if `.tccrc` file exists:
+   ```bash
+   ls -la ~/.tccrc
+   cat ~/.tccrc
+   ```
+3. Verify `.bashrc` was updated:
+   ```bash
+   grep "tcc-init.sh" ~/.bashrc
+   ```
+4. Reload your shell configuration:
+   ```bash
+   source ~/.bashrc
+   ```
+5. Start a new terminal session
+
+### TCC Can't Find Framework Files
+
+**Problem**: TCC commands error with "framework not found" or similar.
+
+**Solutions**:
+1. Check if framework directory exists:
+   ```bash
+   ls -la ~/AI-Collaboration-Management/
+   ```
+2. Verify TCC environment variables:
+   ```bash
+   source ~/.tccrc
+   echo $AI_FRAMEWORK_ROOT
+   echo $AI_RULES_DIR
+   ```
+3. Re-sync the framework:
+   ```bash
+   tcc-sync
+   ```
+4. If missing, clone the framework:
+   ```bash
+   cd ~
+   git clone https://github.com/JamesKayten/AI-Collaboration-Management.git
+   ```
+
+### TCC Init Script Errors
+
+**Problem**: `source ~/tcc-init.sh` produces errors.
+
+**Solutions**:
+1. Check for syntax errors in the init script:
+   ```bash
+   bash -n ~/tcc-init.sh
+   ```
+2. View the actual error:
+   ```bash
+   bash -x ~/tcc-init.sh
+   ```
+3. Verify file permissions:
+   ```bash
+   ls -la ~/tcc-init.sh
+   chmod 755 ~/tcc-init.sh
+   ```
+4. Reinstall TCC:
+   ```bash
+   # Backup current config
+   mv ~/.tccrc ~/.tccrc.backup
+   mv ~/tcc-init.sh ~/tcc-init.sh.backup
+
+   # Reinstall
+   curl -sSL https://raw.githubusercontent.com/JamesKayten/AI-Collaboration-Management/main/tcc-setup/install-tcc.sh | bash
+   ```
+
+### TCC Not Auto-Loading
+
+**Problem**: TCC doesn't initialize automatically in new terminal sessions.
+
+**Solutions**:
+1. Check if `.bashrc` sources the init script:
+   ```bash
+   grep "tcc-init.sh" ~/.bashrc
+   ```
+2. Add it manually if missing:
+   ```bash
+   echo 'source ~/tcc-init.sh 2>/dev/null' >> ~/.bashrc
+   ```
+3. For Zsh users, update `.zshrc`:
+   ```bash
+   echo 'source ~/tcc-init.sh 2>/dev/null' >> ~/.zshrc
+   ```
+4. Restart your terminal
+
+### TCC-Board Command Shows Wrong Project
+
+**Problem**: `tcc-board` displays BOARD.md from wrong project.
+
+**Solutions**:
+1. Check current directory:
+   ```bash
+   pwd
+   ls -la BOARD.md
+   ```
+2. Navigate to correct project:
+   ```bash
+   cd /path/to/your/project
+   tcc-board
+   ```
+3. Run TCC setup for current project:
+   ```bash
+   tcc-setup
+   ```
+
+### TCC Conflicts with Existing Configuration
+
+**Problem**: TCC installation conflicts with existing shell configuration.
+
+**Solutions**:
+1. Review what TCC adds to `.bashrc`:
+   ```bash
+   # TCC only adds one line:
+   # source ~/tcc-init.sh 2>/dev/null
+   ```
+2. Move TCC initialization to specific location in `.bashrc`:
+   ```bash
+   # Edit ~/.bashrc and move the TCC line to avoid conflicts
+   nano ~/.bashrc
+   ```
+3. Use conditional loading:
+   ```bash
+   # In .bashrc:
+   if [ -f ~/tcc-init.sh ]; then
+       source ~/tcc-init.sh
+   fi
+   ```
+
+### TCC Sync Fails
+
+**Problem**: `tcc-sync` command fails to update framework.
+
+**Solutions**:
+1. Check git status in framework directory:
+   ```bash
+   cd ~/AI-Collaboration-Management/
+   git status
+   git pull origin main
+   ```
+2. If conflicts exist, reset to clean state:
+   ```bash
+   cd ~/AI-Collaboration-Management/
+   git fetch origin
+   git reset --hard origin/main
+   ```
+3. Check internet connectivity:
+   ```bash
+   ping github.com
+   ```
+
+### TCC Installed But Not Working
+
+**Problem**: TCC installed successfully but commands don't work.
+
+**Solutions**:
+1. Start fresh terminal session
+2. Manually initialize:
+   ```bash
+   source ~/tcc-init.sh
+   ```
+3. Check for errors:
+   ```bash
+   tcc-status
+   ```
+4. Verify all components:
+   ```bash
+   ls -la ~/.tccrc
+   ls -la ~/tcc-init.sh
+   ls -la ~/AI-Collaboration-Management/
+   ```
+
 ## Getting More Help
 
 If these solutions don't help:

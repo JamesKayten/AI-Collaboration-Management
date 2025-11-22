@@ -42,6 +42,57 @@ A: All of them! The framework is language-agnostic. You just need to configure v
 **Q: Can I use this for multiple projects?**
 A: Yes. Install separately in each project and customize rules per project.
 
+## TCC (Terminal Control Center)
+
+**Q: What is TCC and do I need it?**
+A: TCC is a persistent configuration system for terminal-based AI agents (like Claude Code). You need it if:
+- You're using Claude Code or another terminal AI
+- You want your AI to have automatic access to framework rules
+- You work across multiple projects and want consistent AI behavior
+
+If you only use browser-based AI or don't use terminal AI, you don't need TCC.
+
+**Q: How do I install TCC?**
+A: Tell your terminal AI: "Please install the TCC configuration system on my local machine. Follow the instructions in tcc-setup/INSTRUCTIONS_FOR_TCC.md"
+
+Or run directly:
+```bash
+curl -sSL https://raw.githubusercontent.com/JamesKayten/AI-Collaboration-Management/main/tcc-setup/install-tcc.sh | bash
+```
+
+**Q: What does TCC install on my machine?**
+A: TCC installs:
+- `~/.tccrc` - Environment variables and configuration
+- `~/tcc-init.sh` - Session initialization script
+- `~/AI-Collaboration-Management/` - Framework repository clone
+- Updates to `~/.bashrc` to auto-load TCC configuration
+
+**Q: How does TCC work?**
+A: After installation, run `source ~/tcc-init.sh` at the start of each terminal session. This gives your AI access to all framework rules, protocols, and helper commands.
+
+**Q: What are the TCC helper commands?**
+A: After TCC installation, you have:
+- `tcc-status` - Display framework and project status
+- `tcc-board` - View current project's BOARD.md
+- `tcc-rules` - Display GENERAL_AI_RULES.md
+- `tcc-startup` - Display STARTUP_PROTOCOL.md
+- `tcc-setup` - Configure TCC for current project
+- `tcc-sync` - Update framework with latest changes
+
+**Q: Does TCC work with the standard project installation?**
+A: Yes! TCC is complementary. Use standard installation for project-specific setup, and TCC for terminal AI persistent access to the framework. They work together perfectly.
+
+**Q: Can I uninstall TCC?**
+A: Yes. Remove the TCC configuration:
+```bash
+rm ~/.tccrc ~/tcc-init.sh
+# Remove the TCC lines from ~/.bashrc
+# Optionally remove ~/AI-Collaboration-Management/ if not needed
+```
+
+**Q: Do I need to install TCC for each project?**
+A: No! TCC is a one-time installation on your machine. Once installed, it works across all your projects automatically.
+
 ## Technical
 
 **Q: How does AI-to-AI communication work?**

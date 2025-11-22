@@ -53,8 +53,9 @@ Documentation is critical for adoption:
 1. **Validation Templates** - New language or framework presets
 2. **Integration Scripts** - CI/CD, tools, and platform integrations
 3. **Core Framework** - Improvements to setup, session management, or AI communication
-4. **Testing** - Unit tests, integration tests, or test infrastructure
-5. **Bug Fixes** - Resolving reported issues
+4. **TCC System** - Terminal Control Center features, helper commands, or integrations
+5. **Testing** - Unit tests, integration tests, or test infrastructure
+6. **Bug Fixes** - Resolving reported issues
 
 #### Before You Start
 
@@ -104,6 +105,12 @@ shellcheck *.sh scripts/*.sh
 # Test the master command
 ./ai setup --preset python
 ./ai status
+
+# If working on TCC features, test TCC installation
+cd tcc-setup
+bash install-tcc.sh
+source ~/tcc-init.sh
+tcc-status
 ```
 
 ### 4. Commit Your Changes
@@ -235,6 +242,7 @@ Any additional context or notes for reviewers
    - BATS test suite development
    - Automated integration tests
    - Cross-platform testing
+   - TCC installation testing
 
 2. **Language Support**
    - Go, Rust, Ruby, PHP presets
@@ -247,11 +255,18 @@ Any additional context or notes for reviewers
    - Jenkins pipeline scripts
    - CircleCI configurations
 
-4. **Documentation**
+4. **TCC System Enhancement**
+   - Additional TCC helper commands
+   - TCC integration with other terminal AIs
+   - TCC configuration improvements
+   - TCC testing and validation
+
+5. **Documentation**
    - Video tutorials
    - Real-world case studies
    - Translation to other languages
    - API documentation
+   - TCC usage examples
 
 ### 💡 Good First Issues
 
@@ -339,6 +354,7 @@ Contributors are recognized in several ways:
 - **[README.md](./README.md)**: Project overview and documentation
 - **[FAQ.md](./FAQ.md)**: Common questions and answers
 - **[TROUBLESHOOTING.md](./TROUBLESHOOTING.md)**: Problem resolution
+- **[tcc-setup/](./tcc-setup/)**: TCC system documentation and installation
 
 ### Communication Channels
 

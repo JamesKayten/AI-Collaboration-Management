@@ -6,12 +6,26 @@
 - Local AI (Claude Code, Cursor, etc.) OR Online AI (Claude, GPT, etc.)
 - 5 minutes
 
-## Installation
+## Installation Options
+
+You have two installation paths depending on your workflow:
+
+### Option A: Standard Project Installation
+
+For adding AI collaboration to your projects.
+
+### Option B: TCC (Terminal Control Center) Installation
+
+For terminal-based AI agents that need persistent framework access.
+
+---
+
+## Option A: Standard Project Installation
 
 ### Step 1: Clone the Framework
 
 ```bash
-git clone https://github.com/JamesKayten/Averys-AI-Collaboration-Hack.git
+git clone https://github.com/JamesKayten/AI-Collaboration-Management.git
 ```
 
 ### Step 2: Navigate to Your Project
@@ -23,7 +37,7 @@ cd /path/to/your/project
 ### Step 3: Run the Installer
 
 ```bash
-../Averys-AI-Collaboration-Hack/install.sh
+../AI-Collaboration-Management/setup-ai-collaboration.sh
 ```
 
 The installer will ask:
@@ -40,6 +54,79 @@ ls docs/
 # AI_WORKFLOW.md
 # ai_communication/
 ```
+
+---
+
+## Option B: TCC (Terminal Control Center) Installation
+
+### What is TCC?
+
+TCC provides **persistent framework access** for AI agents working in terminal sessions (like Claude Code's Terminal Control Center). This ensures terminal-based AIs always know where to find rules, protocols, and project context.
+
+### When to Use TCC
+
+- You're using Claude Code or another terminal-based AI
+- You want the AI to have automatic access to framework rules
+- You work across multiple projects and want consistent AI behavior
+
+### Quick TCC Installation
+
+**Step 1: Tell your terminal AI to install:**
+
+```
+"Please install the TCC configuration system on my local machine.
+Follow the instructions in tcc-setup/INSTRUCTIONS_FOR_TCC.md from the
+AI-Collaboration-Management repository."
+```
+
+**Step 2: TCC runs this command:**
+
+```bash
+curl -sSL https://raw.githubusercontent.com/JamesKayten/AI-Collaboration-Management/main/tcc-setup/install-tcc.sh | bash
+```
+
+**Step 3: In every new session, TCC runs:**
+
+```bash
+source ~/tcc-init.sh
+```
+
+### What TCC Installation Provides
+
+After installation, TCC will have:
+
+- ✅ `~/.tccrc` - Environment variables and configuration
+- ✅ `~/tcc-init.sh` - Session initialization script
+- ✅ `~/AI-Collaboration-Management/` - Framework repository with all rules
+- ✅ Updated `~/.bashrc` - Auto-loads TCC configuration
+
+### TCC Helper Commands
+
+```bash
+tcc-status   # Display framework and project status
+tcc-board    # View current project's BOARD.md
+tcc-rules    # Display GENERAL_AI_RULES.md
+tcc-startup  # Display STARTUP_PROTOCOL.md
+tcc-setup    # Configure TCC for current project
+tcc-sync     # Update framework with latest changes
+```
+
+### Benefits of TCC
+
+- ✅ **No Manual Path Lookup** - AI always knows where framework files are
+- ✅ **Persistent Configuration** - Survives terminal restarts
+- ✅ **Auto-Updates** - Init script checks for framework updates
+- ✅ **Project Awareness** - Automatically detects current project context
+- ✅ **Holistic Approach Enabled** - Follows startup protocol automatically
+
+### TCC Documentation
+
+For complete TCC documentation, see:
+- [tcc-setup/README_TCC_INSTALLATION.md](tcc-setup/README_TCC_INSTALLATION.md) - Installation guide
+- [tcc-setup/USER_GUIDE_TCC_INSTALLATION.md](tcc-setup/USER_GUIDE_TCC_INSTALLATION.md) - User guide
+- [tcc-setup/INSTRUCTIONS_FOR_TCC.md](tcc-setup/INSTRUCTIONS_FOR_TCC.md) - Detailed TCC instructions
+
+---
 
 ## Your First AI Collaboration
 

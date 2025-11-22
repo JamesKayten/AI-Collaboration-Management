@@ -21,13 +21,17 @@
 
 ## 🏃 **2-MINUTE SETUP FOR ANY PROJECT**
 
-### **Step 1: Navigate to Your Project**
+### **Choose Your Setup Path:**
+
+#### **Path A: Standard Project Setup** (Most Users)
+
+**Step 1: Navigate to Your Project**
 ```bash
 cd /path/to/your/project
 git init  # (if not already a git repository)
 ```
 
-### **Step 2: Run Setup Command**
+**Step 2: Run Setup Command**
 ```bash
 # For Python projects:
 ~/ai setup --preset python --max-file-size 250 --test-coverage 90 --validation-tools "black,flake8,pytest"
@@ -42,7 +46,7 @@ git init  # (if not already a git repository)
 ~/ai setup --preset data-science --max-file-size 500 --test-coverage 80 --validation-tools "black,pytest,jupyter"
 ```
 
-### **Step 3: Start Using Immediately**
+**Step 3: Start Using Immediately**
 ```bash
 # Work on your project normally, then:
 
@@ -54,6 +58,46 @@ git init  # (if not already a git repository)
 ```
 
 **That's it! AI collaboration + session recovery is now active.**
+
+---
+
+#### **Path B: TCC Setup** (Terminal-Based AI Like Claude Code)
+
+**For Terminal AI that needs persistent framework access:**
+
+**Step 1: One-Time TCC Installation**
+
+Tell your terminal AI:
+```
+"Please install the TCC configuration system on my local machine.
+Follow the instructions in tcc-setup/INSTRUCTIONS_FOR_TCC.md"
+```
+
+Or run directly:
+```bash
+curl -sSL https://raw.githubusercontent.com/JamesKayten/AI-Collaboration-Management/main/tcc-setup/install-tcc.sh | bash
+```
+
+**Step 2: In Every New Terminal Session**
+```bash
+source ~/tcc-init.sh
+```
+
+**Step 3: Use TCC Commands**
+```bash
+tcc-status   # Check framework status
+tcc-board    # View project BOARD.md
+tcc-rules    # View AI rules
+tcc-setup    # Configure for current project
+```
+
+**Benefits:**
+- ✅ AI always knows where framework files are
+- ✅ Persistent across terminal restarts
+- ✅ Works across all your projects
+- ✅ Auto-loads framework rules
+
+**See [tcc-setup/README_TCC_INSTALLATION.md](tcc-setup/README_TCC_INSTALLATION.md) for details.**
 
 ---
 
