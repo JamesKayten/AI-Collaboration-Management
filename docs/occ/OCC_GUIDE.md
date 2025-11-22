@@ -310,4 +310,4 @@ Check the AI Collaboration Framework in the repository for new instructions and 
 For more information:
 - See [AI_COLLABORATION_FRAMEWORK.md](../ai-collaboration/AI_COLLABORATION_FRAMEWORK.md)
 - See [AI_WORKFLOW.md](../ai-collaboration/AI_WORKFLOW.md)
-- See [QUICK_START.md](../../QUICK_START.md)
+- See [QUICK_START.md](../guides/QUICK_START.md)

@@ -6,12 +6,12 @@ Complete documentation for the AI-Collaboration-Management framework.
 
 ### Getting Started
 - **[README](../README.md)** - Project overview and introduction
-- **[Quick Start](../QUICK_START.md)** - 2-minute setup guide
-- **[Getting Started](../GETTING_STARTED.md)** - Detailed installation and setup
-- **[FAQ](../FAQ.md)** - Frequently asked questions
+- **[Quick Start](guides/QUICK_START.md)** - 2-minute setup guide
+- **[Getting Started](guides/GETTING_STARTED.md)** - Detailed installation and setup
+- **[FAQ](guides/FAQ.md)** - Frequently asked questions
 
 ### For Users
-- **[Troubleshooting](../TROUBLESHOOTING.md)** - Common problems and solutions
+- **[Troubleshooting](guides/TROUBLESHOOTING.md)** - Common problems and solutions
 - **[Session Recovery SOP](guides/SESSION_RECOVERY_SOP.md)** - Session recovery procedures
 - **[GUI Quick Start](guides/GUI_QUICK_START.md)** - GUI-based quick start
 - **[OCC Guide](occ/OCC_GUIDE.md)** - Online Claude Copilot guide
@@ -42,8 +42,8 @@ Complete documentation for the AI-Collaboration-Management framework.
 
 | Document | Description | Audience |
 |----------|-------------|----------|
-| [Quick Start](../QUICK_START.md) | 2-minute setup | All users |
-| [Getting Started](../GETTING_STARTED.md) | Detailed installation | New users |
+| [Quick Start](guides/QUICK_START.md) | 2-minute setup | All users |
+| [Getting Started](guides/GETTING_STARTED.md) | Detailed installation | New users |
 | [Deployment Guide](./DEPLOYMENT_GUIDE.md) | Production deployment | Advanced users |
 
 ### Usage & Features
@@ -53,7 +53,7 @@ Complete documentation for the AI-Collaboration-Management framework.
 | [README](../README.md) | Complete feature overview | All users |
 | [Browser Claude Tasks](../BROWSER_CLAUDE_TASKS.md) | Browser AI workflows | All users |
 | [Session Recovery SOP](../SESSION_RECOVERY_SOP.md) | Recovery procedures | All users |
-| [FAQ](../FAQ.md) | Common questions | All users |
+| [FAQ](guides/FAQ.md) | Common questions | All users |
 
 ### Development
 
@@ -78,7 +78,7 @@ Complete documentation for the AI-Collaboration-Management framework.
 | Document | Description | Audience |
 |----------|-------------|----------|
 | [Changelog](./CHANGELOG.md) | Version history | All |
-| [Troubleshooting](../TROUBLESHOOTING.md) | Problem solutions | All users |
+| [Troubleshooting](guides/TROUBLESHOOTING.md) | Problem solutions | All users |
 | [Roadmap](../COLLABORATION_ROADMAP.md) | Future plans | All |
 
 ## Document Status

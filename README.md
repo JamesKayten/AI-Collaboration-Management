@@ -340,7 +340,7 @@ integrations:
 
 - **[Installation Guide](docs/INSTALLATION.md)** - Detailed setup instructions
 - **[Configuration Examples](docs/EXAMPLES.md)** - Templates for common project types
-- **[Troubleshooting](docs/TROUBLESHOOTING.md)** - Common issues and solutions
+- **[Troubleshooting](docs/guides/TROUBLESHOOTING.md)** - Common issues and solutions
 - **[Contributing](CONTRIBUTING.md)** - How to contribute improvements
 - **[API Reference](docs/API.md)** - Framework customization options
 

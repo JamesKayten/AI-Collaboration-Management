@@ -315,7 +315,7 @@ Track these over time:
 
 ## Questions?
 
-- Check [troubleshooting guide](../../TROUBLESHOOTING.md)
+- Check [troubleshooting guide](../../docs/guides/TROUBLESHOOTING.md)
 - Ask in [discussions](https://github.com/JamesKayten/AI-Collaboration-Management/discussions)
 - Review [sample report](sample-report.md)
 

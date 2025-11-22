@@ -177,7 +177,7 @@ bash -n ~/tcc-init.sh
 curl -sSL https://raw.githubusercontent.com/JamesKayten/AI-Collaboration-Management/main/tcc-setup/install-tcc.sh | bash
 ```
 
-For complete troubleshooting, see [TROUBLESHOOTING.md](../TROUBLESHOOTING.md#tcc-terminal-control-center-issues).
+For complete troubleshooting, see [TROUBLESHOOTING.md](../docs/guides/TROUBLESHOOTING.md#tcc-terminal-control-center-issues).
 
 ---
 
@@ -215,7 +215,7 @@ TCC init script automatically checks for updates when sourced.
 
 **Questions?**
 
-- See [FAQ.md](../FAQ.md#tcc-terminal-control-center) for common questions
+- See [FAQ.md](../docs/guides/FAQ.md#tcc-terminal-control-center) for common questions
 - See [INSTRUCTIONS_FOR_TCC.md](INSTRUCTIONS_FOR_TCC.md) for detailed setup
 - See parent [README.md](../README.md#tcc-terminal-control-center-setup) for framework overview
 

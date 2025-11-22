@@ -352,8 +352,8 @@ Contributors are recognized in several ways:
 
 - **[DEVELOPMENT.md](./DEVELOPMENT.md)**: Detailed technical guidelines
 - **[README.md](./README.md)**: Project overview and documentation
-- **[FAQ.md](./FAQ.md)**: Common questions and answers
-- **[TROUBLESHOOTING.md](./TROUBLESHOOTING.md)**: Problem resolution
+- **[FAQ.md](./docs/guides/FAQ.md)**: Common questions and answers
+- **[TROUBLESHOOTING.md](./docs/guides/TROUBLESHOOTING.md)**: Problem resolution
 - **[tcc-setup/](./tcc-setup/)**: TCC system documentation and installation
 
 ### Communication Channels
@@ -373,7 +373,7 @@ Contributors are recognized in several ways:
 1. README.md and documentation
 2. Existing issues (open and closed)
 3. GitHub Discussions
-4. TROUBLESHOOTING.md
+4. docs/guides/TROUBLESHOOTING.md
 
 **When asking for help, include:**
 - What you're trying to achieve
