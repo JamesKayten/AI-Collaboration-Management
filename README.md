@@ -139,6 +139,83 @@ The framework now includes a **comprehensive rules system** that ensures all AIs
 
 **Result**: Eliminates narrow-focused failures, ensures systematic approaches, and creates self-improving AI collaboration quality.
 
+## 🖥️ TCC (Terminal Control Center) Setup
+
+### Persistent Framework Access for Terminal AI Sessions
+
+The TCC Setup System provides **automatic framework access** for AI agents working in terminal sessions (like Claude Code's Terminal Control Center). This ensures terminal-based AIs always know where to find rules, protocols, and project context.
+
+#### The Problem This Solves
+When AI agents start fresh terminal sessions, they don't know:
+- Where the AI Collaboration Management framework is located
+- How to access GENERAL_AI_RULES.md, STARTUP_PROTOCOL.md
+- Where to find project BOARD.md files
+- What environment variables to use
+
+#### The Solution: One-Command Installation
+
+```bash
+# User tells TCC:
+"Please install the TCC configuration system on my local machine.
+Follow the instructions in tcc-setup/INSTRUCTIONS_FOR_TCC.md"
+
+# TCC runs one command that installs everything:
+curl -sSL https://raw.githubusercontent.com/JamesKayten/AI-Collaboration-Management/main/tcc-setup/install-tcc.sh | bash
+```
+
+#### What Gets Installed
+
+**Configuration Files:**
+- `~/.tccrc` - Environment variables and helper functions
+- `~/tcc-init.sh` - Session initialization script
+- `~/.bashrc` - Updated to auto-load TCC configuration
+
+**Framework Repository:**
+- `~/AI-Collaboration-Management/` - Auto-cloned with all rules and templates
+
+#### TCC's First Command in Every Session
+
+After installation, TCC runs this **first** in every new terminal session:
+
+```bash
+source ~/tcc-init.sh
+```
+
+This provides immediate access to:
+- ✅ All framework rules and protocols
+- ✅ Project BOARD.md files
+- ✅ Environment variables for all paths
+- ✅ Helper commands (`tcc-status`, `tcc-board`, `tcc-rules`, etc.)
+
+#### Available Commands After Installation
+
+```bash
+tcc-status   # Display framework and project status
+tcc-board    # View current project's BOARD.md
+tcc-rules    # Display GENERAL_AI_RULES.md
+tcc-startup  # Display STARTUP_PROTOCOL.md
+tcc-setup    # Configure TCC for current project
+tcc-sync     # Update framework with latest changes
+```
+
+#### Benefits
+
+- ✅ **No Manual Path Lookup** - TCC always knows where framework files are
+- ✅ **Persistent Configuration** - Survives terminal restarts
+- ✅ **Auto-Updates** - Init script checks for framework updates
+- ✅ **Project Awareness** - Automatically detects current project context
+- ✅ **Holistic Approach Enabled** - Follows startup protocol automatically
+
+#### Documentation
+
+Complete TCC setup documentation available in [`tcc-setup/`](tcc-setup/):
+- **README_TCC_INSTALLATION.md** - Quick start overview
+- **USER_GUIDE_TCC_INSTALLATION.md** - User-friendly guide
+- **INSTRUCTIONS_FOR_TCC.md** - Detailed instructions for TCC
+- **install-tcc.sh** - Automated installation script
+
+**See [tcc-setup/README_TCC_INSTALLATION.md](tcc-setup/README_TCC_INSTALLATION.md) for complete installation guide.**
+
 ## 📋 Example Configurations
 
 ### Web Application (React + Node.js)
