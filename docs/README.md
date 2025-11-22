@@ -2,7 +2,7 @@
 
 Complete documentation for the AI-Collaboration-Management framework.
 
-## Quick Links
+## 🚀 Quick Links
 
 ### Getting Started
 - **[README](../README.md)** - Project overview and introduction
@@ -12,25 +12,28 @@ Complete documentation for the AI-Collaboration-Management framework.
 
 ### For Users
 - **[Troubleshooting](../TROUBLESHOOTING.md)** - Common problems and solutions
-- **[Session Recovery SOP](../SESSION_RECOVERY_SOP.md)** - Session recovery procedures
-- **[Browser Claude Tasks](../BROWSER_CLAUDE_TASKS.md)** - Browser-specific workflows
-- **[Project State](../PROJECT_STATE.md)** - Current project status
+- **[Session Recovery SOP](guides/SESSION_RECOVERY_SOP.md)** - Session recovery procedures
+- **[GUI Quick Start](guides/GUI_QUICK_START.md)** - GUI-based quick start
+- **[OCC Guide](occ/OCC_GUIDE.md)** - Online Claude Copilot guide
+- **[TCC Setup](../tcc-setup/README.md)** - Terminal Control Center setup
 
 ### For Contributors
 - **[Contributing Guide](../CONTRIBUTING.md)** - How to contribute to the project
-- **[Development Guide](../DEVELOPMENT.md)** - Development standards and workflows
-- **[Code Standards](../CODE_STANDARDS.md)** - Coding style and best practices
+- **[Development Guide](development/DEVELOPMENT.md)** - Development standards and workflows
+- **[Code Standards](development/CODE_STANDARDS.md)** - Coding style and best practices
 - **[Testing Guide](../tests/README.md)** - How to write and run tests
+- **[Architecture](development/ARCHITECTURE.md)** - System architecture
 
 ### For Maintainers
-- **[Governance](../GOVERNANCE.md)** - Project governance and decision-making
-- **[Releases](../RELEASES.md)** - Release process and versioning
-- **[Security](../SECURITY.md)** - Security policies and procedures
+- **[Governance](GOVERNANCE.md)** - Project governance and decision-making
+- **[Releases](development/RELEASES.md)** - Release process and versioning
+- **[Security](SECURITY.md)** - Security policies and procedures
 
 ### Additional Resources
-- **[Changelog](./CHANGELOG.md)** - Version history and changes
-- **[Deployment Guide](./DEPLOYMENT_GUIDE.md)** - Deployment instructions
-- **[Collaboration Roadmap](../COLLABORATION_ROADMAP.md)** - Future plans
+- **[Changelog](../CHANGELOG.md)** - Version history and changes
+- **[Deployment Guide](DEPLOYMENT_GUIDE.md)** - Deployment instructions
+- **[Collaboration Roadmap](ai-collaboration/COLLABORATION_ROADMAP.md)** - Future plans
+- **[Project Manifesto](PROJECT_MANIFESTO.md)** - Vision and philosophy
 - **[License](../LICENSE)** - MIT License
 
 ## Documentation by Category
