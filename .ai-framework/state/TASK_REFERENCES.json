@@ -1,0 +1,23 @@
+{
+  "next_task_id": 4,
+  "tasks": [
+    {
+      "ref": "TK-001",
+      "description": "Fix authentication bug in login module",
+      "status": "PENDING",
+      "created": "2025-11-23T13:50:33-08:00"
+    },
+    {
+      "ref": "TK-002",
+      "description": "Add dark mode toggle to settings page",
+      "status": "PENDING",
+      "created": "2025-11-23T13:50:33-08:00"
+    },
+    {
+      "ref": "TK-003",
+      "description": "Optimize database queries for user profiles",
+      "status": "PENDING",
+      "created": "2025-11-23T13:50:33-08:00"
+    }
+  ]
+}
