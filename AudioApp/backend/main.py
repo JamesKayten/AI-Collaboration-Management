@@ -12,15 +12,21 @@ from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 
 from .services import DatabaseService, LibraryManager, PlayerManager
+from .services.artwork_service import ArtworkService
+from .services.playlist_service import PlaylistService
+from .services.websocket_manager import manager as ws_manager
 from .api import routes
 
 # Configure logging
+app_dir = Path.home() / '.audioapp'
+app_dir.mkdir(exist_ok=True)
+
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     handlers=[
         logging.StreamHandler(sys.stdout),
-        logging.FileHandler(Path.home() / '.audioapp' / 'backend.log')
+        logging.FileHandler(app_dir / 'backend.log')
     ]
 )
 
@@ -46,12 +52,14 @@ app.add_middleware(
 db_service = None
 library_manager = None
 player_manager = None
+artwork_service = None
+playlist_service = None
 
 
 @app.on_event("startup")
 async def startup_event():
     """Initialize services on startup."""
-    global db_service, library_manager, player_manager
+    global db_service, library_manager, player_manager, artwork_service, playlist_service
 
     logger.info("Starting AudioApp Backend...")
 
@@ -67,10 +75,21 @@ async def startup_event():
     player_manager = PlayerManager(db_service)
     logger.info("Player manager initialized")
 
+    # Initialize artwork service
+    artwork_service = ArtworkService()
+    logger.info("Artwork service initialized")
+
+    # Initialize playlist service
+    playlist_service = PlaylistService(db_service)
+    logger.info("Playlist service initialized")
+
     # Inject services into routes
     routes.db_service = db_service
     routes.library_manager = library_manager
     routes.player_manager = player_manager
+    routes.artwork_service = artwork_service
+    routes.playlist_service = playlist_service
+    routes.ws_manager = ws_manager
 
     logger.info("AudioApp Backend started successfully")
 
