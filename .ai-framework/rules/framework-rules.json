@@ -1,0 +1,120 @@
+{
+  "rules_version": "1.0",
+  "last_updated": "2025-11-23T21:40:00Z",
+  "rules": {
+    "file_compliance": {
+      "default_line_limit": {
+        "rule_id": "FR-001",
+        "category": "file_limits",
+        "description": "Default maximum lines per file",
+        "status": "active",
+        "parameters": {
+          "limit": 250,
+          "scope": "all_files",
+          "exceptions": []
+        },
+        "priority": "medium",
+        "created_by": "system",
+        "created_at": "2025-11-23T21:40:00Z"
+      },
+      "file_type_specific_limits": {
+        "rule_id": "FR-002",
+        "category": "file_limits",
+        "description": "File type specific line limits",
+        "status": "active",
+        "parameters": {
+          "limits": {
+            "py": 250,
+            "js": 150,
+            "ts": 150,
+            "jsx": 150,
+            "tsx": 150,
+            "sh": 200,
+            "json": 500,
+            "md": 1000
+          }
+        },
+        "priority": "high",
+        "created_by": "system",
+        "created_at": "2025-11-23T21:40:00Z"
+      }
+    },
+    "workflow_requirements": {
+      "tcc_analysis_required": {
+        "rule_id": "FR-003",
+        "category": "workflow_requirements",
+        "description": "TCC analysis required before OCC implementation",
+        "status": "active",
+        "parameters": {
+          "trigger": "new_feature",
+          "required_action": "tcc_analysis_and_design",
+          "scope": "all_implementations"
+        },
+        "priority": "high",
+        "created_by": "system",
+        "created_at": "2025-11-23T21:40:00Z"
+      },
+      "testing_before_merge": {
+        "rule_id": "FR-004",
+        "category": "workflow_requirements",
+        "description": "Testing required before merge to main",
+        "status": "active",
+        "parameters": {
+          "trigger": "merge_request",
+          "required_action": "run_tests",
+          "scope": "all_merges"
+        },
+        "priority": "high",
+        "created_by": "system",
+        "created_at": "2025-11-23T21:40:00Z"
+      }
+    },
+    "collaboration_patterns": {
+      "tcc_role_definition": {
+        "rule_id": "FR-005",
+        "category": "collaboration_roles",
+        "description": "TCC responsibilities: analysis, design, verification",
+        "status": "active",
+        "parameters": {
+          "role": "TCC",
+          "responsibilities": [
+            "analysis",
+            "design",
+            "specification",
+            "architecture",
+            "verification",
+            "compliance_checking",
+            "project_management"
+          ]
+        },
+        "priority": "high",
+        "created_by": "system",
+        "created_at": "2025-11-23T21:40:00Z"
+      },
+      "occ_role_definition": {
+        "rule_id": "FR-006",
+        "category": "collaboration_roles",
+        "description": "OCC responsibilities: implementation, testing, coding",
+        "status": "active",
+        "parameters": {
+          "role": "OCC",
+          "responsibilities": [
+            "implementation",
+            "coding",
+            "testing",
+            "building",
+            "file_creation",
+            "system_development",
+            "detailed_programming"
+          ]
+        },
+        "priority": "high",
+        "created_by": "system",
+        "created_at": "2025-11-23T21:40:00Z"
+      }
+    }
+  },
+  "rule_count": 6,
+  "active_rules": 6,
+  "disabled_rules": 0
+}
