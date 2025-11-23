@@ -22,7 +22,7 @@ echo ""
 
 # Create framework directory structure
 echo "📁 Creating framework directory structure..."
-mkdir -p .ai-framework/{communications/{reports,updates,responses},project-state,rules,scripts,tools}
+mkdir -p .ai-framework/{communications/{reports,updates,responses},project-state,rules,scripts,tools,monitoring}
 mkdir -p .claude/commands
 
 # Create self-contained BOARD.md
@@ -929,9 +929,46 @@ echo "   ✅ Completely self-contained"
 echo "   ✅ Customizable per repository"
 echo "   ✅ Portable and reliable"
 
+# Install monitoring system
+echo "🛡️  Installing compliance monitoring system..."
+cat > .ai-framework/monitoring/compliance-monitor.sh << 'MONEOF'
+#!/bin/bash
+# AI Collaboration Framework - Compliance Monitor
+set -e
+FRAMEWORK_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+MONITOR_LOG="$FRAMEWORK_ROOT/monitoring/compliance.log"
+VIOLATION_LOG="$FRAMEWORK_ROOT/monitoring/violations.log"
+RED='\033[0;31m'; GREEN='\033[0;32m'; YELLOW='\033[1;33m'; NC='\033[0m'
+mkdir -p "$FRAMEWORK_ROOT/monitoring"
+log_event() { echo "[$(date)] $1" >> "$MONITOR_LOG"; }
+log_violation() { echo "[$(date)] VIOLATION: $1" >> "$VIOLATION_LOG"; echo -e "${RED}🚨 RULE VIOLATION: $1${NC}"; }
+check_tcc_compliance() {
+    log_event "Checking TCC compliance..."
+    if [ -f "$FRAMEWORK_ROOT/tools/auto-check-board.sh" ]; then log_event "✅ Auto board check tool exists"; else log_violation "TCC missing auto-check-board.sh tool"; fi
+    if [ -f "$FRAMEWORK_ROOT/../.claude/commands/check-the-board.md" ]; then
+        if grep -q "no command execution" "$FRAMEWORK_ROOT/../.claude/commands/check-the-board.md"; then log_event "✅ SlashCommand configured correctly"; else log_violation "SlashCommand still trying to execute commands"; fi
+    else log_violation "SlashCommand not configured"; fi
+    if [ -f "$FRAMEWORK_ROOT/CURRENT_BOARD_STATUS.md" ] && [ -f "$FRAMEWORK_ROOT/CHECK_THE_BOARD.md" ]; then log_event "✅ Board status files exist"; else log_violation "Missing board status files for OCC"; fi
+}
+run_compliance_check() {
+    echo -e "${YELLOW}🔍 Running Compliance Check${NC}"
+    log_event "=== COMPLIANCE CHECK STARTED ==="
+    check_tcc_compliance
+    VIOLATION_COUNT=0; if [ -f "$VIOLATION_LOG" ]; then VIOLATION_COUNT=$(wc -l < "$VIOLATION_LOG"); fi
+    if [ "$VIOLATION_COUNT" -gt 0 ]; then echo -e "${RED}🚨 COMPLIANCE FAILURES: $VIOLATION_COUNT violations found${NC}"; exit 1; else echo -e "${GREEN}✅ COMPLIANCE: All rules followed${NC}"; log_event "=== COMPLIANCE CHECK PASSED ==="; fi
+}
+case "${1:-check}" in
+    "check") run_compliance_check ;;
+    "violations") if [ -f "$VIOLATION_LOG" ]; then cat "$VIOLATION_LOG"; else echo "No violations logged"; fi ;;
+    *) echo "Usage: $0 [check|violations]"; exit 1 ;;
+esac
+MONEOF
+chmod +x .ai-framework/monitoring/compliance-monitor.sh
+
 echo ""
 echo -e "${YELLOW}📋 Next Steps:${NC}"
 echo "1. Test framework: ./.ai-framework/tools/tcc-board-check-fast.sh $REPO_URL"
+echo "2. Check compliance: ./.ai-framework/monitoring/compliance-monitor.sh check"
 echo "2. Commit framework: git add . && git commit -m 'Add self-contained AI collaboration framework'"
 echo "3. Use with TCC: 'Check the board' command will work automatically"
 
