@@ -4,14 +4,16 @@
     {
       "ref": "TK-004",
       "description": "Fix SlashCommand permission errors - OCC still getting tool permission failures",
-      "status": "PENDING",
-      "created": "2025-11-23T13:59:12-08:00"
+      "status": "COMPLETE",
+      "created": "2025-11-23T13:59:12-08:00",
+      "completed": "2025-11-23T14:29:01-08:00"
     },
     {
       "ref": "TK-005",
       "description": "Fix framework distribution - new repositories not getting working SlashCommand",
-      "status": "PENDING",
-      "created": "2025-11-23T13:59:12-08:00"
+      "status": "COMPLETE",
+      "created": "2025-11-23T13:59:12-08:00",
+      "completed": "2025-11-23T14:29:01-08:00"
     },
     {
       "ref": "TK-006",
