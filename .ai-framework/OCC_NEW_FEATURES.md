@@ -16,6 +16,16 @@ The collaboration framework has been enhanced with automated TCC discovery. No m
 
 ---
 
+## 📊 **WHEN OCC SAYS "CHECK THE BOARD"**
+
+**Instead of executing commands, just read:**
+1. `.ai-framework/CURRENT_BOARD_STATUS.md` (complete current status)
+2. `.ai-framework/CHECK_THE_BOARD.md` (quick summary)
+
+**No SlashCommand issues, no permission errors, instant status.**
+
+---
+
 ## 🚀 **Immediate OCC Commands**
 
 ### **Check This Repository's Framework Status (Fast):**
