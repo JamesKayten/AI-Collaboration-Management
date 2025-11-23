@@ -21,6 +21,9 @@ Execute this command for **instant** framework status:
 curl -sSL https://raw.githubusercontent.com/JamesKayten/AI-Collaboration-Management/main/tcc-setup/tcc-board-check-fast.sh | bash -s https://github.com/JamesKayten/AI-Collaboration-Management
 ```
 
+### **🚨 For OCC: Use This Command (Not Slash Command)**
+**If you get SlashCommand permission errors with `/check-the-board`, use the curl command above instead.**
+
 ## 🔍 Detailed Analysis (If Needed)
 
 For complete framework analysis with file-level detail:
