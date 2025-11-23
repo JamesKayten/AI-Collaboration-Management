@@ -1,5 +1,5 @@
 {
-  "next_task_id": 9,
+  "next_task_id": 10,
   "tasks": [
     {
       "ref": "TK-004",
@@ -32,6 +32,12 @@
       "description": "Deploy SlashCommand fixes to working repositories - run emergency fix script and test",
       "status": "PENDING",
       "created": "2025-11-23T14:31:34-08:00"
+    },
+    {
+      "ref": "TK-009",
+      "description": "URGENT: Fix SlashCommand permission errors in your working repository. Run the emergency fix script and test that /check-the-board works without permission errors. This is the core issue blocking everything.",
+      "status": "PENDING",
+      "created": "2025-11-23T14:46:24-08:00"
     }
   ]
 }
