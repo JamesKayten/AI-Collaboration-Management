@@ -80,7 +80,16 @@ Merge Cycle: $MERGE_CYCLE
 5. **TK-104: Dynamic Rule Management** - 100% complete, merged to main
 
 ### 🔄 **PENDING TASKS**
-$(if [ -f "\$FRAMEWORK_DIR/tools/task-reference-manager.sh" ]; then "\$FRAMEWORK_DIR/tools/task-reference-manager.sh" pending 2>/dev/null || echo "No active tasks"; else echo "Task system ready"; fi)
+$(if [ -f "$FRAMEWORK_DIR/tools/task-reference-manager.sh" ]; then
+    PENDING_OUTPUT=$("$FRAMEWORK_DIR/tools/task-reference-manager.sh" pending 2>/dev/null)
+    if [ -n "$PENDING_OUTPUT" ]; then
+        echo "$PENDING_OUTPUT"
+    else
+        echo "No pending tasks"
+    fi
+else
+    echo "Task system ready"
+fi)
 
 ---
 
