@@ -110,6 +110,25 @@ No command execution needed. Just read these files and report:
 Report the complete framework status based on the file contents.
 EOF
 
+# Create initial board status files for OCC to read
+echo "📋 Creating board status files..."
+cat > .ai-framework/CURRENT_BOARD_STATUS.md << 'EOF'
+# 📊 Current Board Status
+
+**Framework:** Newly installed
+**Status:** Ready for development
+**Tasks:** No pending tasks
+
+Framework installed successfully. Ready for OCC/TCC collaboration.
+EOF
+
+cat > .ai-framework/CHECK_THE_BOARD.md << 'EOF'
+# 📋 Quick Board Status
+
+**Framework:** Newly installed and ready
+**Next:** Begin development with numbered task references
+EOF
+
 # Install tcc-board-check-fast.sh locally
 echo "🔧 Installing fast board check tool..."
 cat > .ai-framework/tools/tcc-board-check-fast.sh << 'EOF'
