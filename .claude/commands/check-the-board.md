@@ -1,11 +1,33 @@
 ---
-description: Check current board status and tasks
+description: Check board status, commit any changes, and push
 aliases: ["Check the Board", "check the board", "check board", "board check", "status"]
 ---
 
-Read and report:
+**TCC's board check workflow:**
 
-1. BOARD.md - Current status
-2. TASKS.md - Active tasks
+1. **Read status**
+```bash
+cat BOARD.md
+cat TASKS.md
+```
 
-That's it. No scripts, no complexity, just read the files.
+2. **Check for uncommitted changes**
+```bash
+git status
+```
+
+3. **If there are changes: COMMIT AND PUSH**
+```bash
+git add .
+git commit -m "Update board status"
+git push
+```
+
+**Always commit and push if there are changes. No exceptions.**
+
+Report:
+- Board status summary
+- "✅ Changes committed and pushed" (if changes existed)
+- "✅ Board is current" (if no changes)
+
+**Don't just look - commit what you see.**
