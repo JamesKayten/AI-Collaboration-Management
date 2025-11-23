@@ -116,8 +116,26 @@ fi)
 ## 🚀 **COLLABORATION STATUS**
 
 **TCC Role:** ✅ Analysis complete, verification ready
-**OCC Role:** 🔄 Ready for implementation of remaining $PENDING_FEATURES features
-**Progress:** $(( COMPLETED_FEATURES * 100 / TOTAL_FEATURES ))% complete ($COMPLETED_FEATURES of $TOTAL_FEATURES major features done)
+**OCC Role:** $(if [ -f "$FRAMEWORK_DIR/tools/task-reference-manager.sh" ]; then
+    PENDING_COUNT=$("$FRAMEWORK_DIR/tools/task-reference-manager.sh" pending 2>/dev/null | wc -l)
+    if [ "$PENDING_COUNT" -gt 0 ]; then
+        echo "🚨 $PENDING_COUNT CRITICAL TASKS BLOCKING OPERATIONS"
+    else
+        echo "✅ Ready for new development"
+    fi
+else
+    echo "🔄 Ready for task assignment"
+fi)
+**Progress:** Framework complete, $(if [ -f "$FRAMEWORK_DIR/tools/task-reference-manager.sh" ]; then
+    PENDING_COUNT=$("$FRAMEWORK_DIR/tools/task-reference-manager.sh" pending 2>/dev/null | wc -l)
+    if [ "$PENDING_COUNT" -gt 0 ]; then
+        echo "$PENDING_COUNT CRITICAL TASKS BLOCKING"
+    else
+        echo "All tasks complete"
+    fi
+else
+    echo "Ready for work"
+fi)
 **Framework State:** Fully operational with position tracking
 
 ---
@@ -146,10 +164,23 @@ fi)
 
 ## 🎯 **FOR OCC: NEXT STEPS**
 
-1. **Check pending tasks:** All framework features complete
-2. **Look for new numbered tasks** in pending section above
-3. **Use task references** (TK-XXX) when reporting completion
-4. **Framework ready** for application development
+$(if [ -f "$FRAMEWORK_DIR/tools/task-reference-manager.sh" ]; then
+    PENDING_TASKS=$("$FRAMEWORK_DIR/tools/task-reference-manager.sh" pending 2>/dev/null)
+    if [ -n "$PENDING_TASKS" ]; then
+        echo "🚨 **URGENT: $(echo "$PENDING_TASKS" | wc -l) CRITICAL TASKS NEED IMMEDIATE ATTENTION**"
+        echo ""
+        echo "**PRIORITY TASKS:**"
+        echo "$PENDING_TASKS" | while read task; do
+            echo "- $task"
+        done
+        echo ""
+        echo "**These are BLOCKING issues - complete immediately**"
+    else
+        echo "✅ **All critical tasks complete - ready for new development**"
+    fi
+else
+    echo "📋 **Ready for task assignment**"
+fi)
 
 ---
 
