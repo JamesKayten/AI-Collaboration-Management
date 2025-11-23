@@ -3,7 +3,7 @@
   "last_updated": "2025-11-23T20:55:00Z",
   "rules": {
     "auto_execution_directive": {
-      "enabled": false,
+      "enabled": true,
       "description": "Automatically display execution directives when OCC has authorization but requests permission",
       "trigger_conditions": {
         "tcc_analysis_complete": true,
