@@ -92,22 +92,18 @@ sed -i.bak "s|REPOSITORY_URL_PLACEHOLDER|$REPO_URL|g" BOARD.md && rm BOARD.md.ba
 echo "🔧 Installing SlashCommand..."
 cat > .claude/commands/check-the-board.md << 'EOF'
 ---
-description: Get current framework status by reading board status files (no command execution)
+description: Read framework status files and report current status (file reading only)
 aliases: ["Check the Board", "check the board", "check board", "board check", "tcc board", "status check"]
 ---
 
-Read the current board status from the framework status files:
+Read these files directly and report the status:
 
-1. **Read:** `.ai-framework/CURRENT_BOARD_STATUS.md` (complete current status)
-2. **Read:** `.ai-framework/CHECK_THE_BOARD.md` (quick summary)
+1. Read `.ai-framework/CURRENT_BOARD_STATUS.md`
+2. Read `.ai-framework/CHECK_THE_BOARD.md`
 
-No command execution needed. Just read these files and report:
-- Framework status and development position
-- Pending OCC implementations
-- Priority tasks and handoff documents
-- Any critical issues requiring attention
+Report the framework status, pending tasks, and next steps based on the file contents.
 
-Report the complete framework status based on the file contents.
+Do not execute any commands or tools - only read and report the file contents.
 EOF
 
 # Create initial board status files for OCC to read
