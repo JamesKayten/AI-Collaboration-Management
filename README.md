@@ -15,6 +15,32 @@ A **minimal framework** for AI collaboration using simple file-based communicati
 
 ---
 
+## TCC's Three Responsibilities
+
+**TCC (Terminal Claude Code) has exactly three jobs:**
+
+### 1. File Verification
+Validate OCC's changes:
+- Run tests (pytest, npm test, etc.)
+- Check linters (flake8, eslint, etc.)
+- Verify builds work
+- Ensure quality standards met
+
+### 2. Merge to Main Branch
+If validation passes:
+- Merge OCC's branch to main
+- Push to GitHub
+
+### 3. Duplicate Everything Locally
+**CRITICAL** - Update local working directory:
+- Pull latest from main
+- Ensure local files match GitHub
+- User can immediately test/use the code
+
+**All three steps must complete. Never skip step 3.**
+
+---
+
 ## Quick Start
 
 ### Install
@@ -25,14 +51,13 @@ cd AI-Collaboration-Management
 
 ### Use
 ```bash
-# Check current status
+# TCC checks status
 /check-the-board
 
-# View tasks
-cat TASKS.md
+# OCC makes changes and pushes
 
-# Update status
-edit BOARD.md
+# TCC validates, merges, updates local
+/works-ready
 ```
 
 **That's it.**
@@ -45,26 +70,35 @@ edit BOARD.md
 - `BOARD.md` - Current status
 - `TASKS.md` - Task list
 
-**Five simple commands:**
-- `/check-the-board` - Read status and tasks
-- `/fix-violations` - Fix reported issues
-- `/verify` - Check that fixes work
-- `/works-ready` - Validate and merge
-- `/merge-to-main` - Create PR
+**Core TCC command:**
+- `/works-ready` - Verify → Merge → Update Local
 
-**No scripts. No complexity. Just files.**
+**No scripts. No complexity. Just files and git.**
 
 ---
 
 ## Workflow
 
-1. Check `BOARD.md` for status
-2. Make changes
-3. Update `TASKS.md`
-4. Commit and push
-5. Create PR and merge
+### TCC Workflow
+```bash
+# 1. Verify
+git fetch && git checkout <occ-branch>
+# Run tests/validation
 
-**Simple git workflow. No bureaucracy.**
+# 2. Merge to main (if passing)
+git checkout main && git merge <branch> && git push origin main
+
+# 3. Update local
+git pull origin main
+```
+
+### OCC Workflow
+1. Read BOARD.md for status
+2. Fix reported issues
+3. Commit and push
+4. Wait for TCC validation
+
+**Communication through git commits and BOARD.md updates.**
 
 ---
 
@@ -101,10 +135,9 @@ AI-Collaboration-Management/
 ├── .ai-framework/
 │   └── README.md               # Framework docs (63 lines)
 └── .claude/commands/
-    ├── check-the-board.md      # Simple status check
-    ├── fix-violations.md       # Fix issues
-    ├── verify.md               # Verify fixes
-    ├── works-ready.md          # Validate & merge
+    ├── check-the-board.md      # Read status
+    ├── works-ready.md          # TCC main: Verify→Merge→Update
+    ├── verify.md               # Validation only
     └── merge-to-main.md        # Create PR
 ```
 
@@ -114,11 +147,24 @@ AI-Collaboration-Management/
 
 ---
 
+## Critical Rule for TCC
+
+**ALWAYS complete all 3 steps:**
+1. ✅ Verify files
+2. ✅ Merge to main
+3. ✅ Update local working directory
+
+**Never skip step 3.** Local files must match GitHub after merge.
+
+---
+
 ## Documentation
 
-All documentation is in this README. If you need more, you're overthinking it.
+- **TCC_WORKFLOW_GUIDE.md** - TCC's three responsibilities explained
+- **CHANGELOG.md** - Version history and changes
+- **CONTRIBUTING.md** - How to contribute (reduce complexity)
 
-See `.ai-framework/README.md` for framework philosophy.
+All documentation emphasizes simplicity.
 
 ---
 
@@ -181,5 +227,7 @@ MIT License - Use freely.
 ---
 
 **Simple file-based AI collaboration. Nothing more, nothing less.**
+
+**TCC: Verify → Merge → Update Local. Always.**
 
 *If you find yourself adding complexity, you're doing it wrong.*

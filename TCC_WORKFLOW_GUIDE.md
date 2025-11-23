@@ -4,146 +4,115 @@
 
 ---
 
-## Overview
+## TCC's Core Responsibilities
 
-TCC (Terminal Claude Code) collaborates with OCC (Online Claude Code) using simple file-based communication.
+TCC has **three critical responsibilities** in this collaboration:
 
-**No complex scripts. Just files.**
+### 1. File Verification
+Validate OCC's changes:
+- Run tests
+- Check linters
+- Verify builds
+- Ensure quality standards
+
+### 2. Merge to Main Branch
+If validation passes:
+- Merge OCC's branch to main
+- Push to GitHub
+
+### 3. Duplicate Everything Locally
+CRITICAL - Update local working directory:
+- Pull latest from main
+- Ensure local files match GitHub
+- User can immediately test/use the code
+
+**All three steps must complete. Never skip step 3.**
 
 ---
 
-## Core Workflow
+## Complete TCC Workflow
 
-### 1. Check Status
 ```bash
-/check-the-board
-```
-Reads `BOARD.md` and `TASKS.md` - that's it.
+# 1. File Verification
+git fetch origin
+git checkout <occ-branch>
+# Run validation: pytest, npm test, make test, etc.
 
-### 2. Do Work
-Make changes, write code, fix issues.
+# 2. Merge to Main (if passing)
+git checkout main
+git merge <occ-branch>
+git push origin main
 
-### 3. Update Status
-```bash
-edit TASKS.md  # Mark tasks complete
-edit BOARD.md  # Update status
+# 3. Duplicate Locally
+git pull origin main
+# Local files now match GitHub
 ```
-
-### 4. Commit & Push
-```bash
-git add .
-git commit -m "Description of changes"
-git push
-```
-
-### 5. Merge When Ready
-```bash
-/merge-to-main
-```
-Creates PR for merge.
 
 ---
 
 ## Available Commands
 
 ### `/check-the-board`
-- Reads BOARD.md
-- Reads TASKS.md
-- Reports status
-
-**No scripts executed. Just reads files.**
-
-### `/fix-violations`
-- Find issues reported
-- Fix them
-- Commit and push
-
-### `/verify`
-- Pull latest changes
-- Run validation (tests, linters)
-- Report results
+Read BOARD.md and TASKS.md for current status.
 
 ### `/works-ready`
-- Validate changes
-- Merge if passing
-- Report issues if failing
+**TCC's main command** - Executes all three responsibilities:
+1. Verify files
+2. Merge to main
+3. Update local
+
+### `/verify`
+Just runs validation without merging.
 
 ### `/merge-to-main`
-- Check for uncommitted changes
-- Push current branch
-- Create PR with summary
+Create PR (for human review workflow).
 
 ---
 
 ## Collaboration Pattern
 
 **TCC's Role:**
-1. Validate code quality
-2. Run tests and checks
-3. Merge when passing
-4. Report issues when failing
+1. File verification - Validate code quality
+2. Merge to main - Push passing code
+3. Update local - Sync working directory
 
 **OCC's Role:**
 1. Read TCC's reports
 2. Fix issues
 3. Push changes
-4. Respond with fixes
 
 **Communication:**
+- Through BOARD.md status updates
 - Through git commits
-- Through BOARD.md updates
-- Through simple files
-
-**No complexity required.**
+- Simple file-based collaboration
 
 ---
 
-## What Changed from v2.0
+## Critical Rule
 
-**Old workflow:**
-- Run 334-line shell scripts
-- Update 6 different JSON state files
-- Provide proof-of-completion with screenshots
-- Execute monitoring and enforcement
-- Parse natural language rules
-- Manage caching systems
+**TCC must ALWAYS complete all 3 steps:**
+1. ✅ Verify files
+2. ✅ Merge to main
+3. ✅ Update local working directory
 
-**New workflow:**
-- Read 2 markdown files
-- Make changes
-- Commit and push
-- Done
-
-**97% simpler.**
+**Never skip step 3.** Local files must match GitHub after merge.
 
 ---
 
 ## Troubleshooting
 
-**Problem:** Command not working
-**Solution:** Check that BOARD.md and TASKS.md exist
+**Problem:** Validation fails
+**Solution:** Report issues, don't merge, wait for OCC fixes
 
-**Problem:** Can't find status
-**Solution:** `cat BOARD.md`
+**Problem:** Merge succeeds but local not updated
+**Solution:** Run `git pull origin main` immediately
 
-**Problem:** Framework too complex
-**Solution:** You're looking at v2.0 docs. Use v3.0.
-
----
-
-## Philosophy
-
-Keep it simple:
-- Files over scripts
-- Trust over verify
-- Clarity over automation
-- Minimal over comprehensive
-
-**If it's getting complex, you're doing it wrong.**
+**Problem:** Local files don't match GitHub
+**Solution:** You skipped step 3. Always complete all 3 steps.
 
 ---
 
 **Version:** 3.0 Simple
 **Last Updated:** November 23, 2025
 
-**Simple file-based collaboration for TCC.**
+**TCC: Verify, Merge, Update Local. Always.**
