@@ -1,24 +1,6 @@
 {
-  "next_task_id": 6,
+  "next_task_id": 8,
   "tasks": [
-    {
-      "ref": "TK-001",
-      "description": "Fix authentication bug in login module",
-      "status": "PENDING",
-      "created": "2025-11-23T13:50:33-08:00"
-    },
-    {
-      "ref": "TK-002",
-      "description": "Add dark mode toggle to settings page",
-      "status": "PENDING",
-      "created": "2025-11-23T13:50:33-08:00"
-    },
-    {
-      "ref": "TK-003",
-      "description": "Optimize database queries for user profiles",
-      "status": "PENDING",
-      "created": "2025-11-23T13:50:33-08:00"
-    },
     {
       "ref": "TK-004",
       "description": "Fix SlashCommand permission errors - OCC still getting tool permission failures",
@@ -30,6 +12,20 @@
       "description": "Fix framework distribution - new repositories not getting working SlashCommand",
       "status": "PENDING",
       "created": "2025-11-23T13:59:12-08:00"
+    },
+    {
+      "ref": "TK-006",
+      "description": "Add automated compliance monitoring system",
+      "status": "COMPLETE",
+      "created": "2025-11-23T14:13:18-08:00",
+      "completed": "2025-11-23T14:13:18-08:00"
+    },
+    {
+      "ref": "TK-007",
+      "description": "Fix confusing board status messaging",
+      "status": "COMPLETE",
+      "created": "2025-11-23T14:22:46-08:00",
+      "completed": "2025-11-23T14:24:08-08:00"
     }
   ]
 }
