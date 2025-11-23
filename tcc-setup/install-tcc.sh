@@ -104,14 +104,147 @@ sync_framework() {
     fi
 }
 
+init_repo() {
+    local repo_url="$1"
+    local branch="${2:-main}"
+
+    if [ -z "$repo_url" ]; then
+        echo "❌ Usage: tcc-init-repo <repo-url> [branch]"
+        echo ""
+        echo "📋 This command will:"
+        echo "  1. Clone the repository"
+        echo "  2. Checkout the specified branch"
+        echo "  3. Look for framework documentation"
+        echo "  4. Read TCC-specific guides"
+        echo "  5. Display quick start information"
+        return 1
+    fi
+
+    # Extract repo name from URL
+    local repo_name=$(basename "$repo_url" .git)
+    local clone_dir="$HOME/tcc-repos/$repo_name"
+
+    echo "🚀 TCC Repository Initialization"
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo "Repository: $repo_url"
+    echo "Branch: $branch"
+    echo "Directory: $clone_dir"
+    echo ""
+
+    # Create repos directory
+    mkdir -p "$HOME/tcc-repos"
+
+    # Clone repository
+    if [ -d "$clone_dir" ]; then
+        echo "📁 Repository already exists, updating..."
+        cd "$clone_dir"
+        git fetch origin
+        git checkout "$branch"
+        git pull origin "$branch"
+    else
+        echo "📥 Cloning repository..."
+        git clone "$repo_url" "$clone_dir"
+        cd "$clone_dir"
+        git checkout "$branch"
+    fi
+
+    echo ""
+    echo "✅ Repository ready at: $clone_dir"
+    echo ""
+
+    # Look for TCC documentation
+    echo "🔍 Looking for TCC documentation..."
+    echo ""
+
+    local found_docs=false
+
+    # Check for TCC guides
+    if find . -name "TCC_*.md" -type f 2>/dev/null | head -5; then
+        echo ""
+        echo "📚 Found TCC guides. Reading first guide..."
+        local first_guide=$(find . -name "TCC_*.md" -type f 2>/dev/null | head -1)
+        if [ -n "$first_guide" ]; then
+            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            cat "$first_guide"
+            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            found_docs=true
+        fi
+    fi
+
+    # Check for framework handoff docs
+    if [ -d ".ai-framework/communications/updates" ]; then
+        echo ""
+        echo "📬 Found framework communications. Reading latest update..."
+        local latest_update=$(ls -t .ai-framework/communications/updates/AI_UPDATE_*.md 2>/dev/null | head -1)
+        if [ -n "$latest_update" ]; then
+            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            cat "$latest_update"
+            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            found_docs=true
+        fi
+    fi
+
+    # Check for project state
+    if [ -f ".ai-framework/project-state/PROJECT_STATE.md" ]; then
+        echo ""
+        echo "📊 Found project state..."
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        head -50 .ai-framework/project-state/PROJECT_STATE.md
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        found_docs=true
+    fi
+
+    # Check for session recovery
+    if [ -f "restore_session.sh" ]; then
+        echo ""
+        echo "🔄 Session recovery available. Run: ./restore_session.sh"
+    fi
+
+    echo ""
+    if [ "$found_docs" = true ]; then
+        echo "✅ TCC initialization complete - framework documentation loaded"
+        echo "📁 Working directory: $clone_dir"
+    else
+        echo "⚠️  No TCC-specific documentation found"
+        echo "📁 Repository cloned to: $clone_dir"
+        echo "💡 Look for README.md or project documentation"
+    fi
+}
+
+restore_tcc_session() {
+    if [ -f "restore_session.sh" ]; then
+        ./restore_session.sh
+    elif [ -f "$AI_FRAMEWORK_REPO/restore_session.sh" ]; then
+        "$AI_FRAMEWORK_REPO/restore_session.sh"
+    else
+        echo "❌ No session recovery script found"
+        echo "💡 Run this from a project directory with restore_session.sh"
+    fi
+}
+
+create_tcc_snapshot() {
+    if [ -f "create_session_snapshot.sh" ]; then
+        ./create_session_snapshot.sh
+    elif [ -f "$AI_FRAMEWORK_REPO/create_session_snapshot.sh" ]; then
+        "$AI_FRAMEWORK_REPO/create_session_snapshot.sh"
+    else
+        echo "❌ No session snapshot script found"
+        echo "💡 Run this from a project directory with create_session_snapshot.sh"
+    fi
+}
+
 alias tcc-status='framework_status'
 alias tcc-board='check_board'
 alias tcc-rules='view_rules'
 alias tcc-startup='view_startup'
 alias tcc-setup='setup_project'
 alias tcc-sync='sync_framework'
+alias tcc-init-repo='init_repo'
+alias tcc-restore='restore_tcc_session'
+alias tcc-snapshot='create_tcc_snapshot'
 
 echo "🤖 TCC Configuration Loaded"
+echo "💡 New: Use 'tcc-init-repo <url> [branch]' to start working on a repository"
 TCCRC_EOF
     echo "✅ Fallback .tccrc created"
 fi
@@ -313,11 +446,32 @@ echo ""
 echo "  source ~/tcc-init.sh"
 echo ""
 echo "This gives you immediate access to:"
-echo "  • tcc-status   - Framework status"
-echo "  • tcc-board    - View BOARD.md"
-echo "  • tcc-rules    - View AI rules"
-echo "  • tcc-startup  - View startup protocol"
-echo "  • tcc-setup    - Configure for current project"
-echo "  • tcc-sync     - Update framework"
+echo ""
+echo "📚 Framework Commands:"
+echo "  • tcc-status      - Framework status"
+echo "  • tcc-board       - View BOARD.md"
+echo "  • tcc-rules       - View AI rules"
+echo "  • tcc-startup     - View startup protocol"
+echo "  • tcc-sync        - Update framework"
+echo ""
+echo "🚀 Repository Commands:"
+echo "  • tcc-init-repo <url> [branch]  - Clone and initialize any repo"
+echo "  • tcc-setup       - Configure for current project"
+echo ""
+echo "🔄 Session Recovery:"
+echo "  • tcc-restore     - Restore previous session state"
+echo "  • tcc-snapshot    - Save current session state"
+echo ""
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "💡 Quick Start for New Repository:"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo ""
+echo "  tcc-init-repo https://github.com/user/repo branch-name"
+echo ""
+echo "This will:"
+echo "  1. Clone the repository"
+echo "  2. Checkout the branch"
+echo "  3. Find and display all TCC documentation"
+echo "  4. Load framework context automatically"
 echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"

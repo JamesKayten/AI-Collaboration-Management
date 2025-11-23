@@ -18,6 +18,30 @@ Hi TCC! I need you to review work in a repository using our AI Collaboration Fra
 **Repository:** `[PASTE_REPO_URL_HERE]`
 **Branch:** `[PASTE_BRANCH_NAME_HERE]`
 
+---
+
+## ⚡ QUICK METHOD (If you have TCC framework installed)
+
+If you've installed the TCC configuration system on your local machine, just run:
+
+```bash
+tcc-init-repo [PASTE_REPO_URL_HERE] [PASTE_BRANCH_NAME_HERE]
+```
+
+**This will automatically:**
+- ✅ Clone the repository
+- ✅ Checkout the branch
+- ✅ Find and display all TCC documentation
+- ✅ Read framework handoff documents
+- ✅ Show project state
+- ✅ Give you instant context to start working
+
+**If this works, you're done! Skip to the "Begin Your Work" section below.**
+
+---
+
+## 📋 MANUAL METHOD (If TCC framework not installed)
+
 ### Your Mission:
 
 1. **Clone and Setup**
@@ -90,9 +114,19 @@ repository-root/
 
 ---
 
-## 📝 QUICK FILL TEMPLATE
+## 📝 QUICK FILL TEMPLATES
 
-Use this for quick copy/paste:
+### Option 1: If TCC has framework installed (RECOMMENDED)
+
+```
+TCC: Initialize this repository with the framework.
+
+Run: tcc-init-repo [REPO_URL] [BRANCH_NAME]
+
+This will clone the repo, checkout the branch, and automatically load all framework documentation.
+```
+
+### Option 2: Manual initialization (if framework not installed)
 
 ```
 TCC: Review this repository using the AI Collaboration Framework.
