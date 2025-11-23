@@ -1,0 +1,43 @@
+{
+  "version_history": [
+    {
+      "version": "v2.1.5",
+      "date": "2025-11-23",
+      "type": "MINOR",
+      "changes": [
+        "Development state tracking system",
+        "Self-contained framework installer complete",
+        "Enhanced file compliance checking",
+        "Detailed board check tool"
+      ],
+      "development_cycle": "DC-2025-11-23-05"
+    },
+    {
+      "version": "v2.1.4",
+      "date": "2025-11-23",
+      "type": "PATCH",
+      "changes": [
+        "Dynamic rule management system design",
+        "Execution mode configuration design"
+      ],
+      "development_cycle": "DC-2025-11-23-04"
+    },
+    {
+      "version": "v2.1.3",
+      "date": "2025-11-23",
+      "type": "PATCH",
+      "changes": [
+        "TCC setup framework enhancements",
+        "Board check automation"
+      ],
+      "development_cycle": "DC-2025-11-23-03"
+    }
+  ],
+  "current_version": "v2.1.5",
+  "next_version": "v2.1.6",
+  "version_scheme": {
+    "MAJOR": "Framework architecture changes (breaking changes)",
+    "MINOR": "New feature additions (backward compatible)",
+    "PATCH": "Bug fixes and refinements (backward compatible)"
+  }
+}
