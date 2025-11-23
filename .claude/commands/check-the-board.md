@@ -1,20 +1,17 @@
 ---
-description: Run TCC board check to get current framework status and collaboration updates
+description: Get current framework status by reading board status files (no command execution)
 aliases: ["Check the Board", "check the board", "check board", "board check", "tcc board", "status check"]
 ---
 
-Execute the fast TCC board check to get instant framework status and pending work:
+Read the current board status from the framework status files:
 
-```bash
-curl -sSL https://raw.githubusercontent.com/JamesKayten/AI-Collaboration-Management/main/tcc-setup/tcc-board-check-fast.sh | bash -s https://github.com/JamesKayten/AI-Collaboration-Management
-```
+1. **Read:** `.ai-framework/CURRENT_BOARD_STATUS.md` (complete current status)
+2. **Read:** `.ai-framework/CHECK_THE_BOARD.md` (quick summary)
 
-This will provide:
-- ✅ Complete framework discovery and configuration
-- ✅ All collaboration parameters loaded
-- ✅ Previous session/progress state recovered
-- ✅ New work needing verification identified
-- ✅ Prioritized action plan
-- ✅ Ready-to-use work environment
+No command execution needed. Just read these files and report:
+- Framework status and development position
+- Pending OCC implementations
+- Priority tasks and handoff documents
+- Any critical issues requiring attention
 
-Report the framework status, pending OCC tasks, and any critical handoffs requiring immediate attention.
+Report the complete framework status based on the file contents.
