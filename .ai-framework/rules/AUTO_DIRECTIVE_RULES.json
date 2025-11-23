@@ -1,0 +1,78 @@
+{
+  "rule_system_version": "1.0",
+  "last_updated": "2025-11-23T20:55:00Z",
+  "rules": {
+    "auto_execution_directive": {
+      "enabled": false,
+      "description": "Automatically display execution directives when OCC has authorization but requests permission",
+      "trigger_conditions": {
+        "tcc_analysis_complete": true,
+        "occ_authorization_granted": true,
+        "occ_waiting_for_permission": true,
+        "handoff_documents_ready": true
+      },
+      "actions": {
+        "update_board_md": true,
+        "display_execution_directive": true,
+        "highlight_priority_order": true,
+        "show_authorization_status": true
+      },
+      "directive_template": {
+        "header": "🚨 **OCC: STOP WAITING - START IMPLEMENTING NOW**",
+        "message": "**URGENT:** Read `.ai-framework/communications/OCC_IMMEDIATE_EXECUTION_ORDER.md`\n**Permission is GRANTED. Begin {priority_task} implementation immediately.**\n**DO NOT ASK FOR PERMISSION. START CODING.**",
+        "separator": "---"
+      },
+      "removal_conditions": {
+        "occ_implementation_started": true,
+        "user_disabled_rule": true,
+        "manual_override": true
+      },
+      "toggle_commands": {
+        "enable": "./.ai-framework/tools/toggle-rule.sh --enable auto_execution_directive",
+        "disable": "./.ai-framework/tools/toggle-rule.sh --disable auto_execution_directive",
+        "status": "./.ai-framework/tools/toggle-rule.sh --status auto_execution_directive"
+      }
+    },
+    "development_state_prompts": {
+      "enabled": true,
+      "description": "Show development position and next actions prominently",
+      "trigger_conditions": {
+        "board_check_event": true,
+        "development_state_available": true
+      },
+      "actions": {
+        "show_current_phase": true,
+        "display_progress_indicators": true,
+        "highlight_next_actions": true
+      }
+    },
+    "merge_conflict_prevention": {
+      "enabled": false,
+      "description": "Automatically detect and prevent problematic merge scenarios",
+      "trigger_conditions": {
+        "merge_attempt": true,
+        "audioapp_detected": true
+      },
+      "actions": {
+        "warn_before_merge": true,
+        "suggest_selective_merge": true,
+        "provide_exclusion_commands": true
+      }
+    }
+  },
+  "global_settings": {
+    "rule_enforcement": "automatic",
+    "user_override_allowed": true,
+    "logging_enabled": true,
+    "debug_mode": false
+  },
+  "rule_log": [
+    {
+      "timestamp": "2025-11-23T20:55:00Z",
+      "action": "rule_created",
+      "rule": "auto_execution_directive",
+      "enabled": true,
+      "reason": "User requested toggleable automatic directive system"
+    }
+  ]
+}
