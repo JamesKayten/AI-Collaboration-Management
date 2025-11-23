@@ -1,5 +1,5 @@
 {
-  "next_task_id": 4,
+  "next_task_id": 6,
   "tasks": [
     {
       "ref": "TK-001",
@@ -18,6 +18,18 @@
       "description": "Optimize database queries for user profiles",
       "status": "PENDING",
       "created": "2025-11-23T13:50:33-08:00"
+    },
+    {
+      "ref": "TK-004",
+      "description": "Fix SlashCommand permission errors - OCC still getting tool permission failures",
+      "status": "PENDING",
+      "created": "2025-11-23T13:59:12-08:00"
+    },
+    {
+      "ref": "TK-005",
+      "description": "Fix framework distribution - new repositories not getting working SlashCommand",
+      "status": "PENDING",
+      "created": "2025-11-23T13:59:12-08:00"
     }
   ]
 }
