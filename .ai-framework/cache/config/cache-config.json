@@ -1,0 +1,48 @@
+{
+  "cache_version": "1.0",
+  "enabled": true,
+  "default_ttl_seconds": 300,
+  "max_cache_size_mb": 100,
+  "compression_enabled": true,
+  "cache_categories": {
+    "board-status": {
+      "enabled": true,
+      "ttl_seconds": 300,
+      "max_entries": 50,
+      "compression": true
+    },
+    "explanations": {
+      "enabled": true,
+      "ttl_seconds": 86400,
+      "max_entries": 100,
+      "compression": true
+    },
+    "code-patterns": {
+      "enabled": true,
+      "ttl_seconds": 3600,
+      "max_entries": 200,
+      "compression": true
+    },
+    "templates": {
+      "enabled": true,
+      "ttl_seconds": 86400,
+      "max_entries": 50,
+      "compression": false
+    }
+  },
+  "invalidation_rules": {
+    "on_framework_update": true,
+    "on_file_modification": true,
+    "on_manual_request": true
+  },
+  "warming_strategy": {
+    "enabled": true,
+    "warm_on_startup": true,
+    "common_responses": [
+      "framework_status",
+      "board_check_summary",
+      "collaboration_workflow"
+    ]
+  },
+  "last_updated": "2025-11-23T21:35:00Z"
+}

@@ -1,0 +1,44 @@
+{
+  "framework_version": "v2.1.6",
+  "execution_defaults": {
+    "mode": "AUTO_EXECUTE",
+    "timeout_seconds": 3600,
+    "max_retry_attempts": 3,
+    "progress_update_interval": 300
+  },
+  "file_compliance_defaults": {
+    "max_file_size_bytes": 51200,
+    "max_lines_per_file": 250,
+    "file_type_limits": {
+      "py": 250,
+      "js": 150,
+      "ts": 150,
+      "sh": 200,
+      "json": 500
+    }
+  },
+  "caching_defaults": {
+    "enabled": true,
+    "default_ttl_seconds": 300,
+    "max_cache_size_mb": 100,
+    "cache_compression": true
+  },
+  "collaboration_defaults": {
+    "tcc_role": "analysis_design_verification",
+    "occ_role": "implementation_testing_coding",
+    "require_handoff_documentation": true,
+    "auto_track_progress": true
+  },
+  "notification_defaults": {
+    "board_check_notifications": true,
+    "merge_completion_notifications": true,
+    "error_notifications": true,
+    "progress_notifications": true
+  },
+  "rule_enforcement_defaults": {
+    "auto_apply_rules": true,
+    "validate_before_commit": true,
+    "block_on_violations": false,
+    "log_all_validations": true
+  }
+}

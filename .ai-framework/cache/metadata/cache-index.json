@@ -1,0 +1,33 @@
+{
+  "index_version": "1.0",
+  "total_entries": 0,
+  "total_size_bytes": 0,
+  "last_cleanup": "2025-11-23T21:35:00Z",
+  "entries": {},
+  "categories": {
+    "board-status": {
+      "count": 0,
+      "size_bytes": 0,
+      "oldest_entry": null,
+      "newest_entry": null
+    },
+    "explanations": {
+      "count": 0,
+      "size_bytes": 0,
+      "oldest_entry": null,
+      "newest_entry": null
+    },
+    "code-patterns": {
+      "count": 0,
+      "size_bytes": 0,
+      "oldest_entry": null,
+      "newest_entry": null
+    },
+    "templates": {
+      "count": 0,
+      "size_bytes": 0,
+      "oldest_entry": null,
+      "newest_entry": null
+    }
+  }
+}
