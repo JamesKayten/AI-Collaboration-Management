@@ -336,9 +336,75 @@ fi
 echo -e "${RED}❌ FILE SIZE COMPLIANCE: FAILED${NC}"
 echo -e "${RED}$VIOLATION_COUNT violations found${NC}"
 
-# Create violation report...
-# [Additional violation report creation code would go here]
+# Create violation report
+cd ../..  # Back to repository root
+cat > "$VIOLATION_REPORT" << REPORTEOF
+# TCC File Size Compliance Report
 
+**Date:** $(date)
+**Branch:** $CURRENT_BRANCH → $TARGET_BRANCH
+**Status:** ❌ **COMPLIANCE FAILED**
+**Violations:** $VIOLATION_COUNT
+
+---
+
+## 🚨 **MERGE BLOCKED - ACTION REQUIRED**
+
+The following files exceed the maximum size limits and **MUST be refactored before merge:**
+
+$(cat "$TEMP_VIOLATIONS" | while IFS='|' read -r type file ext lines limit; do
+    if [[ "$type" == "VIOLATION" ]]; then
+        echo "### ❌ \`$file\`"
+        echo "- **Current Size:** $lines lines"
+        echo "- **Maximum Allowed:** $limit lines"
+        echo "- **Over Limit By:** $((lines - limit)) lines"
+        echo ""
+    fi
+done)
+
+---
+
+## 🔧 **OCC REFACTORING INSTRUCTIONS**
+
+### **File Size Limits:**
+- **Python (.py):** 250 lines max
+- **JavaScript/TypeScript (.js/.ts):** 150 lines max
+- **Java (.java):** 400 lines max
+- **Go/Swift/Rust:** 300 lines max
+- **Markdown (.md):** 500 lines max
+- **Shell scripts (.sh):** 200 lines max
+- **Other formats:** See TCC documentation
+
+### **Refactoring Strategies:**
+1. **Split large functions** into smaller, focused functions
+2. **Extract utility functions** to separate files
+3. **Break large components** into smaller modules
+4. **Move constants/configs** to dedicated files
+5. **Use composition** over large inheritance hierarchies
+
+### **Testing Your Changes:**
+\`\`\`bash
+# Run compliance check again
+./.ai-framework/tools/tcc-file-compliance.sh $TARGET_BRANCH
+
+# Should show: ✅ FILE SIZE COMPLIANCE: PASSED
+\`\`\`
+
+---
+
+## 📋 **TCC Validation Results**
+
+- **Files Scanned:** $(echo "$FILES_TO_CHECK" | wc -l)
+- **Violations Found:** $VIOLATION_COUNT
+- **Compliance Status:** ❌ FAILED
+- **Merge Status:** 🚫 BLOCKED until violations resolved
+
+---
+
+**⚠️  IMPORTANT:** This branch cannot be merged until all file size violations are resolved.
+REPORTEOF
+
+cd .ai-framework/tools
 echo -e "${YELLOW}📝 Violation report created:${NC} $VIOLATION_REPORT"
 
 rm -f "$TEMP_VIOLATIONS"
@@ -351,6 +417,203 @@ exit 1
 EOF
 
 chmod +x .ai-framework/tools/tcc-file-compliance.sh
+
+# Install detailed board check tool
+echo "🔍 Installing detailed board check tool..."
+cat > .ai-framework/tools/tcc-board-check.sh << 'EOF'
+#!/bin/bash
+
+# TCC Board Check - Detailed Version (Self-Contained)
+# Usage: ./tcc-board-check.sh <repository_url> [branch]
+# Purpose: Complete framework status with file-level detail
+
+set -e
+
+REPO_URL="$1"
+BRANCH="${2:-main}"
+WORK_DIR="/tmp/tcc-board-check-$(date +%s)"
+
+# Colors
+GREEN='\033[0;32m'
+RED='\033[0;31m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+CYAN='\033[0;36m'
+NC='\033[0m'
+
+echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo -e "${CYAN}🎯 TCC BOARD CHECK - DETAILED STATUS REPORT (Self-Contained)${NC}"
+echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo ""
+
+if [ -z "$REPO_URL" ]; then
+    echo -e "${RED}❌ Usage: $0 <repository_url> [branch]${NC}"
+    exit 1
+fi
+
+echo -e "${BLUE}📋 Repository:${NC} $REPO_URL"
+echo -e "${BLUE}🔧 Branch:${NC} $BRANCH"
+echo -e "${BLUE}📁 Work Directory:${NC} $WORK_DIR"
+echo ""
+
+# Clone repository
+echo -e "${YELLOW}🔄 Cloning repository...${NC}"
+git clone "$REPO_URL" "$WORK_DIR" >/dev/null 2>&1
+cd "$WORK_DIR"
+
+if [ "$BRANCH" != "main" ] && [ "$BRANCH" != "master" ]; then
+    git checkout "$BRANCH" >/dev/null 2>&1
+fi
+
+echo -e "${GREEN}✅ Repository cloned${NC}"
+echo ""
+
+# Auto-discover framework
+echo -e "${YELLOW}🔍 Discovering framework...${NC}"
+
+FRAMEWORK_FOUND=false
+FRAMEWORK_PATH=""
+
+if [ -d ".ai-framework" ]; then
+    FRAMEWORK_FOUND=true
+    FRAMEWORK_PATH=".ai-framework"
+    echo -e "${GREEN}✅ Self-contained framework found${NC}"
+else
+    for dir in */; do
+        if [ -d "$dir/.ai-framework" ]; then
+            FRAMEWORK_FOUND=true
+            FRAMEWORK_PATH="$dir/.ai-framework"
+            echo -e "${GREEN}✅ Framework found in: $dir${NC}"
+            break
+        fi
+    done
+fi
+
+if [ "$FRAMEWORK_FOUND" = false ]; then
+    echo -e "${RED}❌ No framework found${NC}"
+    rm -rf "$WORK_DIR"
+    exit 1
+fi
+
+echo ""
+
+# Read framework configuration
+echo -e "${YELLOW}📋 Reading configuration...${NC}"
+
+if [ -f "$FRAMEWORK_PATH/project-state/PROJECT_STATE.md" ]; then
+    echo -e "${GREEN}✅ Project state found${NC}"
+fi
+
+if [ -f "$FRAMEWORK_PATH/OCC_NEW_FEATURES.md" ]; then
+    echo -e "${GREEN}✅ OCC features file found${NC}"
+fi
+
+if [ -d "$FRAMEWORK_PATH/tools" ]; then
+    TOOL_COUNT=$(find "$FRAMEWORK_PATH/tools" -name "*.sh" | wc -l)
+    echo -e "${GREEN}✅ $TOOL_COUNT embedded tools found${NC}"
+fi
+
+echo ""
+
+# Check branches
+echo -e "${YELLOW}🌿 Checking branches...${NC}"
+FEATURE_BRANCHES=$(git branch -r | grep -E "(claude/|feature/)" | head -10 || true)
+if [ -n "$FEATURE_BRANCHES" ]; then
+    echo -e "${BLUE}Feature branches:${NC}"
+    echo "$FEATURE_BRANCHES" | sed 's/^/  /'
+    PENDING_BRANCHES=true
+else
+    echo -e "${YELLOW}No feature branches${NC}"
+    PENDING_BRANCHES=false
+fi
+
+echo ""
+
+# Check communications
+echo -e "${YELLOW}📬 Checking communications...${NC}"
+
+REPORTS_FOUND=false
+UPDATES_FOUND=false
+
+if [ -d "$FRAMEWORK_PATH/communications/reports" ]; then
+    REPORTS=$(find "$FRAMEWORK_PATH/communications/reports" -name "*.md" 2>/dev/null || true)
+    if [ -n "$REPORTS" ]; then
+        echo -e "${GREEN}📋 TCC Reports:${NC}"
+        echo "$REPORTS" | sed 's/^/  /'
+        REPORTS_FOUND=true
+    fi
+fi
+
+if [ -d "$FRAMEWORK_PATH/communications/updates" ]; then
+    UPDATES=$(find "$FRAMEWORK_PATH/communications/updates" -name "*.md" 2>/dev/null || true)
+    if [ -n "$UPDATES" ]; then
+        echo -e "${GREEN}📢 OCC Updates:${NC}"
+        echo "$UPDATES" | sed 's/^/  /'
+        UPDATES_FOUND=true
+    fi
+fi
+
+if [ "$REPORTS_FOUND" = false ] && [ "$UPDATES_FOUND" = false ]; then
+    echo -e "${YELLOW}No pending communications${NC}"
+fi
+
+echo ""
+
+# Status summary
+echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo -e "${CYAN}📊 STATUS SUMMARY${NC}"
+echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo ""
+
+echo -e "${BLUE}🔧 Framework Path:${NC} $FRAMEWORK_PATH"
+echo -e "${BLUE}📋 Current Branch:${NC} $(git branch --show-current)"
+echo -e "${BLUE}📅 Last Commit:${NC} $(git log -1 --format='%h - %s (%cr)')"
+echo -e "${BLUE}🔒 Framework Type:${NC} Self-Contained (No External Dependencies)"
+echo ""
+
+# Action items
+echo -e "${YELLOW}⚡ IMMEDIATE ACTIONS:${NC}"
+
+ACTION_COUNT=0
+
+if [ "$PENDING_BRANCHES" = true ]; then
+    ((ACTION_COUNT++))
+    echo -e "${RED}$ACTION_COUNT.${NC} Review and test feature branches"
+fi
+
+if [ "$REPORTS_FOUND" = true ]; then
+    ((ACTION_COUNT++))
+    echo -e "${RED}$ACTION_COUNT.${NC} Process TCC validation reports"
+fi
+
+if [ "$UPDATES_FOUND" = true ]; then
+    ((ACTION_COUNT++))
+    echo -e "${RED}$ACTION_COUNT.${NC} Read OCC handoff updates"
+fi
+
+if [ "$ACTION_COUNT" -eq 0 ]; then
+    echo -e "${GREEN}✅ No immediate actions required${NC}"
+fi
+
+echo ""
+
+# Quick reference
+echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo -e "${CYAN}🚀 QUICK REFERENCE${NC}"
+echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo ""
+
+echo -e "${BLUE}📁 Work Directory:${NC} cd $WORK_DIR"
+echo -e "${BLUE}🔧 Test Branch:${NC} git checkout <branch_name>"
+echo -e "${BLUE}🧹 Cleanup:${NC} rm -rf $WORK_DIR"
+echo ""
+
+echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo -e "${GREEN}✅ DETAILED BOARD CHECK COMPLETE${NC}"
+echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+EOF
+
+chmod +x .ai-framework/tools/tcc-board-check.sh
 
 # Create OCC discovery file
 echo "🔍 Creating OCC discovery file..."
@@ -453,6 +716,7 @@ cat > .ai-framework/project-state/PROJECT_STATE.md << EOF
 ## Tools Installed
 
 - tcc-board-check-fast.sh (Fast status check)
+- tcc-board-check.sh (Detailed status check)
 - tcc-file-compliance.sh (File size enforcement)
 - install-framework-complete.sh (Self-installer)
 
@@ -528,8 +792,10 @@ echo -e "${BLUE}🛠️  Tools:${NC} .ai-framework/tools/"
 echo ""
 echo -e "${GREEN}✅ Files Created:${NC}"
 echo "   📄 BOARD.md (TCC discovery)"
-echo "   🔧 .ai-framework/tools/tcc-board-check-fast.sh"
+echo "   ⚡ .ai-framework/tools/tcc-board-check-fast.sh"
+echo "   🔍 .ai-framework/tools/tcc-board-check.sh"
 echo "   🔒 .ai-framework/tools/tcc-file-compliance.sh"
+echo "   📦 .ai-framework/tools/install-framework-complete.sh"
 echo "   🔍 .ai-framework/OCC_NEW_FEATURES.md"
 echo "   📋 .ai-framework/project-state/PROJECT_STATE.md"
 echo "   ⚙️  .ai-framework/rules/VALIDATION_RULES.md"
@@ -559,6 +825,9 @@ echo -e "${GREEN}🎉 SELF-CONTAINED FRAMEWORK INSTALLATION COMPLETE${NC}"
 echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 EOF
 
+# Copy installer itself to tools directory for self-replication
+echo "📦 Embedding self-installer..."
+cp "$0" .ai-framework/tools/install-framework-complete.sh 2>/dev/null || true
 chmod +x .ai-framework/tools/install-framework-complete.sh
 
 # Final summary
