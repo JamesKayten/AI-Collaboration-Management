@@ -1,19 +1,13 @@
 #!/bin/bash
 
-# TCC File Size Compliance Checker
-# Usage: ./tcc-file-compliance.sh [target_branch]
-# Purpose: Check all files against size limits before merge, create violation reports
+# TCC File Size Compliance Checker - Simple Version
+# Usage: ./tcc-file-compliance-simple.sh [target_branch]
+# Purpose: Check all files against size limits before merge
 
 set -e
 
-# Ensure we're using bash for associative arrays
-if [ -z "$BASH_VERSION" ]; then
-    echo "This script requires bash. Please run with: bash $0 $*"
-    exit 1
-fi
-
 TARGET_BRANCH="${1:-main}"
-CURRENT_BRANCH=$(git branch --show-current)
+CURRENT_BRANCH=$(git branch --show-current 2>/dev/null || echo "unknown")
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
 VIOLATION_REPORT=".ai-framework/communications/reports/TCC_FILE_VIOLATIONS_${TIMESTAMP}.md"
 TEMP_VIOLATIONS="/tmp/violations_${TIMESTAMP}.txt"
@@ -25,36 +19,6 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 CYAN='\033[0;36m'
 NC='\033[0m'
-
-# File size limits (lines per file type)
-declare -A SIZE_LIMITS=(
-    ["py"]=250
-    ["js"]=150
-    ["jsx"]=150
-    ["ts"]=150
-    ["tsx"]=150
-    ["java"]=400
-    ["go"]=300
-    ["swift"]=300
-    ["rs"]=300
-    ["cpp"]=400
-    ["c"]=300
-    ["h"]=200
-    ["hpp"]=200
-    ["md"]=500
-    ["sh"]=200
-    ["yaml"]=300
-    ["yml"]=300
-    ["json"]=300
-    ["xml"]=300
-    ["html"]=200
-    ["css"]=200
-    ["scss"]=200
-    ["vue"]=200
-    ["rb"]=250
-    ["php"]=250
-    ["dart"]=200
-)
 
 echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 echo -e "${CYAN}🔍 TCC FILE SIZE COMPLIANCE CHECK${NC}"
@@ -70,6 +34,25 @@ mkdir -p .ai-framework/communications/reports
 echo ""
 echo -e "${YELLOW}🔍 Scanning files for size violations...${NC}"
 
+# Function to get size limit for file extension
+get_size_limit() {
+    case "$1" in
+        py) echo 250 ;;
+        js|jsx|ts|tsx) echo 150 ;;
+        java) echo 400 ;;
+        go|swift|rs) echo 300 ;;
+        cpp|c) echo 300 ;;
+        h|hpp) echo 200 ;;
+        md) echo 500 ;;
+        sh) echo 200 ;;
+        yaml|yml|json|xml) echo 300 ;;
+        html|css|scss|vue) echo 200 ;;
+        rb|php) echo 250 ;;
+        dart) echo 200 ;;
+        *) echo 0 ;;  # No limit for unknown extensions
+    esac
+}
+
 # Initialize violation counter and file
 VIOLATION_COUNT=0
 > "$TEMP_VIOLATIONS"
@@ -82,30 +65,41 @@ else
 fi
 
 # Check each file
-while IFS= read -r file; do
+echo "$FILES_TO_CHECK" | while IFS= read -r file; do
     if [[ -f "$file" ]]; then
         # Get file extension
         extension="${file##*.}"
 
+        # Get size limit for this extension
+        max_lines=$(get_size_limit "$extension")
+
         # Skip if no size limit defined for this extension
-        if [[ -z "${SIZE_LIMITS[$extension]}" ]]; then
+        if [[ $max_lines -eq 0 ]]; then
             continue
         fi
 
         # Count lines in file
         line_count=$(wc -l < "$file" 2>/dev/null || echo 0)
-        max_lines="${SIZE_LIMITS[$extension]}"
 
         # Check if violation
         if [[ $line_count -gt $max_lines ]]; then
-            ((VIOLATION_COUNT++))
             echo -e "${RED}❌ VIOLATION:${NC} $file ($line_count lines > $max_lines limit)"
             echo "VIOLATION|$file|$extension|$line_count|$max_lines" >> "$TEMP_VIOLATIONS"
         else
             echo -e "${GREEN}✅${NC} $file ($line_count lines ≤ $max_lines limit)"
         fi
     fi
-done <<< "$FILES_TO_CHECK"
+done
+
+# Count violations
+if [[ -f "$TEMP_VIOLATIONS" ]]; then
+    VIOLATION_COUNT=$(grep -c "VIOLATION" "$TEMP_VIOLATIONS" 2>/dev/null || echo 0)
+else
+    VIOLATION_COUNT=0
+fi
+
+# Ensure VIOLATION_COUNT is a number
+VIOLATION_COUNT=${VIOLATION_COUNT//[^0-9]/}
 
 echo ""
 echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
@@ -167,49 +161,30 @@ cat >> "$VIOLATION_REPORT" << EOF
 
 ## 🔧 **OCC REFACTORING INSTRUCTIONS**
 
-### **Immediate Actions Required:**
+### **File Size Limits:**
+- **Python (.py):** 250 lines max
+- **JavaScript/TypeScript (.js/.ts):** 150 lines max
+- **Java (.java):** 400 lines max
+- **Go/Swift/Rust:** 300 lines max
+- **Markdown (.md):** 500 lines max
+- **Shell scripts (.sh):** 200 lines max
+- **Other formats:** See TCC documentation
 
-1. **Review each violation** listed above
-2. **Refactor oversized files** using these strategies:
-   - Split large functions into smaller ones
-   - Extract utility functions to separate files
-   - Break large components into smaller modules
-   - Move constants/configs to dedicated files
-   - Use composition over large inheritance
-
-3. **File Size Limits Reference:**
-EOF
-
-# Add size limits reference
-for ext in "${!SIZE_LIMITS[@]}"; do
-    echo "   - **.$ext files:** ${SIZE_LIMITS[$ext]} lines maximum" >> "$VIOLATION_REPORT"
-done
-
-cat >> "$VIOLATION_REPORT" << EOF
+### **Refactoring Strategies:**
+1. **Split large functions** into smaller, focused functions
+2. **Extract utility functions** to separate files
+3. **Break large components** into smaller modules
+4. **Move constants/configs** to dedicated files
+5. **Use composition** over large inheritance hierarchies
 
 ### **Testing Your Changes:**
 \`\`\`bash
 # Run compliance check again
-./tcc-setup/tcc-file-compliance.sh $TARGET_BRANCH
+curl -sSL https://raw.githubusercontent.com/JamesKayten/AI-Collaboration-Management/main/tcc-setup/tcc-file-compliance-simple.sh > check-compliance.sh
+chmod +x check-compliance.sh
+./check-compliance.sh $TARGET_BRANCH
 
 # Should show: ✅ FILE SIZE COMPLIANCE: PASSED
-\`\`\`
-
-### **After All Violations Fixed:**
-\`\`\`bash
-# Commit your refactoring
-git add .
-git commit -m "refactor: Fix file size compliance violations
-
-- Split oversized files to meet line limits
-- Extracted utility functions to separate modules
-- Improved code organization and modularity
-
-Resolves: TCC_FILE_VIOLATIONS_${TIMESTAMP}
-"
-
-# Push changes
-git push
 \`\`\`
 
 ---
@@ -220,12 +195,6 @@ git push
 - **Violations Found:** $VIOLATION_COUNT
 - **Compliance Status:** ❌ FAILED
 - **Merge Status:** 🚫 BLOCKED until violations resolved
-
----
-
-**📞 TCC Contact:** This report was auto-generated by TCC file compliance checker.
-**🔄 Re-run Check:** \`./tcc-setup/tcc-file-compliance.sh $TARGET_BRANCH\`
-**✅ Success Criteria:** All files must be ≤ their type's line limit
 
 ---
 
@@ -249,7 +218,7 @@ echo ""
 echo -e "${BLUE}📋 Next Steps:${NC}"
 echo "1. Review violation report: $VIOLATION_REPORT"
 echo "2. Refactor oversized files"
-echo "3. Re-run: ./tcc-setup/tcc-file-compliance.sh $TARGET_BRANCH"
+echo "3. Re-run: ./check-compliance.sh $TARGET_BRANCH"
 echo "4. Merge only after: ✅ FILE SIZE COMPLIANCE: PASSED"
 
 # Clean up temp file
