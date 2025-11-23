@@ -1,222 +1,149 @@
-# TCC Workflow Guide - Enhanced with File Compliance
+# TCC Workflow Guide
 
-**Complete TCC workflow including automatic file size compliance checking**
-
----
-
-## 🎯 **TCC Role & Responsibilities**
-
-### **Primary Functions:**
-1. **Board Checking** - Instant project status via "check the board"
-2. **File Compliance** - Enforce file size limits before merges
-3. **Testing & Validation** - Comprehensive project testing
-4. **Communication** - Report findings to OCC via framework
-
-### **Enhanced Workflow:**
-- ✅ **Fast board checks** (3-5 seconds vs 30+ seconds)
-- ✅ **Automatic file compliance** before any merge
-- ✅ **Violation reporting** with actionable OCC instructions
-- ✅ **Merge blocking** until compliance achieved
+**Simple collaboration workflow for Terminal Claude Code**
 
 ---
 
-## ⚡ **TCC Commands (Updated)**
+## Overview
 
-### **1. Fast Board Check (Recommended)**
+TCC (Terminal Claude Code) collaborates with OCC (Online Claude Code) using simple file-based communication.
+
+**No complex scripts. Just files.**
+
+---
+
+## Core Workflow
+
+### 1. Check Status
 ```bash
-curl -sSL https://raw.githubusercontent.com/JamesKayten/AI-Collaboration-Management/main/tcc-setup/tcc-board-check-fast.sh | bash -s REPO_URL
+/check-the-board
 ```
-**Result:** Instant status in 3-5 seconds using GitHub API
+Reads `BOARD.md` and `TASKS.md` - that's it.
 
-### **2. Detailed Board Analysis**
+### 2. Do Work
+Make changes, write code, fix issues.
+
+### 3. Update Status
 ```bash
-curl -sSL https://raw.githubusercontent.com/JamesKayten/AI-Collaboration-Management/main/tcc-setup/tcc-board-check.sh | bash -s REPO_URL
+edit TASKS.md  # Mark tasks complete
+edit BOARD.md  # Update status
 ```
-**Result:** Complete analysis with full repository clone
 
-### **3. File Size Compliance Check**
+### 4. Commit & Push
 ```bash
-./tcc-setup/tcc-file-compliance.sh [target_branch]
+git add .
+git commit -m "Description of changes"
+git push
 ```
-**Result:** Validates all files against size limits, blocks merge if violations
 
-### **4. Complete Pre-Merge Validation**
+### 5. Merge When Ready
 ```bash
-./tcc-setup/tcc-pre-merge-check.sh [target_branch]
+/merge-to-main
 ```
-**Result:** Full validation including compliance, conflicts, and framework checks
+Creates PR for merge.
 
 ---
 
-## 🔄 **Enhanced TCC Workflow**
+## Available Commands
 
-### **Phase 1: Initial Board Check**
-```
-User: "TCC: Check the board for SimpleCP repository"
+### `/check-the-board`
+- Reads BOARD.md
+- Reads TASKS.md
+- Reports status
 
-TCC Actions:
-1. Clone repository (if needed)
-2. Find BOARD.md
-3. Execute FAST board check (3-5 seconds)
-4. Get instant project status
-5. Identify pending work
-```
+**No scripts executed. Just reads files.**
 
-### **Phase 2: Pre-Merge Compliance**
-```
-Before any merge to main, TCC MUST run:
-./tcc-setup/tcc-pre-merge-check.sh main
+### `/fix-violations`
+- Find issues reported
+- Fix them
+- Commit and push
 
-This automatically:
-1. ✅ Checks file size compliance
-2. ✅ Validates no uncommitted changes
-3. ✅ Checks for merge conflicts
-4. ✅ Verifies framework sync
-5. 🚫 BLOCKS merge if any failures
-```
+### `/verify`
+- Pull latest changes
+- Run validation (tests, linters)
+- Report results
 
-### **Phase 3: Violation Reporting**
-```
-If file compliance fails:
-1. TCC creates detailed violation report
-2. Report saved to .ai-framework/communications/reports/
-3. Report includes exact file paths, sizes, and refactoring instructions
-4. OCC automatically discovers report on next session
-5. Merge blocked until violations resolved
-```
+### `/works-ready`
+- Validate changes
+- Merge if passing
+- Report issues if failing
+
+### `/merge-to-main`
+- Check for uncommitted changes
+- Push current branch
+- Create PR with summary
 
 ---
 
-## 📋 **File Size Limits (Enforced by TCC)**
+## Collaboration Pattern
 
-```
-Python (.py):        250 lines
-JavaScript (.js):    150 lines
-TypeScript (.ts):    150 lines
-JSX/TSX:             150 lines
-Java (.java):        400 lines
-Go (.go):            300 lines
-Swift (.swift):      300 lines
-Rust (.rs):          300 lines
-C/C++ (.c/.cpp):     300/400 lines
-Markdown (.md):      500 lines
-Shell (.sh):         200 lines
-YAML/JSON:           300 lines
-CSS/SCSS:            200 lines
-```
+**TCC's Role:**
+1. Validate code quality
+2. Run tests and checks
+3. Merge when passing
+4. Report issues when failing
 
-### **Enforcement Policy:**
-- ❌ **MERGE BLOCKED** if any file exceeds limits
-- 📝 **Violation report** created for OCC with refactoring instructions
-- ✅ **Merge allowed** only after compliance achieved
+**OCC's Role:**
+1. Read TCC's reports
+2. Fix issues
+3. Push changes
+4. Respond with fixes
+
+**Communication:**
+- Through git commits
+- Through BOARD.md updates
+- Through simple files
+
+**No complexity required.**
 
 ---
 
-## 🚨 **TCC Compliance Workflow**
+## What Changed from v2.0
 
-### **When TCC Detects Violations:**
+**Old workflow:**
+- Run 334-line shell scripts
+- Update 6 different JSON state files
+- Provide proof-of-completion with screenshots
+- Execute monitoring and enforcement
+- Parse natural language rules
+- Manage caching systems
 
-#### **1. Immediate Actions:**
-```bash
-# TCC runs (automatically before merge):
-./tcc-setup/tcc-file-compliance.sh main
+**New workflow:**
+- Read 2 markdown files
+- Make changes
+- Commit and push
+- Done
 
-# If violations found:
-❌ FILE SIZE COMPLIANCE: FAILED
-🚫 MERGE BLOCKED until violations resolved
-📝 Violation report: .ai-framework/communications/reports/TCC_FILE_VIOLATIONS_[timestamp].md
-```
-
-#### **2. Violation Report Contents:**
-- **Exact file paths** with current vs max line counts
-- **Overage calculations** (how many lines to remove)
-- **Refactoring strategies** (split functions, extract modules, etc.)
-- **Re-validation commands** for OCC to verify fixes
-- **Success criteria** for merge approval
-
-#### **3. OCC Notification Process:**
-```
-1. TCC creates violation report in framework communications
-2. OCC discovers report when working with repository
-3. OCC reads detailed refactoring instructions
-4. OCC fixes violations and commits changes
-5. OCC re-runs: ./tcc-setup/tcc-file-compliance.sh main
-6. TCC validates fixes: ✅ FILE SIZE COMPLIANCE: PASSED
-7. Merge approved and executed
-```
+**97% simpler.**
 
 ---
 
-## 🔧 **TCC Pre-Merge Checklist**
+## Troubleshooting
 
-**Before ANY merge to main, TCC must verify:**
+**Problem:** Command not working
+**Solution:** Check that BOARD.md and TASKS.md exist
 
-- [ ] ✅ **File compliance passed** - No oversized files
-- [ ] ✅ **No uncommitted changes** - Clean working tree
-- [ ] ✅ **No merge conflicts** - Clean merge possible
-- [ ] ✅ **Framework sync verified** - All validations pass
-- [ ] ✅ **Branch validation complete** - Target branch accessible
+**Problem:** Can't find status
+**Solution:** `cat BOARD.md`
 
-**Only if ALL checks pass → Merge approved**
-
----
-
-## 📊 **TCC Reporting Standards**
-
-### **Violation Reports Must Include:**
-1. **Specific file paths** and exact line counts
-2. **Actionable refactoring instructions**
-3. **Success criteria** (exactly what needs to be achieved)
-4. **Re-validation commands** for OCC to test fixes
-5. **Merge approval process** (how to proceed after fixes)
-
-### **Success Reports Must Include:**
-1. **Compliance status confirmation**
-2. **Files validated count**
-3. **Merge approval statement**
-4. **Next steps** (actual merge commands)
+**Problem:** Framework too complex
+**Solution:** You're looking at v2.0 docs. Use v3.0.
 
 ---
 
-## 🎯 **TCC Best Practices**
+## Philosophy
 
-### **Board Checking:**
-- **Use fast check first** for quick status
-- **Use detailed analysis** only when needed
-- **Update status** after significant changes
+Keep it simple:
+- Files over scripts
+- Trust over verify
+- Clarity over automation
+- Minimal over comprehensive
 
-### **Compliance Checking:**
-- **Always run before merges** - No exceptions
-- **Create detailed reports** for violations
-- **Block merges** until compliance achieved
-- **Re-validate** after OCC fixes
-
-### **Communication:**
-- **Use framework communications** for all reports
-- **Be specific** in violation descriptions
-- **Provide actionable** refactoring guidance
-- **Confirm success** explicitly after fixes
+**If it's getting complex, you're doing it wrong.**
 
 ---
 
-## ⚡ **Quick Reference**
-
-```bash
-# Fast board check (recommended)
-curl -sSL .../tcc-board-check-fast.sh | bash -s REPO_URL
-
-# Pre-merge validation (required)
-./tcc-setup/tcc-pre-merge-check.sh main
-
-# File compliance only
-./tcc-setup/tcc-file-compliance.sh main
-
-# Emergency detailed analysis
-curl -sSL .../tcc-board-check.sh | bash -s REPO_URL
-```
-
----
-
-**TCC Workflow Version:** 2.0 Enhanced
+**Version:** 3.0 Simple
 **Last Updated:** November 23, 2025
-**Key Enhancement:** Automatic file size compliance with merge blocking
+
+**Simple file-based collaboration for TCC.**
