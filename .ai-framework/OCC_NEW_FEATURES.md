@@ -18,9 +18,19 @@ The collaboration framework has been enhanced with automated TCC discovery. No m
 
 ## 🚀 **Immediate OCC Commands**
 
-### **Check This Repository's Framework Status:**
+### **Check This Repository's Framework Status (Fast):**
+```bash
+curl -sSL https://raw.githubusercontent.com/JamesKayten/AI-Collaboration-Management/main/tcc-setup/tcc-board-check-fast.sh | bash -s $(git remote get-url origin)
+```
+
+### **Detailed Framework Analysis:**
 ```bash
 curl -sSL https://raw.githubusercontent.com/JamesKayten/AI-Collaboration-Management/main/tcc-setup/tcc-board-check.sh | bash -s $(git remote get-url origin)
+```
+
+### **Check File Size Compliance Before Merge:**
+```bash
+./tcc-setup/tcc-file-compliance.sh main
 ```
 
 ### **Add TCC Board Check to This Repository:**

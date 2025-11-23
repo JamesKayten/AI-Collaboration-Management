@@ -28,9 +28,17 @@ cat > BOARD.md << EOF
 
 **Automated AI Collaboration Framework Status Check**
 
-## 🎯 Quick Status Command
+## ⚡ Fast Status Check (Recommended)
 
-Execute this single command for complete framework status:
+Execute this command for **instant** framework status:
+
+\`\`\`bash
+curl -sSL https://raw.githubusercontent.com/JamesKayten/AI-Collaboration-Management/main/tcc-setup/tcc-board-check-fast.sh | bash -s $REPO_URL
+\`\`\`
+
+## 🔍 Detailed Analysis (If Needed)
+
+For complete framework analysis with file-level detail:
 
 \`\`\`bash
 curl -sSL https://raw.githubusercontent.com/JamesKayten/AI-Collaboration-Management/main/tcc-setup/tcc-board-check.sh | bash -s $REPO_URL
@@ -110,9 +118,19 @@ The collaboration framework has been enhanced with automated TCC discovery. No m
 
 ## 🚀 **Immediate OCC Commands**
 
-### **Check This Repository's Framework Status:**
+### **Check This Repository's Framework Status (Fast):**
+\`\`\`bash
+curl -sSL https://raw.githubusercontent.com/JamesKayten/AI-Collaboration-Management/main/tcc-setup/tcc-board-check-fast.sh | bash -s \$(git remote get-url origin)
+\`\`\`
+
+### **Detailed Framework Analysis:**
 \`\`\`bash
 curl -sSL https://raw.githubusercontent.com/JamesKayten/AI-Collaboration-Management/main/tcc-setup/tcc-board-check.sh | bash -s \$(git remote get-url origin)
+\`\`\`
+
+### **Check File Size Compliance Before Merge:**
+\`\`\`bash
+curl -sSL https://raw.githubusercontent.com/JamesKayten/AI-Collaboration-Management/main/tcc-setup/tcc-file-compliance.sh > tcc-file-compliance.sh && chmod +x tcc-file-compliance.sh && ./tcc-file-compliance.sh main
 \`\`\`
 
 ### **Add TCC Board Check to Another Repository:**

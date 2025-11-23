@@ -2,9 +2,17 @@
 
 **Automated AI Collaboration Framework Status Check**
 
-## 🎯 Quick Status Command
+## ⚡ Fast Status Check (Recommended)
 
-Execute this single command for complete framework status:
+Execute this command for **instant** framework status:
+
+```bash
+curl -sSL https://raw.githubusercontent.com/JamesKayten/AI-Collaboration-Management/main/tcc-setup/tcc-board-check-fast.sh | bash -s https://github.com/JamesKayten/AI-Collaboration-Management
+```
+
+## 🔍 Detailed Analysis (If Needed)
+
+For complete framework analysis with file-level detail:
 
 ```bash
 curl -sSL https://raw.githubusercontent.com/JamesKayten/AI-Collaboration-Management/main/tcc-setup/tcc-board-check.sh | bash -s https://github.com/JamesKayten/AI-Collaboration-Management
