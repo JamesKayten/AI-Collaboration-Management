@@ -241,6 +241,72 @@ EOF
 
 chmod +x .ai-framework/tools/tcc-board-check-fast.sh
 
+# Install task reference manager
+echo "🔢 Installing task reference manager..."
+cat > .ai-framework/tools/task-reference-manager.sh << 'EOF'
+#!/bin/bash
+
+# Task Reference Manager - Track numbered tasks
+# Usage: ./task-reference-manager.sh [add|complete|list|status] [task_description]
+
+FRAMEWORK_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+TASK_DB="$FRAMEWORK_ROOT/state/TASK_REFERENCES.json"
+
+# Initialize task database if it doesn't exist
+if [ ! -f "$TASK_DB" ]; then
+    cat > "$TASK_DB" << 'TASKEOF'
+{
+    "next_task_id": 1,
+    "tasks": []
+}
+TASKEOF
+fi
+
+case "$1" in
+    "add")
+        DESCRIPTION="$2"
+        TASK_ID=$(jq -r '.next_task_id' "$TASK_DB")
+        REF_NUM="TK-$(printf "%03d" $TASK_ID)"
+
+        # Add task
+        jq --arg ref "$REF_NUM" --arg desc "$DESCRIPTION" '.tasks += [{"ref": $ref, "description": $desc, "status": "PENDING", "created": "'$(date -Iseconds)'"}] | .next_task_id += 1' "$TASK_DB" > tmp.json && mv tmp.json "$TASK_DB"
+
+        echo "$REF_NUM"
+        ;;
+
+    "complete")
+        REF_NUM="$2"
+        jq --arg ref "$REF_NUM" '(.tasks[] | select(.ref == $ref) | .status) = "COMPLETE" | (.tasks[] | select(.ref == $ref) | .completed) = "'$(date -Iseconds)'"' "$TASK_DB" > tmp.json && mv tmp.json "$TASK_DB"
+        echo "✅ $REF_NUM marked complete"
+        ;;
+
+    "list")
+        echo "## TASK REFERENCES"
+        jq -r '.tasks[] | "\(.ref): \(.status) - \(.description)"' "$TASK_DB"
+        ;;
+
+    "pending")
+        jq -r '.tasks[] | select(.status == "PENDING") | "\(.ref): \(.description)"' "$TASK_DB"
+        ;;
+
+    *)
+        echo "Usage: $0 [add|complete|list|pending] [description|ref_number]"
+        exit 1
+        ;;
+esac
+EOF
+
+chmod +x .ai-framework/tools/task-reference-manager.sh
+
+# Initialize task database
+mkdir -p .ai-framework/state
+cat > .ai-framework/state/TASK_REFERENCES.json << 'EOF'
+{
+    "next_task_id": 1,
+    "tasks": []
+}
+EOF
+
 # Install file compliance checker locally
 echo "🔒 Installing file compliance checker..."
 cat > .ai-framework/tools/tcc-file-compliance.sh << 'EOF'
