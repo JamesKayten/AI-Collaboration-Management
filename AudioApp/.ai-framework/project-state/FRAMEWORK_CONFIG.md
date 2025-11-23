@@ -1,145 +1,201 @@
-# Framework Configuration
+# Framework Configuration - AudioApp
 
-**Project:** ai-collaboration-test
-**Framework:** Avery's AI Collaboration Hack v1.0
-**Configuration Date:** November 18, 2025
-**Professional Structure Version:** 2.0
+**Project:** AudioApp - Modern Music Player
+**Framework:** AI Collaboration Framework v2.0
+**Configuration Date:** November 23, 2025
+**OCC Assignment:** Initial development and frontend oversight
+**TCC Assignment:** Local testing and backend validation
 
 ---
 
 ## 🏗️ **PROJECT STRUCTURE**
 
-### **Root Directory Layout:**
+### **AudioApp Directory Layout:**
 ```
-ai-collaboration-test/
-├── .ai-framework/              # AI Framework operational files (HIDDEN)
-│   ├── project-state/          # Project continuity and reboot documentation
-│   │   ├── PROJECT_STATE.md         # Current project status and progress
-│   │   ├── REBOOT_INSTRUCTIONS.md   # Emergency recovery documentation
-│   │   └── FRAMEWORK_CONFIG.md      # This file - configuration details
-│   ├── communications/         # AI-to-AI communication files
-│   │   ├── README.md                # Communication protocol guide
-│   │   ├── reports/                 # Local AI validation reports
-│   │   │   └── AI_REPORT_*.md       # Validation failure reports
-│   │   ├── responses/               # Online AI fix responses
-│   │   │   └── AI_RESPONSE_*.md     # Fix completion documentation
-│   │   └── updates/                 # General AI updates and messages
-│   │       └── AI_UPDATE_*.md       # Status updates and communications
-│   ├── rules/                  # Framework operational rules
-│   │   ├── VALIDATION_RULES.md      # Project-specific validation standards
-│   │   ├── REPOSITORY_SYNC_RULES.md # Repository synchronization protocol
-│   │   └── WORKFLOW_RULES.md        # AI collaboration workflow rules
-│   └── docs/                   # Framework documentation
-│       ├── AI_COLLABORATION_FRAMEWORK.md  # Framework overview
-│       └── AI_WORKFLOW.md               # Detailed workflow instructions
-├── src/                        # Source code files
-│   ├── main.py                      # Original project file
-│   ├── task_api.py                  # Task Management API
-│   └── simple_test.py               # Test files for validation
-├── tests/                      # Test files
-│   └── test_task_api.py             # Comprehensive test suite
-├── docs/                       # Project documentation (user-facing)
-└── README.md                   # Project readme
+AudioApp/
+├── .ai-framework/              # AI Framework operational files
+│   ├── project-state/          # Project continuity and state
+│   │   ├── PROJECT_STATE.md         # Current status and progress
+│   │   ├── REBOOT_INSTRUCTIONS.md   # Recovery documentation
+│   │   └── FRAMEWORK_CONFIG.md      # This configuration file
+│   ├── communications/         # TCC ↔ OCC communication
+│   │   ├── reports/                 # TCC validation reports
+│   │   ├── responses/               # OCC fix responses
+│   │   └── updates/                 # Status updates
+│   ├── rules/                  # Framework rules
+│   │   ├── audioapp-testing-rules.md
+│   │   ├── VALIDATION_RULES.md
+│   │   └── REPOSITORY_SYNC_RULES.md
+│   └── session-logs/           # Session tracking
+├── .claude/commands/           # Custom slash commands
+│   ├── setup-audioapp.md
+│   ├── test-backend.md
+│   ├── verify-integration.md
+│   └── occ-review.md
+├── backend/                    # Python backend
+│   ├── api/                    # FastAPI routes
+│   ├── models/                 # Data models
+│   ├── services/               # Business logic
+│   ├── tests/                  # Backend tests
+│   └── main.py                 # App entry point
+├── AudioApp/                   # SwiftUI macOS frontend
+│   ├── Models/                 # Swift data models
+│   ├── ViewModels/             # MVVM view models
+│   ├── Views/                  # SwiftUI views
+│   └── Services/               # API client
+├── TCC_TESTING_GUIDE.md        # TCC testing protocol
+├── OCC_DEVELOPMENT_NOTES.md    # OCC architecture notes
+└── README.md                   # Project documentation
 ```
 
 ---
 
 ## ⚙️ **FRAMEWORK CONFIGURATION**
 
-### **Project Type:** Python Backend/API
-### **Language:** python
-### **Max File Size:** 250 lines per file
-### **Test Coverage Required:** 90% minimum
-### **Validation Tools:** black, flake8, pytest, pyperclip
+### **Project Type:** Hybrid - Python Backend + SwiftUI Frontend
+### **Languages:** Python 3.9+, Swift 5.9+
+### **Platform:** macOS 11.0+
+
+### **Backend Configuration:**
+```yaml
+backend:
+  framework: FastAPI
+  language: python
+  version: 3.9+
+  testing: pytest
+  coverage_minimum: 80%
+  linting: black, flake8
+  max_file_lines: 500
+
+  services:
+    - audio_player (pygame)
+    - metadata_service (mutagen)
+    - database (SQLAlchemy + SQLite)
+    - websocket_manager (FastAPI WebSocket)
+    - artwork_service (album art extraction)
+    - playlist_service (CRUD operations)
+
+  api:
+    framework: FastAPI
+    port: 8765
+    host: 127.0.0.1
+    documentation: /docs (Swagger UI)
+```
+
+### **Frontend Configuration:**
+```yaml
+frontend:
+  framework: SwiftUI
+  platform: macOS
+  minimum_version: 11.0
+  architecture: MVVM
+  testing: XCTest
+
+  components:
+    - PlayerViewModel (playback state)
+    - LibraryViewModel (library management)
+    - Views (UI components)
+    - AudioAppAPI (REST client)
+```
 
 ### **Quality Standards:**
 ```yaml
 code_quality:
-  formatting: black
-  style_checking: flake8
-  max_line_length: 88
-  test_framework: pytest
-  coverage_minimum: 90
+  backend:
+    formatting: black
+    style_checking: flake8
+    max_line_length: 100
+    test_framework: pytest
+    coverage_minimum: 80%
+
+  frontend:
+    style_guide: Swift API Design Guidelines
+    architecture: MVVM
+    testing: XCTest unit tests
 
 security_requirements:
-  password_hashing: bcrypt (not MD5)
-  input_validation: required
-  session_management: secure tokens
-  vulnerability_scanning: enabled
+  api_security: CORS configured for localhost
+  data_validation: Input validation on all endpoints
+  file_access: Sandboxed with read-only user files
 
 file_organization:
-  source_directory: "src/"
-  test_directory: "tests/"
+  backend_directory: "backend/"
+  frontend_directory: "AudioApp/"
+  tests_directory: "backend/tests/"
   framework_directory: ".ai-framework/"
-  max_file_lines: 250
 ```
 
 ---
 
 ## 🔄 **WORKFLOW CONFIGURATION**
 
-### **Local AI (TCC) Commands:**
-- **Validation trigger:** `"work ready"`
-- **Report location:** `.ai-framework/communications/reports/`
-- **Validation sequence:** File size → Style → Format → Tests → Security
+### **TCC (Terminal Claude Code) Responsibilities:**
+- **Testing:** Run pytest suite, validate all endpoints
+- **Validation:** Backend code quality, database integrity
+- **Reporting:** Create validation reports in communications/reports/
+- **Bug Fixing:** Backend bugs (with documentation)
+- **Integration Testing:** API endpoint verification
 
-### **Online AI (OCC) Commands:**
-- **Activation command:** `"Check .ai-framework/communications/ for latest report and address the issues"`
-- **Response location:** `.ai-framework/communications/responses/`
-- **Fix requirements:** Address all violations in validation report
+### **OCC (Online Claude Code) Responsibilities:**
+- **Development:** Frontend implementation, UI/UX
+- **Architecture:** System design decisions
+- **Integration:** Frontend ↔ Backend connections
+- **Code Review:** Approve all architectural changes
+- **Oversight:** Final approval on TCC fixes
 
 ### **Communication Protocol:**
-1. **Local AI** detects violations → Creates report
-2. **User** triggers Online AI with repository files
-3. **Online AI** reads report → Implements fixes → Creates response
-4. **Local AI** re-validates → Merges if successful
+1. **TCC** runs tests → Creates report if issues found
+2. **TCC** escalates frontend/architecture issues to OCC
+3. **OCC** reviews reports → Implements fixes → Creates response
+4. **TCC** re-validates → Updates project state
+5. **Both** collaborate on integration issues
 
 ---
 
 ## 📂 **DIRECTORY RESPONSIBILITIES**
 
-### **.ai-framework/ (Framework Operational Files)**
-- **Owner:** AI Collaboration Framework
-- **Purpose:** All framework-related files and communications
-- **Backup:** Critical - contains project continuity information
-- **Access:** Framework automation and manual review
+### **.ai-framework/ (Framework Operations)**
+- **Owner:** Both TCC and OCC
+- **Purpose:** Collaboration infrastructure
+- **Backup:** Git version controlled
+- **Critical Files:** PROJECT_STATE.md, communication reports
 
-### **src/ (Source Code)**
-- **Owner:** Development team and AI collaborators
-- **Purpose:** All application source code
-- **Backup:** Version controlled in git
-- **Access:** Read/write by both Local and Online AI
+### **backend/ (Python Backend)**
+- **Primary Owner:** TCC for testing, OCC for architecture
+- **Testing:** TCC validates all changes
+- **Modifications:** TCC can fix bugs, OCC approves features
+- **Quality:** pytest, black, flake8 validation
 
-### **tests/ (Test Files)**
-- **Owner:** Development team and AI collaborators
-- **Purpose:** All test files and test data
-- **Backup:** Version controlled in git
-- **Access:** Read/write for test coverage validation
+### **AudioApp/ (SwiftUI Frontend)**
+- **Primary Owner:** OCC exclusively
+- **Testing:** TCC verifies API integration only
+- **Modifications:** OCC only, TCC reports issues
+- **Quality:** Swift style guide, XCTest
 
-### **docs/ (Project Documentation)**
-- **Owner:** Development team
-- **Purpose:** User-facing project documentation
-- **Backup:** Version controlled in git
-- **Access:** Primarily human-readable documentation
+### **Documentation**
+- **Shared:** Both TCC and OCC update
+- **TCC Updates:** Testing results, backend changes
+- **OCC Updates:** Architecture decisions, frontend changes
 
 ---
 
 ## 🛡️ **SECURITY CONFIGURATION**
 
-### **Framework File Protection:**
-- **Hidden directory:** `.ai-framework/` not visible in normal listings
-- **Git tracking:** All framework files version controlled
-- **Access control:** Framework files readable by both AI systems
+### **Framework Protection:**
+- Hidden directory (.ai-framework/) for operational files
+- Git tracking of all framework files
+- Communication files preserved for audit trail
 
-### **Repository Security:**
-- **Sensitive data:** Never commit secrets or credentials
-- **File permissions:** Standard Unix permissions
-- **Backup strategy:** Git repository with full history
+### **Application Security:**
+- Backend: CORS restricted to localhost
+- Frontend: Sandboxed macOS app
+- Database: Local SQLite with proper permissions
+- No credentials in code or git
 
-### **AI Communication Security:**
-- **Report validation:** All reports include timestamp and source
-- **Response verification:** Responses must reference original report
-- **Audit trail:** Complete communication history preserved
+### **Testing Security:**
+- Test database separate from production
+- No real user data in tests
+- Audio files for testing not committed
 
 ---
 
@@ -150,85 +206,122 @@ file_organization:
 # Framework integrity
 ls .ai-framework/project-state/ | wc -l  # Should be 3+ files
 
-# Communication status
-ls .ai-framework/communications/reports/ | wc -l    # Reports created
-ls .ai-framework/communications/responses/ | wc -l  # Responses received
+# Backend health
+pytest backend/tests/ -v                  # All tests passing
+curl http://127.0.0.1:8765/health        # Backend running
 
-# Code quality status
-python3 -m flake8 src/ --count              # Style violations
-python3 -m pytest tests/ --cov=src --cov-report=term-missing  # Test coverage
+# Frontend build
+xcodebuild -project AudioApp.xcodeproj -scheme AudioApp -configuration Debug build
+
+# Communication status
+ls .ai-framework/communications/reports/ | wc -l
 ```
 
-### **Failure Indicators:**
-- Missing framework directories
-- Validation reports without responses
-- Responses without corresponding reports
-- Git working directory not clean during collaboration
+### **Success Indicators:**
+- ✅ All pytest tests passing
+- ✅ Backend starts without errors
+- ✅ Frontend builds successfully
+- ✅ API endpoints respond correctly
+- ✅ No critical issues in logs
+- ✅ Integration tests pass
 
 ---
 
 ## 🎯 **COLLABORATION TARGETS**
 
 ### **Quality Metrics:**
-- **Zero critical syntax errors** in production code
-- **90% minimum test coverage** for all source files
-- **100% PEP 8 compliance** via flake8 validation
-- **100% black formatting compliance**
-- **Zero security vulnerabilities** (bcrypt passwords, input validation)
+- **Backend:** 80% test coverage minimum
+- **API:** All endpoints documented in Swagger
+- **Frontend:** Builds without warnings
+- **Integration:** All features work end-to-end
+- **Documentation:** Complete and accurate
 
 ### **Collaboration Metrics:**
-- **Response time:** Online AI responds to reports within user session
-- **Fix effectiveness:** All reported violations addressed in single cycle
-- **Communication completeness:** Reports and responses properly documented
+- **Response time:** OCC responds to TCC reports same session
+- **Fix effectiveness:** Issues resolved in single cycle
+- **Communication:** All reports and responses documented
+- **Handoff clarity:** Clean transitions between TCC and OCC
 
 ### **Workflow Metrics:**
-- **Merge success rate:** Clean merges after validation passes
-- **Automation level:** Minimal manual intervention required
-- **Audit trail completeness:** Full history of AI collaboration preserved
+- **Test success rate:** 95%+ passing
+- **Build success rate:** 100% clean builds
+- **Integration stability:** No breaking changes
+- **Audit trail:** Complete history preserved
 
 ---
 
 ## 🔧 **MAINTENANCE CONFIGURATION**
 
-### **Regular Tasks:**
+### **TCC Regular Tasks:**
 ```bash
-# Weekly framework health check
-.ai-framework/project-state/health-check.sh
+# Daily: Run backend tests
+pytest backend/tests/ -v
 
-# Monthly repository cleanup
-git gc --prune=now
-find .ai-framework -name "*.md" -mtime +30 -type f  # Archive old communications
+# Daily: Check backend health
+curl http://127.0.0.1:8765/health
 
-# Quarterly configuration review
-review .ai-framework/rules/VALIDATION_RULES.md
-review .ai-framework/project-state/FRAMEWORK_CONFIG.md
+# Weekly: Code quality check
+black backend/ --check
+flake8 backend/
+
+# Weekly: Update PROJECT_STATE.md
 ```
 
-### **Upgrade Procedures:**
-1. **Backup current framework state**
-2. **Test new framework version in branch**
-3. **Migrate configuration and rules**
-4. **Validate workflow with test scenarios**
-5. **Deploy to main branch if successful**
+### **OCC Regular Tasks:**
+```bash
+# Per session: Review TCC reports
+cat .ai-framework/communications/reports/*.md
+
+# Per session: Update frontend
+# (SwiftUI development)
+
+# Weekly: Architecture review
+# Review OCC_DEVELOPMENT_NOTES.md
+
+# Monthly: Documentation update
+```
 
 ---
 
 ## 📈 **PERFORMANCE CONFIGURATION**
 
-### **Optimization Settings:**
-- **Validation parallelization:** Run multiple checks simultaneously
-- **Cache management:** Preserve test coverage and validation results
-- **File watching:** Monitor source changes for incremental validation
+### **Backend Performance:**
+- API response time: < 100ms for most endpoints
+- Database queries: Optimized with indexes
+- WebSocket: Real-time updates < 50ms latency
+- Audio playback: No stuttering or lag
 
-### **Resource Limits:**
-- **Max file size:** 250 lines (configurable per project type)
-- **Max test execution time:** 60 seconds per test suite
-- **Max validation report size:** 10KB (for efficient communication)
+### **Frontend Performance:**
+- UI responsiveness: 60fps animations
+- API calls: Async with loading states
+- Image caching: Artwork cached locally
+- Memory usage: Efficient resource management
 
 ---
 
-**This configuration ensures professional, scalable, and maintainable AI collaboration workflow.**
+## 🚀 **DEPLOYMENT CONFIGURATION**
 
-**Configuration Version:** 2.0 Professional Structure
-**Last Verified:** November 18, 2025
-**Next Review:** December 18, 2025
+### **Development:**
+- Backend: `python -m backend.main` or `./run.sh`
+- Frontend: Xcode build and run
+- Database: Auto-created at ~/.audioapp/library.db
+
+### **Testing:**
+- Backend: `pytest backend/tests/`
+- Frontend: Xcode Test (⌘U)
+- Integration: Manual testing with both running
+
+### **Current Status:**
+- **Version:** 1.0.0 (Initial development)
+- **Branch:** claude/quadview-four-panel-editor-01J2v3zV7xqgvCWtYJ4haq1b
+- **Backend:** Feature complete
+- **Frontend:** Core features implemented, enhancements needed
+- **Integration:** Partial (WebSocket pending)
+
+---
+
+**This configuration enables professional TCC/OCC collaboration on AudioApp.**
+
+**Configuration Version:** 2.0 AudioApp
+**Last Updated:** November 23, 2025
+**Next Review:** December 23, 2025
