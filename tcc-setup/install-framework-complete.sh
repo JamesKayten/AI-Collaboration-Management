@@ -22,7 +22,7 @@ echo ""
 
 # Create framework directory structure
 echo "📁 Creating framework directory structure..."
-mkdir -p .ai-framework/{communications/{reports,updates,responses},project-state,rules,scripts,tools,monitoring}
+mkdir -p .ai-framework/{communications/{reports,updates,responses},project-state,rules,scripts,tools,monitoring,verification/proof}
 mkdir -p .claude/commands
 
 # Create self-contained BOARD.md
@@ -960,6 +960,94 @@ case "${1:-check}" in
 esac
 MONEOF
 chmod +x .ai-framework/monitoring/compliance-monitor.sh
+
+# Install proof verification system
+echo "🔍 Installing proof verification system..."
+cat > .ai-framework/verification/proof-of-completion.sh << 'PROOFEOF'
+#!/bin/bash
+# Proof of Completion Verification System - Forces actual proof before task completion
+set -e
+FRAMEWORK_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+PROOF_DIR="$FRAMEWORK_ROOT/verification/proof"
+TASK_DB="$FRAMEWORK_ROOT/state/TASK_REFERENCES.json"
+RED='\033[0;31m'; GREEN='\033[0;32m'; YELLOW='\033[1;33m'; BLUE='\033[0;34m'; NC='\033[0m'
+mkdir -p "$PROOF_DIR"
+
+require_proof() {
+    local task_ref="$1"
+    local task_description="$2"
+    echo -e "${YELLOW}🔍 PROOF REQUIRED: $task_ref${NC}"
+    echo "Task: $task_description"
+    echo ""
+    echo -e "${BLUE}📋 PROOF REQUIREMENTS:${NC}"
+    echo ""
+    echo "🚨 BEFORE MARKING COMPLETE, PROVIDE:"
+    echo ""
+    echo "1. **Before Evidence:** Screenshot/documentation of problem existing"
+    echo "2. **Fix Implementation:** Code changes, files modified, actions taken"
+    echo "3. **After Evidence:** Screenshot/documentation of fix working"
+    echo "4. **Testing Results:** Proof the solution actually works"
+    echo ""
+    create_proof_template "$task_ref"
+}
+
+create_proof_template() {
+    local task_ref="$1"
+    cat > "$PROOF_DIR/${task_ref}_PROOF_REQUIRED.md" << EOF
+# 🔍 PROOF OF COMPLETION REQUIRED: $task_ref
+
+## STATUS: ❌ PROOF PENDING
+
+**Task cannot be marked complete until proof is provided.**
+
+## SUBMIT PROOF:
+
+Replace this section with actual evidence:
+
+\`\`\`
+BEFORE FIX EVIDENCE:
+[Screenshot/error message here]
+
+FIX IMPLEMENTATION:
+[What was changed/where]
+
+AFTER FIX EVIDENCE:
+[Screenshot/success message here]
+
+TESTING VERIFICATION:
+[Proof it actually works]
+\`\`\`
+
+**DO NOT MARK TASK COMPLETE WITHOUT COMPLETING THIS PROOF.**
+EOF
+    echo -e "${RED}📄 Proof template: $PROOF_DIR/${task_ref}_PROOF_REQUIRED.md${NC}"
+    echo -e "${YELLOW}⚠️  TASK COMPLETION BLOCKED UNTIL PROOF PROVIDED${NC}"
+}
+
+check_proof_exists() {
+    local task_ref="$1"
+    if [ -f "$PROOF_DIR/${task_ref}_PROOF_COMPLETED.md" ]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+case "${1:-help}" in
+    "require")
+        if [ -f "$TASK_DB" ] && command -v jq >/dev/null 2>&1; then
+            task_desc=$(jq -r --arg ref "$2" '.tasks[] | select(.ref == $ref) | .description' "$TASK_DB")
+            require_proof "$2" "$task_desc"
+        else
+            require_proof "$2" "Task verification"
+        fi
+        ;;
+    "check") check_proof_exists "$2" ;;
+    *) echo "Usage: $0 [require|check] <task_ref>" ;;
+esac
+PROOFEOF
+
+chmod +x .ai-framework/verification/proof-of-completion.sh
 
 echo ""
 echo -e "${YELLOW}📋 Next Steps:${NC}"

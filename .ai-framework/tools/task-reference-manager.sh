@@ -30,6 +30,21 @@ case "$1" in
 
     "complete")
         REF_NUM="$2"
+
+        # Check if proof verification system exists
+        if [ -f "$FRAMEWORK_ROOT/verification/proof-of-completion.sh" ]; then
+            # Check if proof exists for this task
+            if ! "$FRAMEWORK_ROOT/verification/proof-of-completion.sh" check "$REF_NUM" >/dev/null 2>&1; then
+                echo "❌ COMPLETION BLOCKED: No proof provided for $REF_NUM"
+                echo ""
+                echo "🔍 PROOF REQUIRED before marking task complete."
+                echo "Run: .ai-framework/verification/proof-of-completion.sh require $REF_NUM"
+                echo ""
+                echo "Provide evidence that the task was actually completed successfully."
+                exit 1
+            fi
+        fi
+
         jq --arg ref "$REF_NUM" '(.tasks[] | select(.ref == $ref) | .status) = "COMPLETE" | (.tasks[] | select(.ref == $ref) | .completed) = "'$(date -Iseconds)'"' "$TASK_DB" > tmp.json && mv tmp.json "$TASK_DB"
         echo "✅ $REF_NUM marked complete"
         ;;
