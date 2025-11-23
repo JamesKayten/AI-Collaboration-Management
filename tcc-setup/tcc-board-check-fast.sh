@@ -120,5 +120,39 @@ else
 fi
 
 echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo -e "${CYAN}⚙️ FRAMEWORK RULE CONTROLS${NC}"
+echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+
+# Check if we're in a local repository to show toggle commands
+if [ -f ".ai-framework/rules/AUTO_DIRECTIVE_RULES.json" ]; then
+    # Get current rule status if possible
+    if command -v jq >/dev/null 2>&1; then
+        AUTO_DIRECTIVE_STATUS=$(jq -r '.rules.auto_execution_directive.enabled' .ai-framework/rules/AUTO_DIRECTIVE_RULES.json 2>/dev/null || echo "unknown")
+    else
+        AUTO_DIRECTIVE_STATUS="unknown"
+    fi
+
+    if [ "$AUTO_DIRECTIVE_STATUS" = "true" ]; then
+        echo -e "${GREEN}✅ Auto-Directive Rule: ENABLED${NC}"
+        echo -e "${YELLOW}📝 Automatic execution directives will appear when OCC needs direction${NC}"
+    elif [ "$AUTO_DIRECTIVE_STATUS" = "false" ]; then
+        echo -e "${RED}⏸️  Auto-Directive Rule: DISABLED${NC}"
+        echo -e "${YELLOW}📝 Manual intervention required for OCC permission issues${NC}"
+    else
+        echo -e "${BLUE}🔍 Auto-Directive Rule: Status unknown${NC}"
+    fi
+
+    echo ""
+    echo -e "${BLUE}🔧 TOGGLE COMMANDS (copy and paste):${NC}"
+    echo -e "   ${GREEN}Enable auto-directives:${NC}  ./.ai-framework/tools/toggle-rule.sh --enable auto_execution_directive"
+    echo -e "   ${RED}Disable auto-directives:${NC} ./.ai-framework/tools/toggle-rule.sh --disable auto_execution_directive"
+    echo -e "   ${BLUE}Check rule status:${NC}       ./.ai-framework/tools/rule-enforcement.sh --status"
+    echo -e "   ${YELLOW}Apply rules manually:${NC}     ./.ai-framework/tools/rule-enforcement.sh --apply"
+else
+    echo -e "${YELLOW}💡 Rule controls available when working in local repository${NC}"
+    echo -e "   Clone repository and run toggle commands from project root"
+fi
+
+echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 echo -e "${GREEN}⚡ FAST BOARD CHECK COMPLETE ($(date))${NC}"
 echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
