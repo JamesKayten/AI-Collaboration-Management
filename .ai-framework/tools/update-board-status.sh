@@ -167,16 +167,32 @@ fi)
 $(if [ -f "$FRAMEWORK_DIR/tools/task-reference-manager.sh" ]; then
     PENDING_TASKS=$("$FRAMEWORK_DIR/tools/task-reference-manager.sh" pending 2>/dev/null)
     if [ -n "$PENDING_TASKS" ]; then
-        echo "🚨 **URGENT: $(echo "$PENDING_TASKS" | wc -l) CRITICAL TASKS NEED IMMEDIATE ATTENTION**"
+        echo "🚨 **URGENT: $(echo "$PENDING_TASKS" | wc -l) TASKS REQUIRE PROOF OF COMPLETION**"
         echo ""
-        echo "**PRIORITY TASKS:**"
+        echo "**PENDING TASKS:**"
         echo "$PENDING_TASKS" | while read task; do
             echo "- $task"
         done
         echo ""
-        echo "**These are BLOCKING issues - complete immediately**"
+        echo "🔍 **PROOF SYSTEM ACTIVE - READ CAREFULLY:**"
+        echo ""
+        echo "**Before marking ANY task complete, you MUST provide proof:**"
+        echo ""
+        echo "1. **Evidence the problem exists** (screenshot/error message)"
+        echo "2. **Document your fix** (what you changed, where)"
+        echo "3. **Prove the fix works** (screenshot of success)"
+        echo "4. **Test verification** (demonstrate it actually works)"
+        echo ""
+        echo "**Proof templates available in:** \`.ai-framework/verification/proof/\`"
+        echo ""
+        echo "**TASK COMPLETION BLOCKED WITHOUT PROOF.**"
+        echo ""
+        echo "**Instructions:**"
+        echo "1. Read: \`.ai-framework/verification/proof/TK-XXX_PROOF_REQUIRED.md\`"
+        echo "2. Complete the work AND provide evidence"
+        echo "3. Only then attempt: \`.ai-framework/tools/task-reference-manager.sh complete TK-XXX\`"
     else
-        echo "✅ **All critical tasks complete - ready for new development**"
+        echo "✅ **All tasks complete with verified proof**"
     fi
 else
     echo "📋 **Ready for task assignment**"
