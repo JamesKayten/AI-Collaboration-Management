@@ -12,6 +12,35 @@ No active tasks. System ready for work.
 
 ---
 
+## OCC Tasks (Posted by TCC)
+
+_None pending_
+
+<!--
+TCC: When you find issues, add tasks here in this format:
+
+### Task: [Brief description]
+**Repository:** [repo name]
+**Files affected:**
+- `path/to/file1.swift`
+- `path/to/file2.swift`
+
+**Issue found:**
+[What TCC observed - error messages, test failures, etc.]
+
+**What OCC needs to do:**
+- [ ] Fix X
+- [ ] Update Y
+- [ ] Test Z
+
+**Diagnosis/logs:**
+```
+[paste relevant error output here]
+```
+-->
+
+---
+
 ## Active Approach: CLAUDE.md + Hooks
 
 **The framework has been simplified to 3 files:**
