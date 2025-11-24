@@ -71,6 +71,16 @@ This prevents stale merges where OCC pushed new commits during TCC's work.
 
 ---
 
+## AICM Sync Rule
+
+**Any changes to AICM framework files while working in SimpleCP must also be committed to the main AI-Collaboration-Management repository.**
+
+This keeps the main AICM repo up to date with improvements discovered during project work.
+
+TCC is responsible for syncing AICM changes back to the main repo.
+
+---
+
 ## Session Start Checklist
 
 1. Read this file (you just did)
