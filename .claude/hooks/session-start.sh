@@ -5,6 +5,20 @@ REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null)
 REPO_NAME=$(basename "$REPO_ROOT" 2>/dev/null || echo "UNKNOWN")
 BRANCH=$(git branch --show-current 2>/dev/null || echo "UNKNOWN")
 BOARD_FILE="$REPO_ROOT/docs/BOARD.md"
+WATCHER_SCRIPT="$REPO_ROOT/scripts/watch-board.sh"
+WATCHER_PID_FILE="/tmp/board-watcher-${REPO_NAME}.pid"
+
+# Start board watcher in background (if not already running)
+if [ -f "$WATCHER_SCRIPT" ]; then
+    # Check if already running
+    if [ -f "$WATCHER_PID_FILE" ] && kill -0 "$(cat "$WATCHER_PID_FILE")" 2>/dev/null; then
+        echo "📡 Board watcher already running (PID: $(cat "$WATCHER_PID_FILE"))"
+    else
+        nohup "$WATCHER_SCRIPT" > /tmp/board-watcher.log 2>&1 &
+        echo $! > "$WATCHER_PID_FILE"
+        echo "📡 Board watcher started (PID: $!) - Audio alert on BOARD.md changes"
+    fi
+fi
 
 cat <<EOF
 ================================================================================
