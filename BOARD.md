@@ -6,170 +6,61 @@
 
 ---
 
-## Quick Status
+## 🚨 TCC: MERGE TASKS REQUIRED - EXECUTE NOW
 
-⚠️ **TCC: YOU SHOULD BE CHECKING SIMPLECP BOARD, NOT THIS ONE**
-
-**Active development board:** `/home/user/SimpleCP/BOARD.md`
-
-SimpleCP is the active project. Check SimpleCP/BOARD.md for current tasks.
-
-This AICM board is for reference only. The cleanup task below is also in SimpleCP/BOARD.md.
-
----
-
-🚨 **CRITICAL: TCC MUST CLEAN UP SIMPLECP REPOSITORY**
-
-**Issue:** SimpleCP has duplicate/confusing AICM directories
-
-**TCC MUST EXECUTE THIS CLEANUP:**
+### Task 1: Merge SimpleCP Sync Fix
 
 ```bash
-cd /path/to/SimpleCP
-
-# 1. DELETE OLD BACKUP DIRECTORIES
-rm -rf .ai-framework-COMPLEX-BACKUP
-rm -rf .ai-framework-backup
-
-# 2. DELETE OBSOLETE WORKFLOW DOC
-rm -f AICM_SYNC_WORKFLOW.md
-
-# 3. DELETE CONFUSING .ai DIRECTORY (duplicate tracking)
-rm -rf .ai
-
-# 4. VERIFY CLEANUP
-ls -la | grep -E "^d.*\.ai"
-# Should show: .ai-framework only
-
-# 5. COMMIT CLEANUP
-git add -A
-git commit -m "Clean up SimpleCP: Remove duplicate AICM directories"
+cd /Volumes/User_Smallfavor/Users/Smallfavor/SimpleCP
+git pull origin main
 git push origin main
 ```
 
-**What gets deleted:**
-- `.ai/` - Duplicate task tracking (use BOARD.md)
-- `.ai-framework-COMPLEX-BACKUP/` - Old backup
-- `.ai-framework-backup/` - Old backup
-- `AICM_SYNC_WORKFLOW.md` - Obsolete doc
-
-**What stays:**
-- ✅ `BOARD.md` - Single source of truth
-- ✅ `.ai-framework/` - AICM framework (where improvements happen)
-- ✅ `sync-to-aicm.sh` - Syncs SimpleCP → AICM repo (paths fixed)
-- ✅ `sync-from-aicm.sh` - Syncs AICM repo → SimpleCP (paths fixed)
-
-**WORKFLOW GOING FORWARD:**
-1. Work in SimpleCP (active development)
-2. Make AICM improvements in SimpleCP/.ai-framework/
-3. Use `bash sync-to-aicm.sh` to push to AI-Collaboration-Management repo
-4. Changes sync bidirectionally between repos
-
-**After cleanup, proceed with AICM merge below.**
+**What this does:** Pushes sync script path fix to GitHub (Linux couldn't push)
 
 ---
 
-🎯 **TCC TASK: MERGE STREAMLINED RULES TO MAIN**
+### Task 2: Merge AICM Streamlined Rules to Main
 
-**Branch Ready:** `claude/streamline-rules-error-prevention-011F1fZ47653uHAyxCkmJK7y`
+```bash
+cd /Volumes/User_Smallfavor/Users/Smallfavor/AI-Collaboration-Management
+git fetch origin
+git checkout main
+git merge origin/claude/streamline-rules-error-prevention-011F1fZ47653uHAyxCkmJK7y --no-ff -m "Merge streamlined rules v2.0: 50% reduction for fast execution"
+git push origin main
+```
 
-Streamlined rules v2.0 are committed and ready for merge:
-- 50% reduction in rules documentation (1012 → 509 lines)
+**What this does:** Merges streamlined rules into main branch
+
+---
+
+## After Both Tasks Complete
+
+✅ SimpleCP sync scripts work correctly
+✅ AICM has streamlined rules in main
+✅ Everything synchronized
+✅ Framework ready for use
+
+---
+
+## What Was Completed
+
+**Streamlined Rules v2.0:**
+- 50% reduction: 1012 → 509 lines
 - Action-oriented format with executable commands
 - Scannable checklists for fast compliance
 - All error prevention protocols preserved
 
-**TCC ACTION:**
-```bash
-git fetch origin
-git checkout claude/streamline-rules-error-prevention-011F1fZ47653uHAyxCkmJK7y
-git checkout main
-git merge claude/streamline-rules-error-prevention-011F1fZ47653uHAyxCkmJK7y --no-ff
-git push origin main
-git pull origin main
-```
+**Files Streamlined:**
+- GENERAL_AI_RULES.md: 214→114 lines
+- STARTUP_PROTOCOL.md: 250→143 lines
+- FRONTEND_TESTING_RULES.md: 238→111 lines
+- REPOSITORY_SYNC_PROTOCOL.md: 310→141 lines
 
-**Success:** "✅ Streamlined rules v2.0 merged to main"
-
----
-
-✅ **COMPLETE: SimpleCP Backend-Frontend Communication FIXED**
-
-**Status:** OCC completed all implementation work
-
-**What Was Done:**
-1. ✅ Backend verified - All endpoints responding correctly on port 8000
-2. ✅ APIClient completed - Added all missing history/search methods
-3. ✅ Endpoint matching verified - All Swift calls use correct `/api/` prefix
-4. ✅ Documentation created - STARTUP_GUIDE.md with full instructions
-
-**All Success Criteria Met:**
-- Backend running and responding on all endpoints
-- APIClient methods match backend routes exactly
-- No endpoint mismatch issues
-- Documentation complete
-
-**Commits Made (in SimpleCP repo):**
-- `8ae9096` - Complete APIClient: Add history and search methods
-- `1e48890` - Update BOARD: Mark frontend-backend communication as fixed
-
-**Next Step:** TCC to test on macOS and merge SimpleCP commits
-
-See SimpleCP/BOARD.md for detailed completion report.
-
----
-
-✅ **TCC Onboarding Improved** (Previous work completed)
-
-Changes made:
-- Created `.ai/TCC_ONBOARDING.md` - Clear step-by-step onboarding
-- Updated `.ai/README.md` - Points TCC to onboarding file
-- Updated `.ai/BEHAVIOR_RULES.md` - Added startup protocol
-- Updated `README.md` - Added "New TCC Session" section
-- **First command now crystal clear: `/check-the-board`**
-
----
-
-## Proof of Simplification
-
-### What Was Removed (with line counts)
-- 331-line proof-of-completion bureaucracy → `.ai-framework-BLOAT-ARCHIVE/verification/proof-of-completion.sh`
-- 334-line natural language parser → `.ai-framework-BLOAT-ARCHIVE/rule-engine/rule-manager.sh`
-- 293-line caching system → `.ai-framework-BLOAT-ARCHIVE/tools/cache-manager.sh`
-- 174-line behavior enforcer → `.ai-framework-BLOAT-ARCHIVE/monitoring/behavior-enforcer.sh`
-- 168-line compliance monitor → `.ai-framework-BLOAT-ARCHIVE/monitoring/compliance-monitor.sh`
-- 6 different JSON state files → `.ai-framework-BLOAT-ARCHIVE/state/`
-- 1,508 lines of handoff docs → `.ai-framework-BLOAT-ARCHIVE/communications/updates/`
-- All unnecessary scripts → `.ai-framework-BLOAT-ARCHIVE/old-scripts/`
-
-### What Was Created
-- Simple BOARD.md (this file - 65 lines)
-- TASKS.md (46 lines)
-- 5 streamlined slash commands (61 lines total)
-- Framework README (63 lines)
-- **Total: 185 lines (97% reduction)**
-
-### Documentation Updated
-- README.md - TCC's three responsibilities at top
-- TCC_WORKFLOW_GUIDE.md - Complete TCC workflow
-- CHANGELOG.md - v3.0 changes
-- CONTRIBUTING.md - Simplicity-focused
-- MASTER_FRAMEWORK_STATUS.md - v3.0 status
-
----
-
-## TCC's Three Responsibilities (Now Enforced)
-
-### 1. File Verification
-Validate code quality, run tests, check linters
-
-### 2. Merge to Main Branch
-Push passing code to GitHub main
-
-### 3. Duplicate Everything Locally
-Update local working directory - **CRITICAL**
-
-**All three steps documented in TCC_WORKFLOW_GUIDE.md and /works-ready command**
+**Role Enforcement Created:**
+- OCC_TCC_ROLES.md: Establishes developer/PM division
+- Pre-commit hook: Blocks TCC from code commits
+- Install script: Easy deployment
 
 ---
 
@@ -183,4 +74,4 @@ Update local working directory - **CRITICAL**
 
 ---
 
-**Simple is better. v3.0 is live.**
+**Simple is better. v3.0 is live after merge.**
