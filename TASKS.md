@@ -1,22 +1,31 @@
 # Task List
 
-**Updated:** 2025-11-23
+**Updated:** 2025-11-24
 
 ---
 
 ## In Progress
 
-None - All simplification work complete and merged to main
+None - TCC onboarding improvements complete
 
 ---
 
 ## Pending
 
-None - Framework is simple now
+- Merge onboarding improvements to main
 
 ---
 
 ## Completed
+
+### TCC Onboarding Improvements (2025-11-24)
+- ✅ Created `.ai/TCC_ONBOARDING.md` with clear step-by-step instructions
+- ✅ Updated `.ai/README.md` to direct TCC to onboarding
+- ✅ Updated `.ai/BEHAVIOR_RULES.md` with startup protocol
+- ✅ Updated `README.md` with "New TCC Session" section
+- ✅ Made `/check-the-board` the first command every session
+
+### Framework Simplification (2025-11-23)
 
 - ✅ Audited repository for complexity
 - ✅ Identified over-engineering issues (6,000 lines!)

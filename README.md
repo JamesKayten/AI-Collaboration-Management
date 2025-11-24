@@ -41,6 +41,21 @@ If validation passes:
 
 ---
 
+## New TCC Session? Start Here
+
+**If you're TCC starting a new session:**
+
+1. Read `.ai/TCC_ONBOARDING.md` for complete onboarding
+2. Run `/check-the-board` to see current status
+3. Follow the instructions from BOARD.md
+
+**First command every session:**
+```bash
+/check-the-board
+```
+
+---
+
 ## Quick Start
 
 ### Install

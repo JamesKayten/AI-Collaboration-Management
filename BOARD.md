@@ -1,23 +1,23 @@
 # Current Status
 
 **Repository:** AI-Collaboration-Management
-**Branch:** main
-**Last Updated:** 2025-11-23
+**Branch:** claude/onboard-tcc-member-01EdaGJGruJEJZ9jopepRDtw
+**Last Updated:** 2025-11-24
 
 ---
 
 ## Quick Status
 
-✅ **Framework Simplified - v3.0 Complete - MERGED TO MAIN**
+✅ **TCC Onboarding Improved**
 
-All work complete and deployed:
-- Removed 6,000 lines of over-engineering
-- Created 185-line simple framework
-- Updated all documentation
-- Cleaned up obsolete files
-- **TCC three responsibilities clearly defined**
+Changes made:
+- Created `.ai/TCC_ONBOARDING.md` - Clear step-by-step onboarding
+- Updated `.ai/README.md` - Points TCC to onboarding file
+- Updated `.ai/BEHAVIOR_RULES.md` - Added startup protocol
+- Updated `README.md` - Added "New TCC Session" section
+- **First command now crystal clear: `/check-the-board`**
 
-**Now live on main branch.**
+**Ready to merge to main.**
 
 ---
 
