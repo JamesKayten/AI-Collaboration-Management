@@ -71,6 +71,17 @@ This prevents stale merges where OCC pushed new commits during TCC's work.
 
 ---
 
+## TCC: Board Update Required
+
+After completing ANY task from the board, TCC MUST:
+1. Update BOARD.md - mark task as ✅ COMPLETED or remove it
+2. Commit and push to main
+3. This triggers the board watcher alert so OCC knows work is done
+
+**Do not leave stale tasks on the board.** Close the loop.
+
+---
+
 ## AICM Sync Rule
 
 **Any changes to AICM framework files while working in SimpleCP must also be committed to the main AI-Collaboration-Management repository.**
