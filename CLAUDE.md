@@ -71,6 +71,29 @@ This prevents stale merges where OCC pushed new commits during TCC's work.
 
 ---
 
+## TCC: Sync Confirmation (CRITICAL)
+
+After ANY merge or sync operation, TCC MUST explicitly confirm:
+
+```
+✅ SYNC STATUS
+- Local main:  [commit hash]
+- Remote main: [commit hash]
+- Status: IN SYNC ✓ (or OUT OF SYNC ✗)
+```
+
+**Run these commands to verify:**
+```bash
+git rev-parse HEAD              # Local HEAD
+git rev-parse origin/main       # Remote HEAD (after fetch)
+git status                      # Should show "up to date with origin/main"
+```
+
+**The user MUST see clear confirmation that local and remote are synchronized.**
+Do NOT assume sync is complete - VERIFY and REPORT explicitly.
+
+---
+
 ## TCC: Board Update Required
 
 After completing ANY task from the board, TCC MUST:
