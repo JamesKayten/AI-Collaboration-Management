@@ -34,14 +34,18 @@ TCC: Post tasks for OCC here:
 
 ## TCC Tasks (Posted by OCC)
 
-### Task: Merge updated hook and board format
-**Repository:** AI-Collaboration-Management
-**Branch:** `claude/check-build-output-01QdQBFDw91Tyym9sJBmNf9Z`
+### Task: Deploy enforcement to SimpleCP
+**Repository:** SimpleCP
+**Source:** AI-Collaboration-Management (main branch after merge)
 
 **What TCC needs to do:**
-- [ ] Merge branch to main
-- [ ] Delete abandoned branches: `streamline-rules-error-prevention-...` and `onboard-tcc-member-...`
-- [ ] Copy `CLAUDE.md` and `.claude/` folder to **SimpleCP**
+- [ ] Copy `CLAUDE.md` to **SimpleCP/** root
+- [ ] Copy `.claude/` folder to **SimpleCP/** (HIDDEN - use `cp -r .claude/ /path/to/SimpleCP/`)
+- [ ] Create `SimpleCP/docs/BOARD.md` with same two-way queue format
+- [ ] Commit and push to SimpleCP main
+- [ ] Delete abandoned AICM branches: `streamline-rules-error-prevention-...` and `onboard-tcc-member-...`
+
+**Note:** `.claude/` is a hidden directory. Ensure it's included when copying.
 
 <!--
 OCC: Post tasks for TCC here:
