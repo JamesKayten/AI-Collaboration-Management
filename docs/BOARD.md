@@ -1,14 +1,6 @@
-# Current Status
+# BOARD - AI-Collaboration-Management
 
-**Repository:** AI-Collaboration-Management
-**Last Updated:** 2025-11-24 20:15 PST
-**Updated By:** OCC Claude
-
----
-
-## Current State: IDLE
-
-No active tasks. System ready for work.
+**Last Updated:** 2025-11-24 20:30 PST
 
 ---
 
@@ -17,57 +9,52 @@ No active tasks. System ready for work.
 _None pending_
 
 <!--
-TCC: When you find issues, add tasks here in this format:
+TCC: Post tasks for OCC here:
 
 ### Task: [Brief description]
 **Repository:** [repo name]
+**Branch:** [branch to work on]
 **Files affected:**
-- `path/to/file1.swift`
-- `path/to/file2.swift`
+- `path/to/file.swift`
 
 **Issue found:**
-[What TCC observed - error messages, test failures, etc.]
+[Error messages, test failures, what you observed]
 
 **What OCC needs to do:**
 - [ ] Fix X
 - [ ] Update Y
-- [ ] Test Z
 
-**Diagnosis/logs:**
+**Logs:**
 ```
-[paste relevant error output here]
+[paste error output]
 ```
 -->
 
 ---
 
-## Active Approach: CLAUDE.md + Hooks
+## TCC Tasks (Posted by OCC)
 
-**The framework has been simplified to 3 files:**
+### Task: Merge updated hook and board format
+**Repository:** AI-Collaboration-Management
+**Branch:** `claude/check-build-output-01QdQBFDw91Tyym9sJBmNf9Z`
 
-| File | Purpose |
-|------|---------|
-| `CLAUDE.md` | Baked-in rules read at every session start |
-| `.claude/hooks/session-start.sh` | Injects repo/branch context automatically |
-| `.claude/settings.json` | Hook configuration |
+**What TCC needs to do:**
+- [ ] Merge branch to main
+- [ ] Delete abandoned branches: `streamline-rules-error-prevention-...` and `onboard-tcc-member-...`
+- [ ] Copy `CLAUDE.md` and `.claude/` folder to **SimpleCP**
 
-**Key rules enforced:**
-- Always specify repository name in messages
-- Always specify branch name for git operations
-- Always give completion reports when finishing tasks
+<!--
+OCC: Post tasks for TCC here:
 
----
+### Task: [Brief description]
+**Repository:** [repo name]
+**Branch:** [branch ready for review/merge]
 
-## Abandoned Branches
-
-The following branches are obsolete and should be deleted:
-
-| Branch | Reason |
-|--------|--------|
-| `streamline-rules-error-prevention-...` | Superseded by CLAUDE.md approach |
-| `onboard-tcc-member-...` | Superseded by CLAUDE.md approach |
-
-These contained complex framework scripts (3000+ lines) replaced by ~85 lines total.
+**What TCC needs to do:**
+- [ ] Test X
+- [ ] Merge Y
+- [ ] Validate Z
+-->
 
 ---
 
@@ -78,11 +65,4 @@ These contained complex framework scripts (3000+ lines) replaced by ~85 lines to
 
 ---
 
-## Next Steps
-
-1. **TCC**: Delete the 2 abandoned branches in **AI-Collaboration-Management**
-2. **TCC**: Copy `CLAUDE.md`, `.claude/` folder to **SimpleCP** for same enforcement
-
----
-
-**Philosophy: Simple beats clever. Less is more.**
+**Simple is better.**
