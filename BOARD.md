@@ -12,12 +12,41 @@
 
 **Issue:** SimpleCP has duplicate/confusing AICM directories causing confusion
 
-**TCC Action Required:**
-1. Go to SimpleCP repository
-2. Read SimpleCP/BOARD.md (line 10-39)
-3. Execute the cleanup script exactly as written
-4. Verify cleanup succeeded
-5. Commit and push cleanup
+**TCC MUST EXECUTE THIS CLEANUP NOW:**
+
+```bash
+cd /path/to/SimpleCP
+
+# 1. DELETE OLD BACKUP DIRECTORIES
+rm -rf .ai-framework-COMPLEX-BACKUP
+rm -rf .ai-framework-backup
+
+# 2. DELETE OLD AICM SYNC FILES (no longer needed)
+rm -f AICM_SYNC_WORKFLOW.md
+rm -f sync-from-aicm.sh
+rm -f sync-to-aicm.sh
+
+# 3. DELETE CONFUSING .ai DIRECTORY (duplicate tracking)
+rm -rf .ai
+
+# 4. VERIFY CLEANUP (should show ONLY .ai-framework/)
+ls -la | grep -E "^d.*\.ai|AICM|sync"
+
+# 5. COMMIT CLEANUP
+git add -A
+git commit -m "Clean up SimpleCP: Remove duplicate AICM directories and sync files"
+git push origin main
+```
+
+**What gets deleted:**
+- `.ai/` - Duplicate task tracking
+- `.ai-framework-COMPLEX-BACKUP/` - Old backup
+- `.ai-framework-backup/` - Old backup
+- `AICM_SYNC_WORKFLOW.md`, `sync-*.sh` - Obsolete sync files
+
+**What stays:**
+- `BOARD.md` (single source of truth)
+- `.ai-framework/` (enforcement system only)
 
 **After cleanup complete, proceed with AICM merge below.**
 
