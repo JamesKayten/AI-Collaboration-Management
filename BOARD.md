@@ -8,11 +8,11 @@
 
 ## Quick Status
 
-🚨 **CRITICAL: TCC MUST CLEAN UP SIMPLECP REPOSITORY FIRST**
+🚨 **CRITICAL: TCC MUST CLEAN UP SIMPLECP REPOSITORY**
 
-**Issue:** SimpleCP has duplicate/confusing AICM directories causing confusion
+**Issue:** SimpleCP has duplicate/confusing AICM directories
 
-**TCC MUST EXECUTE THIS CLEANUP NOW:**
+**TCC MUST EXECUTE THIS CLEANUP:**
 
 ```bash
 cd /path/to/SimpleCP
@@ -21,34 +21,41 @@ cd /path/to/SimpleCP
 rm -rf .ai-framework-COMPLEX-BACKUP
 rm -rf .ai-framework-backup
 
-# 2. DELETE OLD AICM SYNC FILES (no longer needed)
+# 2. DELETE OBSOLETE WORKFLOW DOC
 rm -f AICM_SYNC_WORKFLOW.md
-rm -f sync-from-aicm.sh
-rm -f sync-to-aicm.sh
 
 # 3. DELETE CONFUSING .ai DIRECTORY (duplicate tracking)
 rm -rf .ai
 
-# 4. VERIFY CLEANUP (should show ONLY .ai-framework/)
-ls -la | grep -E "^d.*\.ai|AICM|sync"
+# 4. VERIFY CLEANUP
+ls -la | grep -E "^d.*\.ai"
+# Should show: .ai-framework only
 
 # 5. COMMIT CLEANUP
 git add -A
-git commit -m "Clean up SimpleCP: Remove duplicate AICM directories and sync files"
+git commit -m "Clean up SimpleCP: Remove duplicate AICM directories"
 git push origin main
 ```
 
 **What gets deleted:**
-- `.ai/` - Duplicate task tracking
+- `.ai/` - Duplicate task tracking (use BOARD.md)
 - `.ai-framework-COMPLEX-BACKUP/` - Old backup
 - `.ai-framework-backup/` - Old backup
-- `AICM_SYNC_WORKFLOW.md`, `sync-*.sh` - Obsolete sync files
+- `AICM_SYNC_WORKFLOW.md` - Obsolete doc
 
 **What stays:**
-- `BOARD.md` (single source of truth)
-- `.ai-framework/` (enforcement system only)
+- ✅ `BOARD.md` - Single source of truth
+- ✅ `.ai-framework/` - AICM framework (where improvements happen)
+- ✅ `sync-to-aicm.sh` - Syncs SimpleCP → AICM repo (paths fixed)
+- ✅ `sync-from-aicm.sh` - Syncs AICM repo → SimpleCP (paths fixed)
 
-**After cleanup complete, proceed with AICM merge below.**
+**WORKFLOW GOING FORWARD:**
+1. Work in SimpleCP (active development)
+2. Make AICM improvements in SimpleCP/.ai-framework/
+3. Use `bash sync-to-aicm.sh` to push to AI-Collaboration-Management repo
+4. Changes sync bidirectionally between repos
+
+**After cleanup, proceed with AICM merge below.**
 
 ---
 
