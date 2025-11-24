@@ -7,8 +7,8 @@ aliases: ["Check the Board", "check the board", "check board", "board check", "s
 
 1. **Read status**
 ```bash
-cat BOARD.md
-cat TASKS.md
+cat docs/BOARD.md
+cat docs/TASKS.md
 ```
 
 2. **Check for uncommitted changes**
