@@ -33,7 +33,20 @@ TCC: Post bug fixes, refactoring, and coding tasks here for OCC.
 
 ## Tasks FOR TCC (OCC writes here, TCC reads)
 
-_None pending_
+### Task: Merge board watcher feature
+**Repository:** AI-Collaboration-Management
+**Branch:** `claude/check-build-output-01QdQBFDw91Tyym9sJBmNf9Z`
+
+**What was added:**
+- `scripts/watch-board.sh` - polls GitHub for BOARD.md changes, plays audio alert
+- Updated `.claude/hooks/session-start.sh` - auto-starts watcher on session start
+
+**What TCC needs to do:**
+- [ ] Merge branch to main
+- [ ] Report commit hash
+- [ ] Deploy updated files to SimpleCP
+
+---
 
 ### ✅ COMPLETED: Deploy AICM to SimpleCP
 **Completed by:** TCC on 2025-11-24
