@@ -1,6 +1,15 @@
 #!/bin/bash
 # SessionStart hook - forces context awareness and shows board status
 
+# ANSI color codes
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+BLUE='\033[0;34m'
+CYAN='\033[0;36m'
+BOLD='\033[1m'
+RESET='\033[0m'
+
 REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null)
 REPO_NAME=$(basename "$REPO_ROOT" 2>/dev/null || echo "UNKNOWN")
 BRANCH=$(git branch --show-current 2>/dev/null || echo "UNKNOWN")
@@ -16,11 +25,11 @@ BOARD_PID_FILE="/tmp/board-watcher-${REPO_NAME}.pid"
 # SOUND: Hero (triumphant fanfare)
 if [ -f "$BRANCH_WATCHER" ]; then
     if [ -f "$BRANCH_PID_FILE" ] && kill -0 "$(cat "$BRANCH_PID_FILE")" 2>/dev/null; then
-        echo "📡 Branch watcher running (PID: $(cat "$BRANCH_PID_FILE")) - Hero sound = OCC branch ready"
+        echo -e "📡 Branch watcher ${GREEN}running${RESET} (PID: $(cat "$BRANCH_PID_FILE")) - ${CYAN}Hero sound${RESET} = OCC branch ready"
     else
         nohup "$BRANCH_WATCHER" > /tmp/branch-watcher.log 2>&1 &
         echo $! > "$BRANCH_PID_FILE"
-        echo "📡 Branch watcher started (PID: $!) - Hero sound = OCC branch ready"
+        echo -e "📡 Branch watcher ${GREEN}started${RESET} (PID: $!) - ${CYAN}Hero sound${RESET} = OCC branch ready"
     fi
 fi
 
@@ -28,46 +37,43 @@ fi
 # SOUND: Glass (soft double-chime)
 if [ -f "$BOARD_WATCHER" ]; then
     if [ -f "$BOARD_PID_FILE" ] && kill -0 "$(cat "$BOARD_PID_FILE")" 2>/dev/null; then
-        echo "📋 Board watcher running (PID: $(cat "$BOARD_PID_FILE")) - Glass sound = TCC posted task"
+        echo -e "📋 Board watcher ${GREEN}running${RESET} (PID: $(cat "$BOARD_PID_FILE")) - ${YELLOW}Glass sound${RESET} = TCC posted task"
     else
         nohup "$BOARD_WATCHER" > /tmp/board-watcher.log 2>&1 &
         echo $! > "$BOARD_PID_FILE"
-        echo "📋 Board watcher started (PID: $!) - Glass sound = TCC posted task"
+        echo -e "📋 Board watcher ${GREEN}started${RESET} (PID: $!) - ${YELLOW}Glass sound${RESET} = TCC posted task"
     fi
 fi
 
-cat <<EOF
-================================================================================
-SESSION START - MANDATORY CONTEXT
-================================================================================
-
-REPOSITORY: $REPO_NAME
-BRANCH: $BRANCH
-ROLE: Check if you are OCC (developer) or TCC (project manager)
-
-CRITICAL RULES (from CLAUDE.md):
-1. ALWAYS specify repository name in every message
-2. ALWAYS specify branch name when discussing git operations
-3. ALWAYS give completion reports when finishing tasks
-4. NEVER say vague things like "two merges remain" without context
-
-================================================================================
-CURRENT BOARD STATUS ($REPO_NAME/docs/BOARD.md):
-================================================================================
-EOF
+echo ""
+echo -e "${BOLD}================================================================================${RESET}"
+echo -e "${BOLD}SESSION START - MANDATORY CONTEXT${RESET}"
+echo -e "${BOLD}================================================================================${RESET}"
+echo ""
+echo -e "REPOSITORY: ${GREEN}${BOLD}$REPO_NAME${RESET}"
+echo -e "BRANCH:     ${CYAN}${BOLD}$BRANCH${RESET}"
+echo -e "ROLE:       Check if you are ${BLUE}OCC${RESET} (developer) or ${YELLOW}TCC${RESET} (project manager)"
+echo ""
+echo -e "${BOLD}CRITICAL RULES${RESET} (from CLAUDE.md):"
+echo "1. ALWAYS specify repository name in every message"
+echo "2. ALWAYS specify branch name when discussing git operations"
+echo "3. ALWAYS give completion reports when finishing tasks"
+echo "4. NEVER say vague things like \"two merges remain\" without context"
+echo ""
+echo -e "${BOLD}================================================================================${RESET}"
+echo -e "${BOLD}CURRENT BOARD STATUS${RESET} ($REPO_NAME/docs/BOARD.md):"
+echo -e "${BOLD}================================================================================${RESET}"
 
 # Show board contents if it exists
 if [ -f "$BOARD_FILE" ]; then
     cat "$BOARD_FILE"
 else
-    echo "No BOARD.md found at $BOARD_FILE"
+    echo -e "${RED}No BOARD.md found at $BOARD_FILE${RESET}"
 fi
 
-cat <<EOF
-
-================================================================================
-END OF BOARD - Proceed with your role (OCC or TCC)
-================================================================================
-EOF
+echo ""
+echo -e "${BOLD}================================================================================${RESET}"
+echo -e "${BOLD}END OF BOARD${RESET} - Proceed with your role (OCC or TCC)"
+echo -e "${BOLD}================================================================================${RESET}"
 
 exit 0
