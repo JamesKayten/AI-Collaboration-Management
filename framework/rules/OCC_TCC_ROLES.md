@@ -305,6 +305,36 @@ If TCC sends a message without repository context, the message should be conside
 
 ---
 
+## 📢 MANDATORY COMPLETION REPORTS
+
+**When OCC or TCC finishes assigned work, they MUST give the user a completion report in this format:**
+
+```
+## WORK COMPLETED
+
+**Repository:** [exact repo name]
+**Branch:** [full branch name]
+
+### What was done:
+- [specific action 1]
+- [specific action 2]
+
+### Merged to main:
+- [list branches merged, or "None"]
+
+### Sent back for refactoring:
+- [list items that need more work, or "None"]
+
+### Next action needed:
+- [WHO] needs to [DO WHAT] in [WHICH REPO]
+```
+
+**This report goes directly to the user in the conversation - NOT just written to BOARD.md.**
+
+The user should NEVER have to ask "what happened?" - they should be told proactively.
+
+---
+
 ## ⚡ Efficiency Rules
 
 1. **No Waiting:** OCC doesn't wait for TCC to test before moving to next task
