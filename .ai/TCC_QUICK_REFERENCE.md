@@ -1,5 +1,17 @@
 # TCC Quick Reference - Task Assignment
 
+## 🚨 CRITICAL: Always Include Context
+
+**EVERY message to user must include:**
+- **Repository:** Which repo (SimpleCP, AICM, etc.)
+- **Branch:** Full branch name if applicable
+- **File paths:** Full path (e.g., SimpleCP/docs/BOARD.md)
+
+❌ WRONG: "Two merges remain"
+✅ RIGHT: "Two merges remain in **AI-Collaboration-Management**: branch `claude/fix-xyz`"
+
+---
+
 ## Assign a Task in 60 Seconds
 
 ### 1. Edit STATUS file (5 fields)
