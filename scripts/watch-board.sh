@@ -9,21 +9,18 @@ REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null)
 BOARD_FILE="docs/BOARD.md"
 
 # Audio alert function (cross-platform)
+# SOUND: Glass (soft chime) - TCC posted task, OCC has work to do
 play_alert() {
     if [[ "$OSTYPE" == "darwin"* ]]; then
-        # macOS - use system sound
-        afplay /System/Library/Sounds/Ping.aiff 2>/dev/null &
-        # Play twice for emphasis
+        # Glass sound = board updated (task waiting)
+        afplay /System/Library/Sounds/Glass.aiff 2>/dev/null &
         sleep 0.3
-        afplay /System/Library/Sounds/Ping.aiff 2>/dev/null &
+        afplay /System/Library/Sounds/Glass.aiff 2>/dev/null &
     elif command -v paplay &>/dev/null; then
-        # Linux with PulseAudio
-        paplay /usr/share/sounds/freedesktop/stereo/complete.oga 2>/dev/null &
+        paplay /usr/share/sounds/freedesktop/stereo/message.oga 2>/dev/null &
     elif command -v aplay &>/dev/null; then
-        # Linux with ALSA
         aplay /usr/share/sounds/alsa/Front_Center.wav 2>/dev/null &
     else
-        # Fallback: terminal bell
         echo -e "\a"
     fi
 }

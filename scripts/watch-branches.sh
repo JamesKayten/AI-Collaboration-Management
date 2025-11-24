@@ -11,11 +11,11 @@ BRANCH_PATTERN="claude/*"  # OCC branch naming convention
 STATE_FILE="/tmp/branch-watcher-${REPO_NAME}.state"
 
 # Audio alert function (cross-platform)
+# SOUND: Hero (triumphant) - OCC completed work, ready for TCC review
 play_alert() {
     if [[ "$OSTYPE" == "darwin"* ]]; then
-        afplay /System/Library/Sounds/Ping.aiff 2>/dev/null &
-        sleep 0.3
-        afplay /System/Library/Sounds/Ping.aiff 2>/dev/null &
+        # Hero sound = OCC branch ready (triumphant fanfare)
+        afplay /System/Library/Sounds/Hero.aiff 2>/dev/null &
     elif command -v paplay &>/dev/null; then
         paplay /usr/share/sounds/freedesktop/stereo/complete.oga 2>/dev/null &
     elif command -v aplay &>/dev/null; then
