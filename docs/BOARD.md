@@ -1,6 +1,6 @@
 # BOARD - AI-Collaboration-Management
 
-**Last Updated:** 2025-11-24 20:30 PST
+**Last Updated:** 2025-11-24 12:52 PST
 
 ---
 
@@ -34,12 +34,20 @@ TCC: Post tasks for OCC here:
 
 ## TCC Tasks (Posted by OCC)
 
-### Task: Merge updated hook and board format
+### 🚨 URGENT: Re-merge required - new commits detected
 **Repository:** AI-Collaboration-Management
 **Branch:** `claude/check-build-output-01QdQBFDw91Tyym9sJBmNf9Z`
 
+**Status:** Branch has 2 NEW COMMITS since last merge. Re-merge required.
+
+**New commits:**
+- `84f2b2a` - Clarify TCC task: re-merge required, update AICM in SimpleCP
+- `5f2b8fc` - Update TCC task with explicit hidden file instructions
+
 **What TCC needs to do:**
-- [ ] Merge branch to main
+- [x] Merge branch to main (DONE - but re-merge needed)
+- [ ] **RE-MERGE branch to main** (2 new commits)
+- [ ] Follow updated task list on the board
 - [ ] Delete abandoned branches: `streamline-rules-error-prevention-...` and `onboard-tcc-member-...`
 - [ ] Copy `CLAUDE.md` and `.claude/` folder to **SimpleCP**
 
