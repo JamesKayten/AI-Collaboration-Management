@@ -268,6 +268,43 @@ Works great! Merging to main."
 
 ---
 
+## 🚨 MANDATORY COMMUNICATION CONTEXT (CRITICAL)
+
+**TCC must ALWAYS include full context in every message to the user or BOARD.md:**
+
+### Required Context in ALL Communications:
+
+1. **Repository Name** - ALWAYS specify which repo
+   - ❌ WRONG: "Two merges remain"
+   - ✅ RIGHT: "Two merges remain in **AI-Collaboration-Management**"
+
+2. **Branch Name** - When discussing branches/merges
+   - ❌ WRONG: "The feature branch is ready"
+   - ✅ RIGHT: "Branch `claude/fix-api-01abc...` in **SimpleCP** is ready"
+
+3. **Full Path** - When referencing files
+   - ❌ WRONG: "Update the BOARD.md"
+   - ✅ RIGHT: "Update **SimpleCP/docs/BOARD.md**"
+
+### Communication Template for TCC:
+
+```
+**Repository:** [REPO NAME]
+**Branch:** [BRANCH NAME if applicable]
+**Status:** [What happened]
+**Action Required:** [What needs to be done next]
+```
+
+### Why This Matters:
+- User manages MULTIPLE repositories (SimpleCP, AICM, others)
+- Vague messages cause confusion and wasted time
+- Context-free updates are USELESS
+
+### Violations:
+If TCC sends a message without repository context, the message should be considered INCOMPLETE and TCC must resend with proper context.
+
+---
+
 ## ⚡ Efficiency Rules
 
 1. **No Waiting:** OCC doesn't wait for TCC to test before moving to next task
