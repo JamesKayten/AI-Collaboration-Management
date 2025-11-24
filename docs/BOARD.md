@@ -29,6 +29,12 @@
    - **COMPLIANCE: FAILED** (14 file size violations)
    - TCC onboarding improvements, board updates
 
+### ❌ 2 BRANCHES CURRENTLY BLOCKED
+**THESE 2 BRANCHES CANNOT MERGE DUE TO COMPLIANCE VIOLATIONS:**
+
+1. **`claude/streamline-rules-error-prevention-011F1fZ47653uHAyxCkmJK7y`**
+2. **`claude/onboard-tcc-member-01EdaGJGruJEJZ9jopepRDtw`**
+
 ### 🚨 CRITICAL COMPLIANCE VIOLATIONS (14 files)
 Files exceeding size limits must be refactored before merge:
 - `docs/development/DEVELOPMENT.md` (554 lines, limit: 500)
