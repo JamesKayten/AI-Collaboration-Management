@@ -6,13 +6,18 @@
 
 ## In Progress
 
-None - TCC onboarding improvements complete
+🔥 **URGENT: Fix SimpleCP Backend-Frontend Communication** (OCC Task)
+- Assigned to: OCC (Other Claude Contributor)
+- Priority: CRITICAL
+- Repository: https://github.com/JamesKayten/SimpleCP
+- Status: Must test-rebuild-test until working
+- Deadline: ASAP
 
 ---
 
 ## Pending
 
-- Merge onboarding improvements to main
+None - Focus on SimpleCP communication fix
 
 ---
 

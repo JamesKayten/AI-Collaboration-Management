@@ -8,7 +8,31 @@
 
 ## Quick Status
 
-✅ **TCC Onboarding Improved**
+🔥 **URGENT: SimpleCP Backend-Frontend Communication BROKEN**
+
+**OCC TASK: FIX SIMPLECP COMMUNICATION - TEST UNTIL IT WORKS**
+
+Critical issues identified in https://github.com/JamesKayten/SimpleCP:
+
+1. **Backend Server Not Running** - `python3 backend/main.py` needs to be started
+2. **Incomplete API Client** - Swift APIClient missing snippet/history operations
+3. **Endpoint Mismatches** - API calls don't match FastAPI routes
+4. **No Testing Loop** - No automated testing to verify communication
+5. **No Process Management** - Backend needs automatic startup/restart
+
+**OCC INSTRUCTIONS:**
+- Clone SimpleCP repository
+- Run continuous test-rebuild-test loop until frontend talks to backend
+- Test ALL API endpoints (folders, snippets, history, search)
+- Fix any connection, endpoint, or data format issues
+- **DO NOT STOP until frontend fully communicates with backend**
+- Document working startup process
+
+**Success Criteria:** Swift frontend successfully syncs folders/snippets with Python backend
+
+---
+
+✅ **TCC Onboarding Improved** (Previous work completed)
 
 Changes made:
 - Created `.ai/TCC_ONBOARDING.md` - Clear step-by-step onboarding
@@ -16,8 +40,6 @@ Changes made:
 - Updated `.ai/BEHAVIOR_RULES.md` - Added startup protocol
 - Updated `README.md` - Added "New TCC Session" section
 - **First command now crystal clear: `/check-the-board`**
-
-**Ready to merge to main.**
 
 ---
 
