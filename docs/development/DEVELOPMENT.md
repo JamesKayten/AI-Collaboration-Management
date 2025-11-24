@@ -54,7 +54,7 @@ AI-Collaboration-Management/
 ├── setup-ai-collaboration.sh   # Main setup script
 ├── update-claude-rules.sh      # Rules management
 │
-├── .ai-framework/              # Framework internals (hidden)
+├── framework/              # Framework internals (hidden)
 │   ├── project-state/          # Project tracking
 │   ├── communications/         # AI-to-AI protocol
 │   ├── rules/                  # Validation rules

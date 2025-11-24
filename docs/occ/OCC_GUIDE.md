@@ -19,7 +19,7 @@ framework check
 
 **Copy and paste:**
 ```
-Check the AI Collaboration Framework in the repository for new instructions and reports in .ai-framework/communications/. Pull latest changes, address any validation reports, commit your response, and push back to GitHub.
+Check the AI Collaboration Framework in the repository for new instructions and reports in framework/communications/. Pull latest changes, address any validation reports, commit your response, and push back to GitHub.
 ```
 
 **Requirements:** None - works immediately in any session
@@ -44,13 +44,13 @@ between you (Online Claude) and Terminal Claude Code (TCC).
 ```
 When I say "framework check", you should:
 1. Pull latest changes from the current GitHub repository
-2. Check .ai-framework/communications/ for:
+2. Check framework/communications/ for:
    - Validation reports in reports/
    - Work notifications in updates/
    - Previous responses in responses/
 3. Read any reports or instructions you find
 4. Take appropriate action (fix issues, respond to requests, etc.)
-5. Commit your changes and responses to .ai-framework/communications/responses/
+5. Commit your changes and responses to framework/communications/responses/
 6. Push everything back to GitHub
 7. Confirm what you did
 
@@ -87,7 +87,7 @@ No setup required - works in any OCC session immediately.
 ### The Universal Command
 
 ```
-Check the AI Collaboration Framework in the repository for new instructions and reports in .ai-framework/communications/. Pull latest changes, address any validation reports, commit your response, and push back to GitHub.
+Check the AI Collaboration Framework in the repository for new instructions and reports in framework/communications/. Pull latest changes, address any validation reports, commit your response, and push back to GitHub.
 ```
 
 ### When to Use
@@ -147,7 +147,7 @@ When activated, OCC:
    - Gets all recent changes
    - Ensures current with TCC's work
 
-2. **Checks `.ai-framework/communications/`**
+2. **Checks `framework/communications/`**
    - Looks in `reports/` for validation reports
    - Looks in `updates/` for other instructions
    - Checks `responses/` for conversation history
@@ -163,7 +163,7 @@ When activated, OCC:
 
 5. **Creates Response**
    - Documents what was fixed
-   - Saves to `.ai-framework/communications/responses/`
+   - Saves to `framework/communications/responses/`
 
 6. **Commits and Pushes**
    - Commits all changes
@@ -201,7 +201,7 @@ For multiple projects:
 
 Keep the standard prompt in your notes for quick access:
 ```
-Check the AI Collaboration Framework in the repository for new instructions and reports in .ai-framework/communications/. Pull latest changes, address any validation reports, commit your response, and push back to GitHub.
+Check the AI Collaboration Framework in the repository for new instructions and reports in framework/communications/. Pull latest changes, address any validation reports, commit your response, and push back to GitHub.
 ```
 
 ---
@@ -221,9 +221,9 @@ Check the AI Collaboration Framework in the repository for new instructions and 
 
 | Path | Purpose |
 |------|---------|
-| `.ai-framework/communications/reports/` | TCC validation reports |
-| `.ai-framework/communications/responses/` | OCC fix responses |
-| `.ai-framework/communications/updates/` | Status notifications |
+| `framework/communications/reports/` | TCC validation reports |
+| `framework/communications/responses/` | OCC fix responses |
+| `framework/communications/updates/` | Status notifications |
 
 ### When to Use OCC
 
@@ -279,7 +279,7 @@ Check the AI Collaboration Framework in the repository for new instructions and 
 
 ### OCC doesn't find reports
 - Verify TCC has run "work ready" first
-- Check that reports exist in `.ai-framework/communications/reports/`
+- Check that reports exist in `framework/communications/reports/`
 - Ensure reports were pushed to GitHub
 
 ### OCC makes changes but doesn't push

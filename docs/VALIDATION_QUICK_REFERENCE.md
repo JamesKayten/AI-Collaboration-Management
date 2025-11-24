@@ -34,7 +34,7 @@ cd /home/user/AI-Collaboration-Management
 ```
 
 **Checks:**
-- ✅ Core directories exist (docs/, scripts/, .ai-framework/)
+- ✅ Core directories exist (docs/, scripts/, framework/)
 - ✅ Files in correct locations
 - ✅ Scripts are executable
 - ✅ Old files removed from root
@@ -198,7 +198,7 @@ find . -maxdepth 1 -name "*.md" -type f  # Should only be README.md
 ```bash
 ls -la docs/
 ls -la scripts/
-ls -la .ai-framework/
+ls -la framework/
 ```
 
 ### Check Script Permissions

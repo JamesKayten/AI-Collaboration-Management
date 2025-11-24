@@ -107,7 +107,7 @@ Add to `setup-ai-collaboration.sh` around line 458:
 ```bash
 # Deploy session recovery system
 echo "📸 Deploying session recovery system..."
-mkdir -p "$REPO_ROOT/.ai-framework/session-recovery"
+mkdir -p "$REPO_ROOT/framework/session-recovery"
 
 # Copy and customize session recovery templates
 sed -e "s/{{PROJECT_NAME}}/$PROJECT_NAME/g" \
@@ -134,7 +134,7 @@ sed -e "s/{{PROJECT_NAME}}/$PROJECT_NAME/g" \
     -e "s/{{VALIDATION_TOOLS}}/$VALIDATION_TOOLS/g" \
     -e "s|{{PROJECT_PATH}}|$REPO_ROOT|g" \
     "$SCRIPT_DIR/templates/session-recovery/CURRENT_SESSION_STATE_TEMPLATE.md" \
-    > "$REPO_ROOT/.ai-framework/session-recovery/CURRENT_SESSION_STATE.md"
+    > "$REPO_ROOT/framework/session-recovery/CURRENT_SESSION_STATE.md"
 
 echo "✅ Session recovery system deployed"
 ```
@@ -159,7 +159,7 @@ Create `.gitignore`:
 ```gitignore
 # Session Recovery - Personal State Files
 SESSION_EXIT_SNAPSHOT.md
-.ai-framework/session-recovery/CURRENT_SESSION_STATE.md
+framework/session-recovery/CURRENT_SESSION_STATE.md
 
 # Keep templates
 !templates/session-recovery/*.md
@@ -252,14 +252,14 @@ fi
 
 ### 6. **File Location Inconsistency**
 **Problem:**
-- `CURRENT_SESSION_STATE.md` goes in `.ai-framework/session-recovery/`
+- `CURRENT_SESSION_STATE.md` goes in `framework/session-recovery/`
 - `SESSION_EXIT_SNAPSHOT.md` goes in project root
 - Inconsistent and confusing
 
 **Recommendation:**
-- Put BOTH in `.ai-framework/session-recovery/`
+- Put BOTH in `framework/session-recovery/`
 - Cleaner structure
-- Easy to gitignore: `.ai-framework/session-recovery/*.md`
+- Easy to gitignore: `framework/session-recovery/*.md`
 
 **Or:**
 - Put BOTH in project root
@@ -279,9 +279,9 @@ fi
 **Recommendation:**
 Add validation:
 ```bash
-if [ ! -f ".ai-framework/session-recovery/CURRENT_SESSION_STATE.md" ]; then
+if [ ! -f "framework/session-recovery/CURRENT_SESSION_STATE.md" ]; then
     echo "⚠️  WARNING: No current session state file found"
-    echo "💡 TIP: Maintain .ai-framework/session-recovery/CURRENT_SESSION_STATE.md during work"
+    echo "💡 TIP: Maintain framework/session-recovery/CURRENT_SESSION_STATE.md during work"
     echo "    This enables much better session recovery"
     echo ""
     read -p "Create snapshot anyway? [y/N] " -n 1 -r
@@ -314,7 +314,7 @@ read -p "Progress (0-100): " PROGRESS
 read -p "Next action: " NEXT_ACTION
 
 sed -i "s/\[UPDATE: Current specific task being worked on\]/$TASK/" \
-    .ai-framework/session-recovery/CURRENT_SESSION_STATE.md
+    framework/session-recovery/CURRENT_SESSION_STATE.md
 # ... more updates
 ```
 
@@ -375,7 +375,7 @@ git init
 
 # 2. Verify files created
 ls -la create_session_snapshot.sh restore_session.sh
-ls -la .ai-framework/session-recovery/
+ls -la framework/session-recovery/
 
 # 3. Check placeholders replaced
 grep "{{" create_session_snapshot.sh  # Should return: NO MATCHES

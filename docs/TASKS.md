@@ -34,7 +34,7 @@ None - Focus on SimpleCP communication fix
 
 - ✅ Audited repository for complexity
 - ✅ Identified over-engineering issues (6,000 lines!)
-- ✅ Archived bloated framework to `.ai-framework-BLOAT-ARCHIVE/`
+- ✅ Archived bloated framework to `framework-BLOAT-ARCHIVE/`
 - ✅ Created minimal framework (185 lines)
 - ✅ Simplified all slash commands
 - ✅ Updated README.md with TCC's three responsibilities
@@ -56,7 +56,7 @@ None - Focus on SimpleCP communication fix
 2. `1fe3357` - Update all documentation for v3.0 Simple Edition
 3. `0bcd187` - Clarify TCC's three core responsibilities
 
-**Files Archived:** 74 files → `.ai-framework-BLOAT-ARCHIVE/`
+**Files Archived:** 74 files → `framework-BLOAT-ARCHIVE/`
 **Scripts Removed:** 13 shell scripts + 2 Python GUIs
 **Documentation Updated:** 7 major files
 

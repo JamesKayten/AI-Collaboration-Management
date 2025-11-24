@@ -34,7 +34,7 @@ In terminal:
 1. Pull latest changes from GitHub
 2. Checkout the feature branch
 3. Run validation rules
-4. Create validation report in `.ai-framework/communications/reports/`
+4. Create validation report in `framework/communications/reports/`
 5. **Commit the report**
 6. **Push to GitHub**
 7. Tell you to notify OCC
@@ -53,9 +53,9 @@ cd /path/to/SimpleCP
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 Pull latest changes from GitHub branch feature/auth,
-then check .ai-framework/communications/reports/AI_REPORT_20251119.md
+then check framework/communications/reports/AI_REPORT_20251119.md
 and address all violations. When done, commit your fixes and
-response to .ai-framework/communications/responses/ and push to GitHub.
+response to framework/communications/responses/ and push to GitHub.
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
@@ -67,9 +67,9 @@ You **copy that green command** and paste it to me in browser.
 
 **I (OCC) will**:
 1. **Pull latest changes from GitHub**
-2. Read the validation report from `.ai-framework/communications/reports/`
+2. Read the validation report from `framework/communications/reports/`
 3. Fix all violations
-4. Create response file in `.ai-framework/communications/responses/`
+4. Create response file in `framework/communications/responses/`
 5. **Commit all changes**
 6. **Push to GitHub**
 7. Confirm completion
@@ -138,7 +138,7 @@ your-project/
 │   └── [your code changes]
 ├── tests/
 │   └── [your test changes]
-└── .ai-framework/
+└── framework/
     └── communications/
         ├── reports/
         │   └── AI_REPORT_20251119_143022.md     ← Local Claude
@@ -223,16 +223,16 @@ $ ./ai activate
 # Script shows:
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 # Pull latest changes from GitHub branch feature/login,
-# then check .ai-framework/communications/reports/AI_REPORT_20251119_143022.md
+# then check framework/communications/reports/AI_REPORT_20251119_143022.md
 # and address all violations. When done, commit your fixes and
-# response to .ai-framework/communications/responses/ and push to GitHub.
+# response to framework/communications/responses/ and push to GitHub.
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 # ========================================
 # You copy/paste to Browser → Online Claude
 # ========================================
 "Pull latest changes from GitHub branch feature/login,
-then check .ai-framework/communications/reports/AI_REPORT_20251119_143022.md
+then check framework/communications/reports/AI_REPORT_20251119_143022.md
 and address all violations..."
 
 # OCC: 🔄 Pulling from GitHub...

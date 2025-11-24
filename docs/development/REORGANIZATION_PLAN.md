@@ -17,33 +17,33 @@
 ### 1. CHANGELOG.md (3 copies)
 - `./CHANGELOG.md` (128 lines) - **KEEP** (most complete)
 - `./docs/CHANGELOG.md` (85 lines) - DELETE
-- `./.ai-framework/framework-docs/CHANGELOG.md` (85 lines) - DELETE
+- `./framework/framework-docs/CHANGELOG.md` (85 lines) - DELETE
 
 ### 2. CONTRIBUTING.md (3 copies)
 - `./CONTRIBUTING.md` (418 lines, has TCC) - **KEEP**
 - `./docs/CONTRIBUTING.md` (166 lines) - DELETE
-- `./.ai-framework/framework-docs/CONTRIBUTING.md` (166 lines) - DELETE
+- `./framework/framework-docs/CONTRIBUTING.md` (166 lines) - DELETE
 
 ### 3. FAQ.md (3 copies)
 - `./FAQ.md` (has TCC section) - **KEEP**
 - `./docs/FAQ.md` - DELETE
-- `./.ai-framework/framework-docs/FAQ.md` - DELETE
+- `./framework/framework-docs/FAQ.md` - DELETE
 
 ### 4. GETTING_STARTED.md (2 copies)
 - `./GETTING_STARTED.md` (has TCC) - **KEEP**
-- `./.ai-framework/framework-docs/GETTING_STARTED.md` - DELETE
+- `./framework/framework-docs/GETTING_STARTED.md` - DELETE
 
 ### 5. TROUBLESHOOTING.md (2 copies)
 - `./TROUBLESHOOTING.md` (has TCC) - **KEEP**
-- `./.ai-framework/framework-docs/TROUBLESHOOTING.md` - DELETE
+- `./framework/framework-docs/TROUBLESHOOTING.md` - DELETE
 
 ### 6. DEPLOYMENT_GUIDE.md (2 copies)
 - `./docs/DEPLOYMENT_GUIDE.md` - **KEEP**
-- `./.ai-framework/framework-docs/DEPLOYMENT_GUIDE.md` - DELETE
+- `./framework/framework-docs/DEPLOYMENT_GUIDE.md` - DELETE
 
 ### 7. PROJECT_STATE.md (2 copies)
 - `./PROJECT_STATE.md` - DELETE (old)
-- `./.ai-framework/project-state/PROJECT_STATE.md` - **KEEP**
+- `./framework/project-state/PROJECT_STATE.md` - **KEEP**
 
 ---
 
@@ -164,7 +164,7 @@ AI-Collaboration-Management/
 │   ├── FRAMEWORK_USAGE.md
 │   └── TCC_QUICK_REFERENCE.md
 │
-├── .ai-framework/                      # Framework internals
+├── framework/                      # Framework internals
 │   ├── communications/
 │   ├── installation/
 │   ├── project-state/
@@ -200,13 +200,13 @@ AI-Collaboration-Management/
 ### Duplicates to Remove:
 1. `docs/CHANGELOG.md`
 2. `docs/CONTRIBUTING.md`
-3. `.ai-framework/framework-docs/CHANGELOG.md`
-4. `.ai-framework/framework-docs/CONTRIBUTING.md`
-5. `.ai-framework/framework-docs/FAQ.md`
-6. `.ai-framework/framework-docs/GETTING_STARTED.md`
-7. `.ai-framework/framework-docs/TROUBLESHOOTING.md`
-8. `.ai-framework/framework-docs/DEPLOYMENT_GUIDE.md`
-9. `PROJECT_STATE.md` (root - keep .ai-framework version)
+3. `framework/framework-docs/CHANGELOG.md`
+4. `framework/framework-docs/CONTRIBUTING.md`
+5. `framework/framework-docs/FAQ.md`
+6. `framework/framework-docs/GETTING_STARTED.md`
+7. `framework/framework-docs/TROUBLESHOOTING.md`
+8. `framework/framework-docs/DEPLOYMENT_GUIDE.md`
+9. `PROJECT_STATE.md` (root - keep framework version)
 
 ### Files to Consolidate/Move:
 10. `CONNECTION_RETRY_FIX.md` → consolidate

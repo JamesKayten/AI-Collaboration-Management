@@ -28,7 +28,7 @@ PROJECT_ROOT=$(git rev-parse --show-toplevel)
 PROJECT_NAME=$(basename "$PROJECT_ROOT")
 
 # Check if framework is installed
-if [ ! -d "$PROJECT_ROOT/.ai-framework" ]; then
+if [ ! -d "$PROJECT_ROOT/framework" ]; then
     echo -e "${YELLOW}⚠️  AI Framework not installed in this project${NC}"
     echo -e "   Run the installer first: setup-ai-collaboration.sh"
     exit 1
@@ -39,7 +39,7 @@ echo -e "${BLUE}📍 Location:${NC} $PROJECT_ROOT"
 echo ""
 
 # Check for validation reports
-REPORTS_DIR="$PROJECT_ROOT/.ai-framework/communications/reports"
+REPORTS_DIR="$PROJECT_ROOT/framework/communications/reports"
 if [ ! -d "$REPORTS_DIR" ]; then
     echo -e "${YELLOW}⚠️  Reports directory not found${NC}"
     exit 1
@@ -106,14 +106,14 @@ else
 fi
 
 echo -e "${BLUE}🔄 After OCC completes fixes:${NC}"
-echo -e "   1. OCC will create response in .ai-framework/communications/responses/"
+echo -e "   1. OCC will create response in framework/communications/responses/"
 echo -e "   2. OCC will commit and push changes to GitHub"
 echo -e "   3. Run 'work ready' in terminal (after pulling) to re-validate"
 echo -e "   4. If clean, Local AI will merge automatically"
 echo ""
 
 # Check for existing responses
-RESPONSES_DIR="$PROJECT_ROOT/.ai-framework/communications/responses"
+RESPONSES_DIR="$PROJECT_ROOT/framework/communications/responses"
 RESPONSE_COUNT=$(find "$RESPONSES_DIR" -name "AI_RESPONSE_*.md" -type f 2>/dev/null | wc -l)
 
 if [ "$RESPONSE_COUNT" -gt 0 ]; then

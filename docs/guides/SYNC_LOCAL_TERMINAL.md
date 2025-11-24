@@ -109,7 +109,7 @@ grep "v2.0" setup-ai-collaboration.sh
 
 Expected results:
 - ✅ All files should exist
-- ✅ Installer should create `.ai-framework/` structure
+- ✅ Installer should create `framework/` structure
 - ✅ Should have `./ai` helper script
 
 ---
@@ -124,7 +124,7 @@ Expected results:
 - Examples directory
 
 ### 2. Updated Framework Structure ✅
-- Installer now creates `.ai-framework/` instead of `docs/ai_communication/`
+- Installer now creates `framework/` instead of `docs/ai_communication/`
 - Proper subdirectories: `reports/`, `responses/`, `updates/`
 - PROJECT_STATE.md auto-generation
 
@@ -156,7 +156,7 @@ bash ~/Projects/AI-Collaboration-Management/setup-ai-collaboration.sh \
   --preset react --max-file-size 150 --test-coverage 85
 
 # Verify installation
-ls -la .ai-framework/
+ls -la framework/
 ls -la ./ai
 
 # Test helper
@@ -181,14 +181,14 @@ After syncing the framework, re-install in SimpleCP:
 cd /path/to/SimpleCP
 
 # Remove old structure (if exists)
-rm -rf docs/ai_communication .ai-framework
+rm -rf docs/ai_communication framework
 
 # Install latest framework
 bash /path/to/AI-Collaboration-Management/setup-ai-collaboration.sh \
   --preset react --max-file-size 150 --test-coverage 85
 
 # Verify new structure
-ls -la .ai-framework/communications/
+ls -la framework/communications/
 ls -la ./ai
 
 # Test commands

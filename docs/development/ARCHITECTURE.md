@@ -24,14 +24,14 @@ The framework works with:
 
 ### 3. Non-Intrusive Installation
 
-All framework files are stored in `.ai-framework/` to avoid cluttering the project root.
+All framework files are stored in `framework/` to avoid cluttering the project root.
 
 ## System Components
 
 ### Directory Structure
 
 ```
-.ai-framework/
+framework/
 ├── communications/          # AI-to-AI communication hub
 │   ├── reports/            # Validation reports from Local AI
 │   ├── responses/          # Fix responses from Online AI
@@ -53,7 +53,7 @@ All framework files are stored in `.ai-framework/` to avoid cluttering the proje
 
 #### 1. Communications System
 
-**Location**: `.ai-framework/communications/`
+**Location**: `framework/communications/`
 
 **Purpose**: Facilitate structured AI-to-AI communication
 
@@ -86,7 +86,7 @@ Detailed information
 
 #### 2. Project State Management
 
-**Location**: `.ai-framework/project-state/`
+**Location**: `framework/project-state/`
 
 **Purpose**: Track project progress and enable session recovery
 
@@ -98,7 +98,7 @@ Detailed information
 
 #### 3. Rules System
 
-**Location**: `.ai-framework/rules/`
+**Location**: `framework/rules/`
 
 **Purpose**: Define validation standards and sync protocols
 
@@ -109,7 +109,7 @@ Detailed information
 
 #### 4. Installation System
 
-**Location**: Root directory and `.ai-framework/installation/`
+**Location**: Root directory and `framework/installation/`
 
 **Purpose**: Install framework into target projects
 
@@ -141,7 +141,7 @@ Detailed information
                      ▼
 ┌─────────────────────────────────────────────────────────────┐
 │           Create AI_REPORT_*.md                            │
-│  - Write to .ai-framework/communications/reports/          │
+│  - Write to framework/communications/reports/          │
 │  - Include violations, affected files, suggestions         │
 └────────────────────┬────────────────────────────────────────┘
                      │
@@ -155,7 +155,7 @@ Detailed information
                      ▼
 ┌─────────────────────────────────────────────────────────────┐
 │                User Notifies Online AI                     │
-│  "Check .ai-framework/communications/ for latest report"   │
+│  "Check framework/communications/ for latest report"   │
 └────────────────────┬────────────────────────────────────────┘
                      │
                      ▼
@@ -198,7 +198,7 @@ User runs: ./setup-ai-collaboration.sh
     Continue install    Show error & exit
             │
             ▼
-    Create .ai-framework/ directory
+    Create framework/ directory
             │
             ▼
     Copy template files from framework repo
@@ -345,9 +345,9 @@ function validateProject(rules) {
 
 Certain files should be gitignored:
 ```
-.ai-framework/communications/drafts/
-.ai-framework/.cache/
-.ai-framework/.temp/
+framework/communications/drafts/
+framework/.cache/
+framework/.temp/
 ```
 
 ### Validation Safety
@@ -362,10 +362,10 @@ Certain files should be gitignored:
 
 ```javascript
 // Instead of reading all files:
-// ❌ files = glob('.ai-framework/**/*.md')
+// ❌ files = glob('framework/**/*.md')
 
 // Read only latest files:
-// ✅ files = glob('.ai-framework/communications/reports/*')
+// ✅ files = glob('framework/communications/reports/*')
 //           .sort(by: 'timestamp', order: 'desc')
 //           .limit(10)
 ```

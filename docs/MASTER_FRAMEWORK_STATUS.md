@@ -105,7 +105,7 @@ Read `BOARD.md` and `TASKS.md`. Done.
 ## Previous Versions
 
 **v2.0 (Archived):** Over-engineered self-contained framework
-- Archived in `.ai-framework-BLOAT-ARCHIVE/`
+- Archived in `framework-BLOAT-ARCHIVE/`
 - 6,000+ lines of unnecessary complexity
 - Proof systems, caching, monitoring, parsers
 - Replaced by v3.0's 185-line simple approach

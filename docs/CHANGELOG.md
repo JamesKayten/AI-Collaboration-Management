@@ -57,7 +57,7 @@ All notable changes to the AI Collaboration Framework.
 
 ### Breaking Changes
 
-- All v2.0 scripts archived to `.ai-framework-BLOAT-ARCHIVE/`
+- All v2.0 scripts archived to `framework-BLOAT-ARCHIVE/`
 - JSON state files no longer used
 - Proof verification removed
 - Complex validation removed
@@ -76,7 +76,7 @@ Old framework archived but not deleted. To use v3.0:
 ## [2.0.0] - 2024-11-19
 
 ### Added
-- Professional framework structure with `.ai-framework/` directory
+- Professional framework structure with `framework/` directory
 - Comprehensive project state tracking
 - Repository sync rules
 - Framework configuration management

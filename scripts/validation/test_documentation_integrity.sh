@@ -174,8 +174,8 @@ OUTDATED_PATTERNS=(
 
 cd "$REPO_ROOT"
 for pattern in "${OUTDATED_PATTERNS[@]}"; do
-    if grep -r "$pattern" README.md 2>/dev/null | grep -v ".ai-framework/$pattern" > /dev/null; then
-        warn "README may reference old structure: $pattern (should be .ai-framework/$pattern)"
+    if grep -r "$pattern" README.md 2>/dev/null | grep -v "framework/$pattern" > /dev/null; then
+        warn "README may reference old structure: $pattern (should be framework/$pattern)"
     fi
 done
 
