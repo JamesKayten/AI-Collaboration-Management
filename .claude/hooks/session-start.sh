@@ -12,7 +12,6 @@ RESET='\033[0m'
 
 REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null)
 REPO_NAME=$(basename "$REPO_ROOT" 2>/dev/null || echo "UNKNOWN")
-BRANCH=$(git branch --show-current 2>/dev/null || echo "UNKNOWN")
 BOARD_FILE="$REPO_ROOT/docs/BOARD.md"
 
 # Watcher scripts and PID files
@@ -20,6 +19,44 @@ BRANCH_WATCHER="$REPO_ROOT/scripts/watch-branches.sh"
 BRANCH_PID_FILE="/tmp/branch-watcher-${REPO_NAME}.pid"
 BOARD_WATCHER="$REPO_ROOT/scripts/watch-board.sh"
 BOARD_PID_FILE="/tmp/board-watcher-${REPO_NAME}.pid"
+
+cd "$REPO_ROOT" || exit 1
+
+echo ""
+echo -e "${BOLD}================================================================================${RESET}"
+echo -e "${BOLD}SYNCING WITH GITHUB...${RESET}"
+echo -e "${BOLD}================================================================================${RESET}"
+
+# Fetch and pull latest from GitHub
+git fetch origin main --quiet 2>/dev/null
+
+LOCAL_HASH=$(git rev-parse HEAD 2>/dev/null | cut -c1-7)
+REMOTE_HASH=$(git rev-parse origin/main 2>/dev/null | cut -c1-7)
+
+if [[ "$LOCAL_HASH" != "$REMOTE_HASH" ]]; then
+    echo -e "${YELLOW}Local is behind remote. Pulling latest...${RESET}"
+    git pull origin main --quiet 2>/dev/null
+    LOCAL_HASH=$(git rev-parse HEAD 2>/dev/null | cut -c1-7)
+fi
+
+# Display sync status prominently
+echo ""
+echo -e "${BOLD}┌─────────────────────────────────────┐${RESET}"
+echo -e "${BOLD}│         ✅ SYNC STATUS              │${RESET}"
+echo -e "${BOLD}├─────────────────────────────────────┤${RESET}"
+echo -e "${BOLD}│${RESET}  Local main:  ${CYAN}${LOCAL_HASH}${RESET}                 ${BOLD}│${RESET}"
+echo -e "${BOLD}│${RESET}  Remote main: ${CYAN}${REMOTE_HASH}${RESET}                 ${BOLD}│${RESET}"
+
+if [[ "$LOCAL_HASH" == "$REMOTE_HASH" ]]; then
+    echo -e "${BOLD}│${RESET}  Status: ${GREEN}${BOLD}IN SYNC ✓${RESET}                  ${BOLD}│${RESET}"
+else
+    echo -e "${BOLD}│${RESET}  Status: ${RED}${BOLD}OUT OF SYNC ✗${RESET}              ${BOLD}│${RESET}"
+fi
+echo -e "${BOLD}└─────────────────────────────────────┘${RESET}"
+echo ""
+
+# Get branch after pull
+BRANCH=$(git branch --show-current 2>/dev/null || echo "UNKNOWN")
 
 # Start branch watcher (alerts TCC when OCC pushes branches)
 # SOUND: Hero (triumphant fanfare)
