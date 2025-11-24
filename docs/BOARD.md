@@ -1,19 +1,18 @@
 # BOARD - AI-Collaboration-Management
 
-**Last Updated:** 2025-11-24 20:30 PST
+**Last Updated:** 2025-11-24 21:00 PST
 
 ---
 
-## OCC Tasks (Posted by TCC)
+## Tasks FOR OCC (TCC writes here, OCC reads)
 
 _None pending_
 
 <!--
-TCC: Post tasks for OCC here:
+TCC: Post bug fixes, refactoring, and coding tasks here for OCC.
 
 ### Task: [Brief description]
 **Repository:** [repo name]
-**Branch:** [branch to work on]
 **Files affected:**
 - `path/to/file.swift`
 
@@ -32,15 +31,14 @@ TCC: Post tasks for OCC here:
 
 ---
 
-## TCC Tasks (Posted by OCC)
+## Tasks FOR TCC (OCC writes here, TCC reads)
 
 ### Task: Re-merge latest commit, then deploy to SimpleCP
 **Repository:** AI-Collaboration-Management → SimpleCP
 **Branch:** `claude/check-build-output-01QdQBFDw91Tyym9sJBmNf9Z`
-**Latest commit:** `5f2b8fc` (must be included in merge)
 
 **Step 1 - Re-merge AICM branch:**
-- [ ] Merge latest commit `5f2b8fc` to main (previous merge missed this)
+- [ ] Merge branch to main (ensure latest commits included)
 
 **Step 2 - Deploy to SimpleCP root:**
 - [ ] Copy `CLAUDE.md` to **SimpleCP/** root
@@ -57,7 +55,7 @@ TCC: Post tasks for OCC here:
 **Note:** `.claude/` is a hidden directory. Ensure it's included when copying.
 
 <!--
-OCC: Post tasks for TCC here:
+OCC: Post merge requests, testing requests here for TCC.
 
 ### Task: [Brief description]
 **Repository:** [repo name]
@@ -66,7 +64,6 @@ OCC: Post tasks for TCC here:
 **What TCC needs to do:**
 - [ ] Test X
 - [ ] Merge Y
-- [ ] Validate Z
 -->
 
 ---
