@@ -1,250 +1,143 @@
-# AI STARTUP PROTOCOL - Standardized Session Initialization
+# AI STARTUP PROTOCOL - Execute Every Session
 
-**Purpose:** Ensure every AI session begins with proper context, rules acknowledgment, and system preparation.
-
-**Last Updated:** 2025-11-22
+**Last Updated:** 2025-11-24 (v2.0 - Streamlined)
 **Applies To:** All AI instances (TCC, OCC, specialized agents)
-**Execution Time:** First 2-3 minutes of every session
+**Execution Time:** 2-3 minutes
 
 ---
 
-## 🚀 MANDATORY STARTUP SEQUENCE
+## 🚀 STARTUP SEQUENCE (Execute in Order)
 
-### 0. SESSION CONTINUITY CHECK (FIRST - Before anything else)
+### STEP 0: Check for Incomplete Session
 
-**REQUIRED COMMANDS:**
 ```bash
 source .ai-framework/scripts/session-logging.sh
 check_incomplete_session
 ```
 
-**Purpose:** Check for incomplete session from today (disconnection recovery)
-
 **If incomplete session found:**
 ```bash
-get_last_state 50  # Show last 50 lines of session log
+get_last_state 50  # Show last 50 lines
 ```
+**Ask user:** "Incomplete session detected. Resume (1), View full log (2), or Start fresh (3)?"
 
-**Then ask user:**
-"Incomplete session detected. Options:
-1. Resume from last checkpoint
-2. View full log
-3. Start fresh
-
-Which would you like?"
-
-**If no incomplete session:** Proceed to step 1
+**If no incomplete session:** Continue to Step 1
 
 ---
 
-### 1. RULES ACKNOWLEDGMENT
-**Command Pattern:** `"Rules confirmed - holistic approach enabled"`
+### STEP 1: Acknowledge Rules
 
-**Required Actions:**
-- Read and acknowledge GENERAL_AI_RULES.md (VERIFICATION-FIRST section)
-- Read and acknowledge REPOSITORY_SYNC_PROTOCOL.md
-- Confirm understanding of mandatory verification requirements
-- Report any rule conflicts or ambiguities
+**Say:** "Rules confirmed - holistic approach enabled"
 
-**Expected Response:**
-```
-✅ Rules confirmed - holistic approach enabled
-✅ Verification-first protocol acknowledged
-📋 Startup protocol: [PROJECT_NAME] - [STATUS]
-```
+**Read (scan quickly):**
+- `rules/GENERAL_AI_RULES.md` - Verification-first protocol
+- `rules/REPOSITORY_SYNC_PROTOCOL.md` - Sync requirements
 
 ---
 
-### 2. PROJECT CONTEXT DISCOVERY
+### STEP 2: Discover Project Context
 
-#### A. Identify Current Project
-**Commands:**
 ```bash
-pwd                          # Current directory
-ls -la                      # Directory structure
-ls .ai/                     # Check for AI framework files
+pwd                         # Current directory
+ls .ai/                    # Framework files check
+cat BOARD.md               # Current status
+cat .ai/CURRENT_TASK.md    # Task details (if exists)
 ```
 
-#### B. Check Project Status (if .ai/ exists)
-**Commands:**
-```bash
-cat .ai/STATUS              # Current task state
-cat .ai/CURRENT_TASK.md     # Task details
-cat .ai/communication.log   # Recent AI activity
-```
-
-#### C. Natural Language Commands (if available)
-**Commands:**
-```bash
-cat .ai/NATURAL_LANGUAGE_COMMANDS.md  # Check available shortcuts
-```
-- Use `check the board` for quick status overview
-- Use `works ready` for OCC collaboration workflow
+**TCC-specific:** Run `/check-the-board` first
 
 ---
 
-### 3. REPOSITORY SYNC VERIFICATION (MANDATORY SCRIPT EXECUTION)
+### STEP 3: Repository Sync (MANDATORY)
 
-**REQUIRED COMMAND:**
 ```bash
 bash .ai-framework/scripts/pre-work-sync.sh
 ```
 
-**MUST SHOW COMPLETE OUTPUT** including:
-- All verification steps (1-8)
-- Final status: "PRE-WORK SYNC COMPLETE"
-- Sync status: SYNCED or NEW_BRANCH
+**MUST show complete output including:**
+- All verification steps
+- "PRE-WORK SYNC COMPLETE"
+- Sync status
 - Commit hash
 
-**Example Required Output:**
-```
-$ bash .ai-framework/scripts/pre-work-sync.sh
-==========================================
-PRE-WORK SYNC PROTOCOL
-==========================================
-
-Step 1: Verifying git repository...
-✅ Git repository confirmed
-
-Step 2: Checking current status...
-On branch main
-Your branch is up to date with 'origin/main'.
-
-...
-[FULL OUTPUT REQUIRED]
-...
-
-==========================================
-PRE-WORK SYNC COMPLETE
-==========================================
-Status: ✅ SUCCESS
-```
-
-**NON-COMPLIANCE:**
-- ❌ Saying "I synced the repository" without showing script output
-- ❌ Running script but not showing complete output
-- ❌ Skipping sync because "I'll do it later"
-
-**BLOCKING RULE:**
-If pre-work-sync.sh fails, TCC/OCC CANNOT proceed with work.
-Must show error and request user intervention.
+**If sync fails:** STOP. Show error. Request user intervention.
 
 ---
 
-### 4. PROCESS ENVIRONMENT CHECK
+### STEP 4: Check Process Environment
 
-**Commands:**
 ```bash
-lsof -ti:8000              # Check backend port
-lsof -ti:8080              # Check frontend port
-ps aux | grep -E "(python3|SimpleCP)" | grep -v grep  # Check running processes
+# Check common ports
+lsof -ti:8000              # Backend
+lsof -ti:8080              # Frontend
+
+# Check running processes
+ps aux | grep -E "(python3|node|SimpleCP)" | grep -v grep
 ```
 
-**Actions:**
-- Kill conflicting processes if found
-- Document any persistent services
-- Prepare clean testing environment
+**Kill conflicts if found. Prepare clean environment.**
 
 ---
 
-### 5. PROJECT-SPECIFIC RULES INTEGRATION
+### STEP 5: Check Project-Specific Rules
 
-**Check for Local Rules:**
 ```bash
-cat .ai/PROJECT_RULES.md    # Project-specific overrides
+cat .ai/PROJECT_RULES.md   # If exists
 ```
 
-**Integration Logic:**
-- GENERAL_AI_RULES.md = Base requirements (cannot be overridden)
-- PROJECT_RULES.md = Additional or more specific requirements
-- Conflicts resolved in favor of more restrictive/comprehensive approach
+**Integration:**
+- GENERAL_AI_RULES.md = Base (cannot override)
+- PROJECT_RULES.md = Additional specifics
 
 ---
 
-## 🔧 FRAMEWORK INTEGRATION PROTOCOLS
+## ✅ STARTUP COMPLETE CHECKLIST
 
-### For AI Collaboration Projects:
+Execute before starting work:
 
-#### OCC Startup (Online Claude Code):
-1. Execute standard startup sequence
-2. Check for pending OCC tasks: `cat .ai/STATUS | grep "ASSIGNED_TO=OCC"`
-3. If tasks found, load task details and begin execution
-4. Use "works ready" workflow for TCC integration
-
-#### TCC Startup (Terminal Claude Code):
-1. Execute standard startup sequence
-2. Check for OCC completed work: `cat .ai/communication.log`
-3. Verify file size restrictions on any new OCC files
-4. Execute merge workflow if OCC work is ready
-
-#### Specialized Agents:
-1. Execute relevant portions of startup sequence based on agent scope
-2. Report specialized capabilities and limitations
-3. Coordinate with primary AI if collaborative work detected
+- [ ] Rules acknowledged: "Rules confirmed - holistic approach enabled"
+- [ ] Sync verified: `bash .ai-framework/scripts/pre-work-sync.sh` (output shown)
+- [ ] Project context loaded: BOARD.md, CURRENT_TASK.md read
+- [ ] Processes checked: Clean environment verified
+- [ ] Ready statement: "Ready to [capability summary]"
 
 ---
 
-## 📊 SUCCESS INDICATORS
+## 🎯 AI-SPECIFIC PROTOCOLS
 
-### Startup Complete Checklist:
-- [ ] Rules confirmed and acknowledged
-- [ ] Project context understood (structure, purpose, current state)
-- [ ] Repository sync verified and documented
-- [ ] Process environment prepared
-- [ ] Project-specific rules integrated
-- [ ] Framework collaboration protocols activated (if applicable)
+### TCC (Terminal Claude Code):
+1. **ALWAYS start with:** `/check-the-board`
+2. Follow BOARD.md instructions
+3. Execute standard startup if `/check-the-board` not available
 
-### Startup Report Template:
+### OCC (Online Claude Code):
+1. Execute standard startup
+2. Check: `cat .ai/STATUS | grep "ASSIGNED_TO=OCC"`
+3. Begin assigned tasks
+
+---
+
+## 🚫 STARTUP FAILURES - Quick Reference
+
+| Issue | Action |
+|-------|--------|
+| Rules not found | Report to user, use holistic principles |
+| Sync fails | STOP. Show error. Request guidance |
+| Port conflicts | Kill processes, document persistent services |
+| Multiple AIs active | Coordinate via communication.log |
+
+---
+
+## 📊 STARTUP REPORT FORMAT
+
 ```
 ✅ Rules confirmed - holistic approach enabled
-📂 Project: [PROJECT_NAME] ([TYPE]: Frontend/Backend/Full-Stack/Framework)
+📂 Project: [NAME] ([TYPE])
 📊 Status: [IDLE/PENDING/IN_PROGRESS/BLOCKED]
-🔄 Repository: [SYNCED/NEEDS_PUSH/DIVERGED] - [BRANCH_NAME]
-🎯 Ready to: [PRIMARY_CAPABILITY_SUMMARY]
+🔄 Repository: [SYNCED] - [BRANCH]
+🎯 Ready to: [capability summary]
 ```
 
 ---
 
-## 🚫 STARTUP FAILURES
-
-### Common Issues and Resolutions:
-
-#### 1. Rules Not Found
-- **Symptom:** Cannot locate GENERAL_AI_RULES.md
-- **Action:** Report to user, request framework update
-- **Fallback:** Proceed with basic holistic principles
-
-#### 2. Repository Desync
-- **Symptom:** Local changes not pushed, remote ahead
-- **Action:** Document state, ask user for merge/pull strategy
-- **Never:** Assume and auto-merge without confirmation
-
-#### 3. Process Conflicts
-- **Symptom:** Ports occupied, processes running
-- **Action:** Identify processes, get permission before killing
-- **Safety:** Never force-kill unknown processes
-
-#### 4. Framework Conflicts
-- **Symptom:** Multiple AIs trying to work simultaneously
-- **Action:** Coordinate through communication.log, establish priority
-- **Protocol:** Newer AI defers to AI already in progress
-
----
-
-## 🔄 CONTINUOUS IMPROVEMENT
-
-### Startup Metrics to Track:
-- Time to complete startup sequence
-- Number of issues found and resolved
-- User satisfaction with preparedness
-- Success rate of first-attempt problem solving
-
-### Improvement Process:
-1. Document startup issues in RULE_IMPROVEMENTS.md
-2. Update protocol based on common failure patterns
-3. Share improvements across framework
-4. Validate changes don't break existing workflows
-
----
-
-**Validation:** Every AI must demonstrate completed startup protocol before beginning substantive work. Users should see clear evidence of systematic preparation.
+**Enforcement:** No work begins without completed startup. Sync verification is mandatory.

@@ -1,22 +1,36 @@
 # Task List
 
-**Updated:** 2025-11-23
+**Updated:** 2025-11-24
 
 ---
 
 ## In Progress
 
-None - All simplification work complete and merged to main
+🔥 **URGENT: Fix SimpleCP Backend-Frontend Communication** (OCC Task)
+- Assigned to: OCC (Other Claude Contributor)
+- Priority: CRITICAL
+- Repository: https://github.com/JamesKayten/SimpleCP
+- Status: Must test-rebuild-test until working
+- Deadline: ASAP
 
 ---
 
 ## Pending
 
-None - Framework is simple now
+None - Focus on SimpleCP communication fix
 
 ---
 
 ## Completed
+
+### TCC Onboarding Improvements (2025-11-24)
+- ✅ Created `.ai/TCC_ONBOARDING.md` with clear step-by-step instructions
+- ✅ Updated `.ai/README.md` to direct TCC to onboarding
+- ✅ Updated `.ai/BEHAVIOR_RULES.md` with startup protocol
+- ✅ Updated `README.md` with "New TCC Session" section
+- ✅ Made `/check-the-board` the first command every session
+
+### Framework Simplification (2025-11-23)
 
 - ✅ Audited repository for complexity
 - ✅ Identified over-engineering issues (6,000 lines!)

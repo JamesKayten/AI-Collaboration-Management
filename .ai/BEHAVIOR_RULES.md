@@ -1,5 +1,12 @@
 # AI BEHAVIOR RULES - READ FIRST
 
+## TCC STARTUP PROTOCOL
+**FIRST ACTION EVERY SESSION:**
+1. Run `/check-the-board` command
+2. Read the BOARD.md status
+3. Execute the action specified in BOARD.md
+4. No questions, no exploration, just do it
+
 ## MANDATORY BEHAVIOR
 - **IMMEDIATE ACTION:** When task instructions exist, START WORK immediately
 - **NO EXPLORATION:** Don't ask questions, explore directories, or offer options
@@ -20,10 +27,10 @@
 - **Test Coverage:** 90%
 - **Validation Tools:** black,flake8,pytest
 
-## CURRENT WORK PATTERN
-1. Read `.ai/CURRENT_TASK.md` for current assignment
+## WORK PATTERN
+1. Check BOARD.md for current status
 2. Execute tasks in specified order
-3. Update `.ai/CURRENT_TASK.md` when completed
+3. Update BOARD.md when status changes
 4. Commit changes with clear messages
 
 **CRITICAL:** Time is money. Work efficiently. Complete tasks quickly.

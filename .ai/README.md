@@ -1,18 +1,49 @@
 # AI COLLABORATION - START HERE
 
-**ANY AI working on this repository:**
+## NEW TO THIS PROJECT? READ THIS FIRST
 
+**If you are TCC (Terminal Claude Code):**
+1. Read `TCC_ONBOARDING.md` in this directory
+2. Run `/check-the-board` command
+3. Follow the instructions from BOARD.md
+
+**If you are OCC (Online Claude Code):**
+1. Read `.ai/CURRENT_TASK.md` for your assignment
+2. Do the work
+3. Update BOARD.md when complete
+
+---
+
+## TCC QUICK START
+
+**FIRST COMMAND EVERY SESSION:**
+
+```bash
+/check-the-board
+```
+
+**This command will:**
+1. Show you BOARD.md (current status)
+2. Show you TASKS.md (what needs to be done)
+3. Automatically commit and push any changes
+
+**After checking the board:**
+- If BOARD.md says "waiting for validation" → Run `/verify` or `/works-ready`
+- If BOARD.md says "ready to merge" → Run `/works-ready`
+- If BOARD.md says specific task → Do that task
+- If BOARD.md says "all clear" → Read `.ai/CURRENT_TASK.md` for next assignment
+
+## Working Style
 1. **Read `.ai/BEHAVIOR_RULES.md`** - Understand working style requirements
-2. **Read `.ai/CURRENT_TASK.md`** - Get current assignment
-3. **Execute tasks immediately** - No questions, no exploration
-4. **Update `.ai/CURRENT_TASK.md`** when tasks completed
+2. **Execute tasks immediately** - No questions, no exploration
+3. **Update BOARD.md** when tasks change status
 
 ## Quick Start
 ```bash
-# Read current assignment
-cat .ai/CURRENT_TASK.md
+# ALWAYS start with this
+/check-the-board
 
-# Start working immediately on specified tasks
+# Then follow the instructions from BOARD.md
 ```
 
 ## Project Info
