@@ -8,6 +8,16 @@
 
 ## Quick Status
 
+⚠️ **TCC: YOU SHOULD BE CHECKING SIMPLECP BOARD, NOT THIS ONE**
+
+**Active development board:** `/home/user/SimpleCP/BOARD.md`
+
+SimpleCP is the active project. Check SimpleCP/BOARD.md for current tasks.
+
+This AICM board is for reference only. The cleanup task below is also in SimpleCP/BOARD.md.
+
+---
+
 🚨 **CRITICAL: TCC MUST CLEAN UP SIMPLECP REPOSITORY**
 
 **Issue:** SimpleCP has duplicate/confusing AICM directories
