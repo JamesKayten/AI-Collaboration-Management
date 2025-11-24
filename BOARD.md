@@ -8,6 +8,21 @@
 
 ## Quick Status
 
+🚨 **CRITICAL: TCC MUST CLEAN UP SIMPLECP REPOSITORY FIRST**
+
+**Issue:** SimpleCP has duplicate/confusing AICM directories causing confusion
+
+**TCC Action Required:**
+1. Go to SimpleCP repository
+2. Read SimpleCP/BOARD.md (line 10-39)
+3. Execute the cleanup script exactly as written
+4. Verify cleanup succeeded
+5. Commit and push cleanup
+
+**After cleanup complete, proceed with AICM merge below.**
+
+---
+
 🎯 **TCC TASK: MERGE STREAMLINED RULES TO MAIN**
 
 **Branch Ready:** `claude/streamline-rules-error-prevention-011F1fZ47653uHAyxCkmJK7y`
