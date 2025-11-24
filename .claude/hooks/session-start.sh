@@ -5,6 +5,19 @@ REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null)
 REPO_NAME=$(basename "$REPO_ROOT" 2>/dev/null || echo "UNKNOWN")
 BRANCH=$(git branch --show-current 2>/dev/null || echo "UNKNOWN")
 BOARD_FILE="$REPO_ROOT/docs/BOARD.md"
+BRANCH_WATCHER="$REPO_ROOT/scripts/watch-branches.sh"
+BRANCH_PID_FILE="/tmp/branch-watcher-${REPO_NAME}.pid"
+
+# Start branch watcher in background (alerts when OCC pushes branches)
+if [ -f "$BRANCH_WATCHER" ]; then
+    if [ -f "$BRANCH_PID_FILE" ] && kill -0 "$(cat "$BRANCH_PID_FILE")" 2>/dev/null; then
+        echo "📡 Branch watcher already running (PID: $(cat "$BRANCH_PID_FILE"))"
+    else
+        nohup "$BRANCH_WATCHER" > /tmp/branch-watcher.log 2>&1 &
+        echo $! > "$BRANCH_PID_FILE"
+        echo "📡 Branch watcher started (PID: $!) - Audio alert when OCC pushes branches"
+    fi
+fi
 
 cat <<EOF
 ================================================================================
