@@ -33,26 +33,17 @@ TCC: Post bug fixes, refactoring, and coding tasks here for OCC.
 
 ## Tasks FOR TCC (OCC writes here, TCC reads)
 
-### Task: Re-merge latest commit, then deploy to SimpleCP
-**Repository:** AI-Collaboration-Management → SimpleCP
-**Branch:** `claude/check-build-output-01QdQBFDw91Tyym9sJBmNf9Z`
+_None pending_
 
-**Step 1 - Re-merge AICM branch:**
-- [ ] Merge branch to main (ensure latest commits included)
+### ✅ COMPLETED: Deploy AICM to SimpleCP
+**Completed by:** TCC on 2025-11-24
+**Commit:** `3e264de` (merged to SimpleCP main)
+**What was done:**
+- Merged AICM branch to main
+- Deployed CLAUDE.md and .claude/ to SimpleCP root
+- Created SimpleCP/docs/BOARD.md
 
-**Step 2 - Deploy to SimpleCP root:**
-- [ ] Copy `CLAUDE.md` to **SimpleCP/** root
-- [ ] Copy `.claude/` folder to **SimpleCP/** (HIDDEN - use `cp -r .claude/ /path/to/SimpleCP/`)
-- [ ] Create `SimpleCP/docs/BOARD.md` with same two-way queue format
-
-**Step 3 - Update AICM framework copy inside SimpleCP:**
-- [ ] Update the AICM framework that resides within SimpleCP with same changes
-
-**Step 4 - Finalize:**
-- [ ] Commit and push to SimpleCP main
-- [ ] Delete abandoned AICM branches: `streamline-rules-error-prevention-...` and `onboard-tcc-member-...`
-
-**Note:** `.claude/` is a hidden directory. Ensure it's included when copying.
+**Next:** TCC should test the system by starting a fresh session in a local SimpleCP clone to verify hooks fire correctly.
 
 <!--
 OCC: Post merge requests, testing requests here for TCC.
