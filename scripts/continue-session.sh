@@ -13,10 +13,10 @@ check_session_state() {
     if [ -f "SESSION_EXIT_SNAPSHOT.md" ]; then
         echo "✅ Found session exit snapshot (most recent)"
         return 0
-    elif [ -f ".ai-framework/session-recovery/CURRENT_SESSION_STATE.md" ]; then
+    elif [ -f "framework/session-recovery/CURRENT_SESSION_STATE.md" ]; then
         echo "✅ Found current session state"
         return 1
-    elif [ -f ".ai-framework/session-recovery/REBOOT_QUICK_START.md" ]; then
+    elif [ -f "framework/session-recovery/REBOOT_QUICK_START.md" ]; then
         echo "⚠️  Found quick start guide (general state)"
         return 2
     else
@@ -39,7 +39,7 @@ restore_from_snapshot() {
 restore_from_current() {
     echo "📋 RESTORING FROM CURRENT SESSION STATE"
     echo "========================================"
-    cat .ai-framework/session-recovery/CURRENT_SESSION_STATE.md
+    cat framework/session-recovery/CURRENT_SESSION_STATE.md
     echo
     echo "✅ Session state restored"
     echo "💡 Continue with next action specified above"
@@ -49,7 +49,7 @@ restore_from_current() {
 restore_from_quickstart() {
     echo "🚀 LOADING PROJECT QUICK START"
     echo "==============================="
-    cat .ai-framework/session-recovery/REBOOT_QUICK_START.md
+    cat framework/session-recovery/REBOOT_QUICK_START.md
     echo
     echo "⚠️  Loaded general project state (not specific session)"
     echo "💡 Use this as context but may need to determine current task"
@@ -120,7 +120,7 @@ echo "2. Identify your immediate next action"
 echo "3. Continue work from exact interruption point"
 echo
 echo "💡 TIP: To prevent future interruptions:"
-echo "   • Update .ai-framework/session-recovery/CURRENT_SESSION_STATE.md during work"
+echo "   • Update framework/session-recovery/CURRENT_SESSION_STATE.md during work"
 echo "   • Run ./create_session_snapshot.sh before ending sessions"
 echo "   • Use this script (./scripts/continue-session.sh) when reconnecting"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"

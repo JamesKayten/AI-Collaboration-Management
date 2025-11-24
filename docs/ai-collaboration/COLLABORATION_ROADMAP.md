@@ -40,7 +40,7 @@
 - **Terminal Claude Code (TCC)**: Framework architecture, system integration, validation logic
 - **Browser Claude**: Template creation, documentation, user experience improvements
 - **Communication**: Through repository commits and validation reports
-- **Coordination**: Via .ai-framework/communications/ system
+- **Coordination**: Via framework/communications/ system
 
 #### **Success Metrics:**
 - ✅ Framework works across 5+ programming languages

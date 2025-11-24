@@ -37,7 +37,7 @@ warn() {
 # Test 1: Core directories exist
 echo "Test 1: Core Directories"
 echo "------------------------"
-for dir in docs scripts templates tests examples .ai-framework .claude; do
+for dir in docs scripts templates tests examples framework .claude; do
     if [ -d "$REPO_ROOT/$dir" ]; then
         pass "Directory exists: $dir/"
     else
@@ -112,7 +112,7 @@ OLD_DIRS=(
 
 for dir in "${OLD_DIRS[@]}"; do
     if [ -d "$REPO_ROOT/$dir" ]; then
-        fail "Directory should be moved: $dir/ (should be in .ai-framework/)"
+        fail "Directory should be moved: $dir/ (should be in framework/)"
     else
         pass "Directory properly moved: $dir/"
     fi
@@ -168,8 +168,8 @@ echo ""
 echo "Test 8: AI Framework Structure"
 echo "-------------------------------"
 AI_FRAMEWORK_DIRS=(
-    ".ai-framework/rules"
-    ".ai-framework/tcc-setup"
+    "framework/rules"
+    "framework/tcc-setup"
 )
 
 for dir in "${AI_FRAMEWORK_DIRS[@]}"; do

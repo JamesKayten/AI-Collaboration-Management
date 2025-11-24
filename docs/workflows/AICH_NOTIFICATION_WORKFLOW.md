@@ -23,7 +23,7 @@ The AI Collaboration Hub (AICH) Framework uses a **notification-based workflow**
 1. ✅ Implements the feature
 2. ✅ Writes tests
 3. ✅ Commits to feature branch (e.g., `feature/auth`)
-4. ✅ **Creates notification**: `.ai-framework/communications/updates/WORK_READY_FOR_VALIDATION.md`
+4. ✅ **Creates notification**: `framework/communications/updates/WORK_READY_FOR_VALIDATION.md`
 5. ✅ Pushes everything to GitHub
 
 **Notification File Content**:
@@ -65,7 +65,7 @@ TCC should validate and merge or report issues.
 ```
 
 **TCC Actions**:
-1. 🔍 Checks `.ai-framework/communications/updates/` for notifications
+1. 🔍 Checks `framework/communications/updates/` for notifications
 2. 📥 Sees `WORK_READY_FOR_VALIDATION.md`
 3. 📥 Pulls from GitHub
 4. 🌿 Checks out `feature/auth` branch
@@ -112,7 +112,7 @@ TCC creates detailed report:
 
 ## Next Steps
 OCC should address these violations and create response in
-.ai-framework/communications/responses/
+framework/communications/responses/
 ```
 
 TCC then:
@@ -157,13 +157,13 @@ Check the AI Collaboration Framework in the repository for latest instructions.
 
 **OCC Actions**:
 1. 📥 Pulls latest from GitHub
-2. 📂 Checks `.ai-framework/communications/`
+2. 📂 Checks `framework/communications/`
 3. 📄 Finds and reads `reports/AI_REPORT_20251119_153500.md`
 4. 🔧 Fixes all violations:
    - Splits `LoginForm.tsx` into 3 components (each <150 lines)
    - Adds error handling tests
    - Achieves 92% coverage
-5. 📝 Creates response: `.ai-framework/communications/responses/AI_RESPONSE_20251119_154200.md`
+5. 📝 Creates response: `framework/communications/responses/AI_RESPONSE_20251119_154200.md`
 6. ✅ Commits all changes
 7. ✅ Pushes to GitHub
 8. 💬 Confirms to user: "Fixed all violations. TCC can re-validate."
@@ -226,7 +226,7 @@ TCC can now re-run "work ready" to validate fixes.
 ## 📂 AICH Framework File Structure
 
 ```
-.ai-framework/
+framework/
 └── communications/
     ├── updates/
     │   └── WORK_READY_FOR_VALIDATION.md    ← OCC creates (Step 1)

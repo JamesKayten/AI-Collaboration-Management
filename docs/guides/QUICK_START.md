@@ -110,7 +110,7 @@ After running setup, you'll have:
 your-project/
 ├── restore_session.sh              # ⚡ Instant session restoration
 ├── create_session_snapshot.sh      # 📸 Capture exact work state
-└── .ai-framework/
+└── framework/
     └── session-recovery/
         ├── REBOOT_QUICK_START.md   # Project quick start
         └── CURRENT_SESSION_STATE.md # Real-time work tracking
@@ -133,7 +133,7 @@ your-project/
 
 ### **1. During Work:**
 - Code normally
-- Update `.ai-framework/session-recovery/CURRENT_SESSION_STATE.md` with what you're working on
+- Update `framework/session-recovery/CURRENT_SESSION_STATE.md` with what you're working on
 
 ### **2. End Session:**
 ```bash

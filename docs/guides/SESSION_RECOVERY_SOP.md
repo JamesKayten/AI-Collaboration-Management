@@ -24,15 +24,15 @@ When you run the framework install script, session recovery is automatically dep
 **Automatically Creates:**
 - `restore_session.sh` - Instant session restoration script
 - `create_session_snapshot.sh` - Session end state capture script
-- `.ai-framework/session-recovery/REBOOT_QUICK_START.md` - Project quick start guide
-- `.ai-framework/session-recovery/CURRENT_SESSION_STATE.md` - Real-time state template
+- `framework/session-recovery/REBOOT_QUICK_START.md` - Project quick start guide
+- `framework/session-recovery/CURRENT_SESSION_STATE.md` - Real-time state template
 
 ---
 
 ## 📖 **STANDARD USAGE PROTOCOL**
 
 ### **1. During Work Sessions:**
-- Update `.ai-framework/session-recovery/CURRENT_SESSION_STATE.md` with real-time work state
+- Update `framework/session-recovery/CURRENT_SESSION_STATE.md` with real-time work state
 - Track current tasks, specific problems, immediate next actions
 - Keep file updated as work progresses
 
@@ -62,14 +62,14 @@ project-root/
 ├── restore_session.sh                  # Instant session restoration (executable)
 ├── create_session_snapshot.sh          # Session end capture (executable)
 ├── SESSION_EXIT_SNAPSHOT.md            # Exact session end state (auto-created)
-└── .ai-framework/
+└── framework/
     └── session-recovery/
         ├── REBOOT_QUICK_START.md       # Project quick start guide
         └── CURRENT_SESSION_STATE.md    # Real-time work state template
 ```
 
 ### **In Git Repository:**
-- ✅ **Include:** All `.sh` scripts and `.ai-framework/` structure
+- ✅ **Include:** All `.sh` scripts and `framework/` structure
 - ✅ **Include:** `REBOOT_QUICK_START.md` and `CURRENT_SESSION_STATE.md` templates
 - ❌ **Exclude:** `SESSION_EXIT_SNAPSHOT.md` (add to .gitignore - personal session state)
 
@@ -103,8 +103,8 @@ Templates automatically customize based on install parameters:
 
 ### **Manual Customization:**
 Edit these files to customize for your workflow:
-- `.ai-framework/session-recovery/REBOOT_QUICK_START.md` - Project quick start
-- `.ai-framework/session-recovery/CURRENT_SESSION_STATE.md` - Session state template
+- `framework/session-recovery/REBOOT_QUICK_START.md` - Project quick start
+- `framework/session-recovery/CURRENT_SESSION_STATE.md` - Session state template
 
 ---
 

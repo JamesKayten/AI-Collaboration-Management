@@ -194,7 +194,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 - Complete framework restructuring
-- Hidden `.ai-framework/` directory
+- Hidden `framework/` directory
 - Master `ai` command
 
 ### Changed
@@ -337,7 +337,7 @@ git push origin --delete release/v2.1.0
 - `ai` - Master command
 - `setup-ai-collaboration.sh` - Setup script
 - `update-claude-rules.sh` - Rules management
-- `.ai-framework/` - Framework directory
+- `framework/` - Framework directory
 - `templates/` - Template files
 - `scripts/` - Utility scripts
 
@@ -366,7 +366,7 @@ tar -czf "ai-collaboration-management-${VERSION}.tar.gz" \
     ai \
     setup-ai-collaboration.sh \
     update-claude-rules.sh \
-    .ai-framework/ \
+    framework/ \
     templates/ \
     scripts/ \
     README.md \
