@@ -1,8 +1,10 @@
 #!/bin/bash
-# SessionStart hook - forces context awareness
+# SessionStart hook - forces context awareness and shows board status
 
-REPO_NAME=$(basename "$(git rev-parse --show-toplevel 2>/dev/null)" || echo "UNKNOWN")
+REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null)
+REPO_NAME=$(basename "$REPO_ROOT" 2>/dev/null || echo "UNKNOWN")
 BRANCH=$(git branch --show-current 2>/dev/null || echo "UNKNOWN")
+BOARD_FILE="$REPO_ROOT/docs/BOARD.md"
 
 cat <<EOF
 ================================================================================
@@ -19,8 +21,22 @@ CRITICAL RULES (from CLAUDE.md):
 3. ALWAYS give completion reports when finishing tasks
 4. NEVER say vague things like "two merges remain" without context
 
-Read CLAUDE.md and docs/BOARD.md before proceeding.
+================================================================================
+CURRENT BOARD STATUS ($REPO_NAME/docs/BOARD.md):
+================================================================================
+EOF
 
+# Show board contents if it exists
+if [ -f "$BOARD_FILE" ]; then
+    cat "$BOARD_FILE"
+else
+    echo "No BOARD.md found at $BOARD_FILE"
+fi
+
+cat <<EOF
+
+================================================================================
+END OF BOARD - Proceed with your role (OCC or TCC)
 ================================================================================
 EOF
 
