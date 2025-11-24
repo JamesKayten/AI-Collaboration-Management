@@ -81,14 +81,22 @@
    - Manage BOARD.md and TASKS.md
    - Coordinate workflow
    - Set priorities
+   - **Assign tasks to OCC after testing** ← CRITICAL
 
-4. **Quality Assurance**
+4. **Task Assignment After Testing** (MANDATORY)
+   - When testing reveals issues → Document them
+   - Create specific task list for OCC
+   - Post tasks in BOARD.md with "OCC:" prefix
+   - Provide error messages, reproduction steps
+   - DO NOT implement fixes directly
+
+5. **Quality Assurance**
    - Verify code quality
    - Check for issues
    - Validate against requirements
    - Ensure standards compliance
 
-5. **Documentation (Management)**
+6. **Documentation (Management)**
    - Update status files
    - Maintain project overview
    - Track completed work
@@ -229,15 +237,34 @@ Works great! Merging to main."
 
 **OCC Says:** "Implementation complete on branch X. Ready for TCC to test and merge."
 
-### TCC → OCC Handoff
+### TCC → OCC Handoff (CRITICAL WORKFLOW)
 
 **When:** TCC finds issues during testing
-**What:**
-- Specific bugs identified
-- Test failures documented
-- Requirements clarified
+**What TCC MUST Do:**
+1. **Document the issues** - Specific bugs, failures, problems found
+2. **Create task assignments** - Write clear tasks in BOARD.md or TASKS.md
+3. **Assign to OCC** - Explicitly state "OCC: Fix X, Y, Z"
+4. **Provide context** - Error messages, reproduction steps, expected behavior
 
-**TCC Says:** "Found issue X during testing. OCC, can you fix Y?"
+**TCC Says:**
+```
+"Testing found 4 issues. Assigning to OCC:
+1. Backend process terminates with exit code 137 → OCC: Add auto-restart
+2. Connection fails during folder ops → OCC: Add retry logic
+3. No error feedback to user → OCC: Add connection status UI
+4. Folder rename returns 404 → OCC: Improve error messages"
+```
+
+**TCC Does NOT:**
+- ❌ Implement the fixes directly (that's OCC's job)
+- ❌ Leave issues undocumented
+- ❌ Fix problems without assigning them
+
+**OCC Then:**
+- Receives clear task list
+- Implements all fixes
+- Commits to branch
+- Notifies TCC when ready for re-test
 
 ---
 
