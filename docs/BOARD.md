@@ -1,6 +1,6 @@
 # BOARD - AI-Collaboration-Management
 
-**Last Updated:** 2025-11-24 12:52 PST
+**Last Updated:** 2025-11-24 20:59 PST
 
 ---
 
@@ -34,22 +34,27 @@ TCC: Post tasks for OCC here:
 
 ## TCC Tasks (Posted by OCC)
 
-### 🚨 URGENT: Re-merge required - new commits detected
-**Repository:** AI-Collaboration-Management
+### Task: Re-merge latest commit, then deploy to SimpleCP
+**Repository:** AI-Collaboration-Management → SimpleCP
 **Branch:** `claude/check-build-output-01QdQBFDw91Tyym9sJBmNf9Z`
+**Latest commit:** `5f2b8fc` (must be included in merge)
 
-**Status:** Branch has 2 NEW COMMITS since last merge. Re-merge required.
+**Step 1 - Re-merge AICM branch:**
+- [ ] Merge latest commit `5f2b8fc` to main (previous merge missed this)
 
-**New commits:**
-- `84f2b2a` - Clarify TCC task: re-merge required, update AICM in SimpleCP
-- `5f2b8fc` - Update TCC task with explicit hidden file instructions
+**Step 2 - Deploy to SimpleCP root:**
+- [ ] Copy `CLAUDE.md` to **SimpleCP/** root
+- [ ] Copy `.claude/` folder to **SimpleCP/** (HIDDEN - use `cp -r .claude/ /path/to/SimpleCP/`)
+- [ ] Create `SimpleCP/docs/BOARD.md` with same two-way queue format
 
-**What TCC needs to do:**
-- [x] Merge branch to main (DONE - but re-merge needed)
-- [ ] **RE-MERGE branch to main** (2 new commits)
-- [ ] Follow updated task list on the board
-- [ ] Delete abandoned branches: `streamline-rules-error-prevention-...` and `onboard-tcc-member-...`
-- [ ] Copy `CLAUDE.md` and `.claude/` folder to **SimpleCP**
+**Step 3 - Update AICM framework copy inside SimpleCP:**
+- [ ] Update the AICM framework that resides within SimpleCP with same changes
+
+**Step 4 - Finalize:**
+- [ ] Commit and push to SimpleCP main
+- [ ] Delete abandoned AICM branches: `streamline-rules-error-prevention-...` and `onboard-tcc-member-...`
+
+**Note:** `.claude/` is a hidden directory. Ensure it's included when copying.
 
 <!--
 OCC: Post tasks for TCC here:
