@@ -37,6 +37,7 @@ When you finish ANY task, give the user this report directly:
 
 ### Merged to main:
 - [branches merged, or "None"]
+- **Commit hash:** [hash of merged commit - REQUIRED for verification]
 
 ### Sent back for refactoring:
 - [items needing work, or "None"]
@@ -55,6 +56,18 @@ When you finish ANY task, give the user this report directly:
 - **TCC** = Project Manager (tests, merges to main, manages workflow)
 
 OCC cannot push to main. TCC should not write implementation code.
+
+---
+
+## TCC: Merge Verification (CRITICAL)
+
+Before reporting a merge complete, TCC MUST:
+1. `git fetch origin [branch]` to get latest
+2. Check branch HEAD hash
+3. Merge
+4. Report the **exact commit hash** that was merged
+
+This prevents stale merges where OCC pushed new commits during TCC's work.
 
 ---
 
