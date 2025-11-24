@@ -4,6 +4,14 @@
 # Usage: ./scripts/watch-branches.sh [interval_seconds]
 # Default interval: 30 seconds
 
+# ANSI color codes
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+CYAN='\033[0;36m'
+BOLD='\033[1m'
+RESET='\033[0m'
+
 INTERVAL=${1:-30}
 REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null)
 REPO_NAME=$(basename "$REPO_ROOT" 2>/dev/null || echo "UNKNOWN")
@@ -25,10 +33,10 @@ play_alert() {
     fi
 }
 
-echo "=================================="
-echo "BRANCH WATCHER - $REPO_NAME"
-echo "=================================="
-echo "Monitoring for OCC branch activity (pattern: $BRANCH_PATTERN)"
+echo -e "${BOLD}==================================${RESET}"
+echo -e "${BOLD}BRANCH WATCHER${RESET} - ${GREEN}$REPO_NAME${RESET}"
+echo -e "${BOLD}==================================${RESET}"
+echo -e "Monitoring for OCC branch activity (pattern: ${CYAN}$BRANCH_PATTERN${RESET})"
 echo "Polling every ${INTERVAL}s"
 echo "Press Ctrl+C to stop"
 echo ""
@@ -44,7 +52,7 @@ while true; do
 
     # Fetch latest from GitHub
     if ! git fetch origin --quiet 2>/dev/null; then
-        echo "[$(date +%H:%M:%S)] ⚠️  Network error - retrying..."
+        echo -e "[$(date +%H:%M:%S)] ${YELLOW}⚠️  Network error - retrying...${RESET}"
         continue
     fi
 
@@ -54,14 +62,16 @@ while true; do
 
     if [[ "$CURRENT_STATE" != "$PREVIOUS_STATE" ]]; then
         echo ""
-        echo "🔔 [$(date +%H:%M:%S)] OCC BRANCH ACTIVITY DETECTED!"
+        echo -e "${BOLD}${GREEN}════════════════════════════════════════════════════════════${RESET}"
+        echo -e "${BOLD}${GREEN}🔔 [$(date +%H:%M:%S)] OCC BRANCH ACTIVITY DETECTED!${RESET}"
+        echo -e "${BOLD}${GREEN}════════════════════════════════════════════════════════════${RESET}"
         echo ""
 
         # Show what changed
-        echo "Current branches:"
+        echo -e "${BOLD}Current branches:${RESET}"
         echo "$CURRENT_STATE" | while read branch hash; do
             branch_short=$(echo "$branch" | sed 's|origin/||')
-            echo "  → $branch_short ($hash)"
+            echo -e "  → ${CYAN}$branch_short${RESET} (${YELLOW}$hash${RESET})"
         done
         echo ""
 
@@ -69,12 +79,13 @@ while true; do
         echo "$CURRENT_STATE" | while read branch hash; do
             if ! grep -q "$hash" "$STATE_FILE" 2>/dev/null; then
                 branch_short=$(echo "$branch" | sed 's|origin/||')
-                echo "  ⭐ NEW/UPDATED: $branch_short"
+                echo -e "  ${BOLD}${GREEN}⭐ NEW/UPDATED: $branch_short${RESET}"
             fi
         done
 
         echo ""
-        echo "Run: git merge origin/<branch-name> to review"
+        echo -e "${BOLD}Action:${RESET} git merge origin/<branch-name> to review"
+        echo -e "${BOLD}${GREEN}════════════════════════════════════════════════════════════${RESET}"
         echo ""
 
         play_alert

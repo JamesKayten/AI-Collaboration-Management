@@ -4,8 +4,17 @@
 # Usage: ./scripts/watch-board.sh [interval_seconds]
 # Default interval: 30 seconds
 
+# ANSI color codes
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+CYAN='\033[0;36m'
+BOLD='\033[1m'
+RESET='\033[0m'
+
 INTERVAL=${1:-30}
 REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null)
+REPO_NAME=$(basename "$REPO_ROOT" 2>/dev/null || echo "UNKNOWN")
 BOARD_FILE="docs/BOARD.md"
 
 # Audio alert function (cross-platform)
@@ -25,10 +34,10 @@ play_alert() {
     fi
 }
 
-echo "=================================="
-echo "BOARD WATCHER - AI-Collaboration-Management"
-echo "=================================="
-echo "Polling GitHub every ${INTERVAL}s for BOARD.md changes"
+echo -e "${BOLD}==================================${RESET}"
+echo -e "${BOLD}BOARD WATCHER${RESET} - ${GREEN}$REPO_NAME${RESET}"
+echo -e "${BOLD}==================================${RESET}"
+echo -e "Polling GitHub every ${INTERVAL}s for ${CYAN}BOARD.md${RESET} changes"
 echo "Press Ctrl+C to stop"
 echo ""
 
@@ -43,7 +52,7 @@ while true; do
 
     # Fetch latest from GitHub
     if ! git fetch origin main --quiet 2>/dev/null; then
-        echo "[$(date +%H:%M:%S)] ⚠️  Network error - retrying..."
+        echo -e "[$(date +%H:%M:%S)] ${YELLOW}⚠️  Network error - retrying...${RESET}"
         continue
     fi
 
@@ -52,8 +61,14 @@ while true; do
 
     if [[ "$CURRENT_HASH" != "$LAST_HASH" ]]; then
         echo ""
-        echo "🔔 [$(date +%H:%M:%S)] BOARD.MD CHANGED!"
-        echo "   Run 'git pull origin main' to see updates"
+        echo -e "${BOLD}${YELLOW}════════════════════════════════════════════════════════════${RESET}"
+        echo -e "${BOLD}${YELLOW}🔔 [$(date +%H:%M:%S)] BOARD.MD CHANGED!${RESET}"
+        echo -e "${BOLD}${YELLOW}════════════════════════════════════════════════════════════${RESET}"
+        echo ""
+        echo -e "${BOLD}Action:${RESET} git pull origin main"
+        echo -e "${BOLD}Then:${RESET} Check ${CYAN}docs/BOARD.md${RESET} for new tasks"
+        echo ""
+        echo -e "${BOLD}${YELLOW}════════════════════════════════════════════════════════════${RESET}"
         echo ""
         play_alert
         LAST_HASH="$CURRENT_HASH"
