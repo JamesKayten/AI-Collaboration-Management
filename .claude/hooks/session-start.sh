@@ -5,17 +5,34 @@ REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null)
 REPO_NAME=$(basename "$REPO_ROOT" 2>/dev/null || echo "UNKNOWN")
 BRANCH=$(git branch --show-current 2>/dev/null || echo "UNKNOWN")
 BOARD_FILE="$REPO_ROOT/docs/BOARD.md"
+
+# Watcher scripts and PID files
 BRANCH_WATCHER="$REPO_ROOT/scripts/watch-branches.sh"
 BRANCH_PID_FILE="/tmp/branch-watcher-${REPO_NAME}.pid"
+BOARD_WATCHER="$REPO_ROOT/scripts/watch-board.sh"
+BOARD_PID_FILE="/tmp/board-watcher-${REPO_NAME}.pid"
 
-# Start branch watcher in background (alerts when OCC pushes branches)
+# Start branch watcher (alerts TCC when OCC pushes branches)
+# SOUND: Hero (triumphant fanfare)
 if [ -f "$BRANCH_WATCHER" ]; then
     if [ -f "$BRANCH_PID_FILE" ] && kill -0 "$(cat "$BRANCH_PID_FILE")" 2>/dev/null; then
-        echo "📡 Branch watcher already running (PID: $(cat "$BRANCH_PID_FILE"))"
+        echo "📡 Branch watcher running (PID: $(cat "$BRANCH_PID_FILE")) - Hero sound = OCC branch ready"
     else
         nohup "$BRANCH_WATCHER" > /tmp/branch-watcher.log 2>&1 &
         echo $! > "$BRANCH_PID_FILE"
-        echo "📡 Branch watcher started (PID: $!) - Audio alert when OCC pushes branches"
+        echo "📡 Branch watcher started (PID: $!) - Hero sound = OCC branch ready"
+    fi
+fi
+
+# Start board watcher (alerts OCC when TCC posts tasks)
+# SOUND: Glass (soft double-chime)
+if [ -f "$BOARD_WATCHER" ]; then
+    if [ -f "$BOARD_PID_FILE" ] && kill -0 "$(cat "$BOARD_PID_FILE")" 2>/dev/null; then
+        echo "📋 Board watcher running (PID: $(cat "$BOARD_PID_FILE")) - Glass sound = TCC posted task"
+    else
+        nohup "$BOARD_WATCHER" > /tmp/board-watcher.log 2>&1 &
+        echo $! > "$BOARD_PID_FILE"
+        echo "📋 Board watcher started (PID: $!) - Glass sound = TCC posted task"
     fi
 fi
 
