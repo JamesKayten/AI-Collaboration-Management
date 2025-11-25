@@ -47,14 +47,14 @@ play_success_alert() {
 
 # Find Xcode project or Swift package
 find_project() {
-    if [ -f "$PROJECT_PATH/Package.swift" ]; then
+    if [ -f "$PROJECT_PATH/Package.Swift" ]; then
         echo "swift_package"
     elif ls "$PROJECT_PATH"/*.xcodeproj 1>/dev/null 2>&1; then
         echo "xcode_project"
     elif ls "$PROJECT_PATH"/*.xcworkspace 1>/dev/null 2>&1; then
         echo "xcode_workspace"
     else
-        echo "unknown"
+        echo "none"
     fi
 }
 
@@ -127,11 +127,21 @@ parse_build_output() {
     fi
 }
 
+PROJECT_TYPE=$(find_project)
+
 echo -e "${BOLD}==================================${RESET}"
 echo -e "${BOLD}BUILD WATCHER${RESET} - ${GREEN}$REPO_NAME${RESET}"
 echo -e "${BOLD}==================================${RESET}"
 echo -e "Project path: ${CYAN}$PROJECT_PATH${RESET}"
-echo -e "Project type: ${CYAN}$(find_project)${RESET}"
+echo -e "Project type: ${CYAN}$PROJECT_TYPE${RESET}"
+
+# Exit if no Swift project found
+if [ "$PROJECT_TYPE" = "none" ]; then
+    echo -e "${YELLOW}No Swift project found - build watcher not needed${RESET}"
+    echo -e "${YELLOW}Exiting...${RESET}"
+    exit 0
+fi
+
 echo "Checking build every ${INTERVAL}s"
 echo "Press Ctrl+C to stop"
 echo ""

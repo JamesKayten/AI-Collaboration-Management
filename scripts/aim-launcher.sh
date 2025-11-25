@@ -49,8 +49,21 @@ fi
 
 PROJECT_NAME=$(basename "$PROJECT_PATH")
 
+# Check if this is a Swift project
+HAS_SWIFT=false
+if [ -f "$PROJECT_PATH/Package.swift" ] || \
+   ls "$PROJECT_PATH"/*.xcodeproj 1>/dev/null 2>&1 || \
+   ls "$PROJECT_PATH"/*.xcworkspace 1>/dev/null 2>&1; then
+    HAS_SWIFT=true
+fi
+
 echo -e "${GREEN}✓${RESET} Project: ${CYAN}$PROJECT_NAME${RESET}"
 echo -e "${GREEN}✓${RESET} Path: ${CYAN}$PROJECT_PATH${RESET}"
+if [ "$HAS_SWIFT" = true ]; then
+    echo -e "${GREEN}✓${RESET} Swift project detected - build watcher will run"
+else
+    echo -e "${YELLOW}⚠${RESET}  No Swift project - build watcher will be skipped"
+fi
 echo ""
 
 # Check if iTerm2 is available
@@ -86,13 +99,9 @@ tell application "iTerm"
     set newWindow to (create window with default profile)
 
     tell current session of newWindow
-        -- Tab 1: Build Watcher
+        -- Tab 1: Build Watcher (only if Swift project exists)
         set name to "🔨 Build Watcher"
         write text "cd '$PROJECT_PATH' && clear"
-        write text "echo '═══════════════════════════════════════════════════'"
-        write text "echo '🔨 BUILD WATCHER - Monitoring Swift/Xcode builds'"
-        write text "echo '═══════════════════════════════════════════════════'"
-        write text "echo ''"
         write text "'$SCRIPTS_DIR/watch-build.sh' '$PROJECT_PATH'"
     end tell
 
