@@ -105,6 +105,48 @@ After completing ANY task from the board, TCC MUST:
 
 ---
 
+## TCC: Pull Request Template (MANDATORY)
+
+When creating PRs, TCC MUST use this format:
+
+```markdown
+## Summary
+- [What this branch does in 1-2 sentences]
+
+## Commits Included
+- 'abc123' - Fix widget layout
+- 'def456' - Add error handling
+
+## Files Changed
+- `src/Views/Widget.swift` (refactored, 45 lines)
+- `src/Models/Data.swift` (new file, 80 lines)
+
+## Testing Done
+- ✓ Build passes
+- ✓ File size checks pass
+- ✓ Ran on simulator
+
+## Ready to Merge
+**Branch:** `claude/feature-xyz-01abc...`
+**Into:** `main`
+```
+
+### Review Process for Human
+1. TCC creates PR with summary above
+2. Open PR in browser
+3. Click "Files changed" tab - see every diff
+4. If it looks right → Approve → Merge
+5. If something's wrong → Comment → TCC or OCC fixes
+
+### Extra Safety (Optional)
+You can review locally before approving:
+```bash
+git fetch origin
+git diff main...origin/claude/branch-name
+```
+
+---
+
 ## AICM Sync Rule (Bidirectional)
 
 AICM framework files must stay synchronized between repositories:
