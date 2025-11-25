@@ -58,27 +58,36 @@ echo ""
 # Get branch after pull
 BRANCH=$(git branch --show-current 2>/dev/null || echo "UNKNOWN")
 
-# Start branch watcher (alerts TCC when OCC pushes branches)
-# SOUND: Hero (triumphant fanfare)
-if [ -f "$BRANCH_WATCHER" ]; then
-    if [ -f "$BRANCH_PID_FILE" ] && kill -0 "$(cat "$BRANCH_PID_FILE")" 2>/dev/null; then
-        echo -e "📡 Branch watcher ${GREEN}running${RESET} (PID: $(cat "$BRANCH_PID_FILE")) - ${CYAN}Hero sound${RESET} = OCC branch ready"
-    else
-        nohup "$BRANCH_WATCHER" > /tmp/branch-watcher.log 2>&1 &
-        echo $! > "$BRANCH_PID_FILE"
-        echo -e "📡 Branch watcher ${GREEN}started${RESET} (PID: $!) - ${CYAN}Hero sound${RESET} = OCC branch ready"
-    fi
-fi
+# Launch AIM with visible iTerm2 tabs
+AIM_LAUNCHER="$REPO_ROOT/scripts/aim-launcher.sh"
+AIM_PID_FILE="/tmp/aim-launcher-${REPO_NAME}.pid"
 
-# Start board watcher (alerts OCC when TCC posts tasks)
-# SOUND: Glass (soft double-chime)
-if [ -f "$BOARD_WATCHER" ]; then
-    if [ -f "$BOARD_PID_FILE" ] && kill -0 "$(cat "$BOARD_PID_FILE")" 2>/dev/null; then
-        echo -e "📋 Board watcher ${GREEN}running${RESET} (PID: $(cat "$BOARD_PID_FILE")) - ${YELLOW}Glass sound${RESET} = TCC posted task"
+if [ -f "$AIM_LAUNCHER" ]; then
+    # Check if watchers are already running
+    if [ -f "$AIM_PID_FILE" ] && ps -p "$(cat "$AIM_PID_FILE")" > /dev/null 2>&1; then
+        echo -e "📺 AIM watchers ${GREEN}already running${RESET} in iTerm2 tabs"
     else
-        nohup "$BOARD_WATCHER" > /tmp/board-watcher.log 2>&1 &
-        echo $! > "$BOARD_PID_FILE"
-        echo -e "📋 Board watcher ${GREEN}started${RESET} (PID: $!) - ${YELLOW}Glass sound${RESET} = TCC posted task"
+        # Launch iTerm2 with all watchers in separate tabs
+        if [[ "$OSTYPE" == "darwin"* ]] && [ -d "/Applications/iTerm.app" ]; then
+            "$AIM_LAUNCHER" "$REPO_ROOT" > /dev/null 2>&1 &
+            echo $! > "$AIM_PID_FILE"
+            echo -e "📺 ${GREEN}Launching iTerm2 watchers...${RESET}"
+            echo -e "   🔨 Build Watcher - Basso (error) / Blow (success)"
+            echo -e "   🌿 Branch Watcher - ${CYAN}Hero${RESET} (OCC branch ready)"
+            echo -e "   📋 Board Watcher - ${YELLOW}Glass${RESET} (TCC posted task)"
+            echo -e "   🔔 PR Watcher - Funk (PR needs review)"
+        else
+            # Fallback to background processes if not on macOS
+            echo -e "${YELLOW}⚠️  iTerm2 not available, using background watchers${RESET}"
+            if [ -f "$BRANCH_WATCHER" ]; then
+                nohup "$BRANCH_WATCHER" > /tmp/branch-watcher.log 2>&1 &
+                echo -e "📡 Branch watcher ${GREEN}started${RESET} (background) - ${CYAN}Hero sound${RESET}"
+            fi
+            if [ -f "$BOARD_WATCHER" ]; then
+                nohup "$BOARD_WATCHER" > /tmp/board-watcher.log 2>&1 &
+                echo -e "📋 Board watcher ${GREEN}started${RESET} (background) - ${YELLOW}Glass sound${RESET}"
+            fi
+        fi
     fi
 fi
 
