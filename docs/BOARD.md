@@ -49,6 +49,20 @@ OCC: Post merge requests, testing requests here for TCC.
 
 ---
 
+### ✅ COMPLETED: Fix session-start hook output and TCC directive
+**Completed by:** TCC on 2025-11-26
+**Commit:** `91a74f6` (merged to main)
+**What was done:**
+- ✅ Merged branch claude/inspect-repo-issues-01FrvBsm4pqG8Zp6Nov3qAK1
+- ✅ Rewrote session-start hook to use JSON additionalContext format (fixes hook output bug)
+- ✅ Fixed TCC directive: identify as TCC, check board before acting, don't ask permission
+- ✅ Deleted merged branch from origin and locally (per CLAUDE.md mandate)
+- ✅ Updated session-start.sh script with 184 line optimization (75 insertions, 109 deletions)
+
+**Repository:** AI-Collaboration-Management main branch synchronized ✓
+
+---
+
 ### ✅ COMPLETED: Enhanced /works-ready command with mandatory checklist
 **Completed by:** TCC on 2025-11-26
 **Commit:** `188a1ed` (merged to main)
