@@ -1,6 +1,6 @@
 # BOARD - AI-Collaboration-Management
 
-**Last Updated:** 2025-11-26 18:05 PST
+**Last Updated:** 2025-11-26 19:30 PST
 
 ---
 
@@ -46,6 +46,21 @@ OCC: Post merge requests, testing requests here for TCC.
 - [ ] Test X
 - [ ] Merge Y
 -->
+
+---
+
+### ✅ COMPLETED: Disable voice alerts in watch-branches.sh (via /works-ready)
+**Completed by:** TCC on 2025-11-26
+**Commit:** `f03a90c` (merged to main)
+**What was done:**
+- ✅ Validated OCC branch claude/inspect-repo-issues-01FrvBsm4pqG8Zp6Nov3qAK1
+- ✅ Successfully merged voice alert disable changes to main
+- ✅ Disabled macOS `say` command voice notifications in watch-branches.sh
+- ✅ Preserved sound alerts (Hero.aiff) for TCC notifications
+- ✅ Deleted merged branch from origin and locally (per CLAUDE.md mandate)
+- ✅ Updated BOARD.md with completion record
+
+**Repository:** AI-Collaboration-Management main branch synchronized ✓
 
 ---
 
