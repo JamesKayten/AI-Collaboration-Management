@@ -6,6 +6,71 @@
 
 ## Tasks FOR OCC (TCC writes here, OCC reads)
 
+### 🔴 CRITICAL BUG: TCC Role Awareness Broken
+
+**Repository:** AI-Collaboration-Management
+**Date:** 2025-11-26
+**Time spent:** 6+ hours debugging
+**Status:** UNRESOLVED
+
+#### Problem
+TCC sessions do not acknowledge their role. Claude starts blank, doesn't identify as TCC, doesn't check the board, doesn't act on pending branches.
+
+#### What Was Tried (ALL FAILED)
+
+1. **Session-start hook with plain text echo statements**
+   - Hook at `.claude/hooks/session-start.sh`
+   - Outputs sync status, board contents, TCC directive
+   - Hook executes (terminal shows output) but Claude doesn't receive/acknowledge it
+   - Suspected cause: Claude Code bug where SessionStart hook stdout is discarded
+
+2. **Session-start hook with JSON additionalContext format**
+   - Rewrote hook to output JSON: `{"hookSpecificOutput": {"additionalContext": "..."}}`
+   - Based on research suggesting this format injects context into Claude
+   - Also failed - Claude still doesn't receive hook output
+
+3. **Added explicit TCC role to CLAUDE.md**
+   - Added "## YOUR ROLE: TCC" section at top of CLAUDE.md
+   - Says "You ARE TCC. Not OCC."
+   - Includes directive to identify on session start
+   - Merged to main (commit 426e1dd)
+   - **Still doesn't work** - Claude ignores it
+
+4. **Restored old hook from backup repo**
+   - Copied `.claude/hooks/session-start.sh` from AI-Collaboration-Management-OLD
+   - No improvement
+
+#### Files Modified During Debugging
+- `.claude/hooks/session-start.sh` - Multiple rewrites (JSON format, plain text)
+- `CLAUDE.md` - Added TCC role section
+- `.claude/commands/works-ready.md` - Strengthened branch deletion mandate
+- `scripts/watch-branches.sh` - Disabled voice alerts
+
+#### Environment Details
+- User's Mac: macOS with iTerm2
+- This debugging session: Linux container (NOT user's Mac)
+- Claude Code version: Unknown
+- Hooks configured in `.claude/settings.json`
+
+#### Suspected Root Cause
+Claude Code has a known bug (GitHub issue #12151) where SessionStart hook output is not passed to Claude's context. The hook runs, produces output, but stdout is silently discarded.
+
+CLAUDE.md should work independently of hooks, but Claude still isn't reading/following the TCC role directive in CLAUDE.md. Unknown why.
+
+#### What Might Work (Untested)
+1. Different Claude Code version
+2. Different hook event type (not SessionStart)
+3. User manually typing "You are TCC" at session start
+4. Completely different approach to role assignment
+
+#### Files to Check
+- `/home/user/AI-Collaboration-Management/CLAUDE.md` - Has TCC role section
+- `/home/user/AI-Collaboration-Management/.claude/settings.json` - Hook config
+- `/home/user/AI-Collaboration-Management/.claude/hooks/session-start.sh` - Current hook
+- User's backup: `~/Documents/AI-Collaboration-Management-OLD/` - Working version from earlier
+
+---
+
 _None pending_
 
 <!--
