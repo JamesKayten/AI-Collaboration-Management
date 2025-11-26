@@ -13,6 +13,7 @@ RESET='\033[0m'
 REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null)
 REPO_NAME=$(basename "$REPO_ROOT" 2>/dev/null || echo "UNKNOWN")
 BOARD_FILE="$REPO_ROOT/docs/BOARD.md"
+PENDING_FILE="/tmp/branch-watcher-${REPO_NAME}.pending"
 
 # Watcher scripts and PID files
 BRANCH_WATCHER="$REPO_ROOT/scripts/watch-branches.sh"
@@ -55,6 +56,21 @@ fi
 echo -e "${BOLD}└─────────────────────────────────────┘${RESET}"
 echo ""
 
+# Check for pending OCC branches (TCC alert)
+if [ -f "$PENDING_FILE" ] && [ -s "$PENDING_FILE" ]; then
+    echo -e "${BOLD}${YELLOW}┌─────────────────────────────────────────────────────────────┐${RESET}"
+    echo -e "${BOLD}${YELLOW}│  ⚠️  TCC ALERT: OCC BRANCHES WAITING FOR REVIEW            │${RESET}"
+    echo -e "${BOLD}${YELLOW}├─────────────────────────────────────────────────────────────┤${RESET}"
+    while read -r branch hash timestamp; do
+        echo -e "${BOLD}${YELLOW}│${RESET}  Branch: ${CYAN}$branch${RESET}"
+        echo -e "${BOLD}${YELLOW}│${RESET}  Commit: ${YELLOW}$hash${RESET}  Time: $timestamp"
+    done < "$PENDING_FILE"
+    echo -e "${BOLD}${YELLOW}├─────────────────────────────────────────────────────────────┤${RESET}"
+    echo -e "${BOLD}${YELLOW}│${RESET}  ${BOLD}ACTION: Run /works-ready to validate and merge${RESET}"
+    echo -e "${BOLD}${YELLOW}└─────────────────────────────────────────────────────────────┘${RESET}"
+    echo ""
+fi
+
 # Get branch after pull
 BRANCH=$(git branch --show-current 2>/dev/null || echo "UNKNOWN")
 
@@ -75,7 +91,6 @@ if [ -f "$AIM_LAUNCHER" ]; then
             echo -e "   🔨 Build Watcher - Basso (error) / Blow (success)"
             echo -e "   🌿 Branch Watcher - ${CYAN}Hero${RESET} (OCC branch ready)"
             echo -e "   📋 Board Watcher - ${YELLOW}Glass${RESET} (TCC posted task)"
-            echo -e "   🔔 PR Watcher - Funk (PR needs review)"
         else
             # Fallback to background processes if not on macOS
             echo -e "${YELLOW}⚠️  iTerm2 not available, using background watchers${RESET}"
