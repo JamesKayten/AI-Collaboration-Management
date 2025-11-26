@@ -45,13 +45,13 @@ show_notification() {
     fi
 }
 
-# Voice alert (macOS)
-speak_alert() {
-    local branch="$1"
-    if [[ "$OSTYPE" == "darwin"* ]]; then
-        say "OCC has pushed branch $branch ready for TCC review" 2>/dev/null &
-    fi
-}
+# Voice alert (macOS) - DISABLED
+# speak_alert() {
+#     local branch="$1"
+#     if [[ "$OSTYPE" == "darwin"* ]]; then
+#         say "OCC has pushed branch $branch ready for TCC review" 2>/dev/null &
+#     fi
+# }
 
 echo -e "${BOLD}==================================${RESET}"
 echo -e "${BOLD}BRANCH WATCHER${RESET} - ${GREEN}$REPO_NAME${RESET}"
@@ -112,8 +112,8 @@ while true; do
                 # Desktop notification
                 show_notification "$branch_short"
 
-                # Voice alert
-                speak_alert "$branch_short"
+                # Voice alert - DISABLED
+                # speak_alert "$branch_short"
             fi
         done
 
