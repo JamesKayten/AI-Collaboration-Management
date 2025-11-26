@@ -47,7 +47,7 @@ play_success_alert() {
 
 # Find Xcode project or Swift package
 find_project() {
-    if [ -f "$PROJECT_PATH/Package.Swift" ]; then
+    if [ -f "$PROJECT_PATH/Package.swift" ]; then
         echo "swift_package"
     elif ls "$PROJECT_PATH"/*.xcodeproj 1>/dev/null 2>&1; then
         echo "xcode_project"
