@@ -49,7 +49,6 @@ show_notification() {
 speak_alert() {
     local branch="$1"
     if [[ "$OSTYPE" == "darwin"* ]]; then
-        say "OCC has pushed branch $branch ready for TCC review" 2>/dev/null &
     fi
 }
 
