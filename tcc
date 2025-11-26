@@ -5,4 +5,4 @@
 PROJECT_DIR="${1:-.}"
 cd "$PROJECT_DIR" || exit 1
 
-claude -p "go"
+command claude -p "go"
