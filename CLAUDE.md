@@ -71,6 +71,24 @@ This prevents stale merges where OCC pushed new commits during TCC's work.
 
 ---
 
+## TCC: Branch Cleanup (MANDATORY)
+
+After EVERY successful merge, TCC MUST immediately:
+
+1. Delete the merged branch from origin:
+   ```bash
+   git push origin --delete [branch-name]
+   ```
+2. Delete the local branch:
+   ```bash
+   git branch -D [branch-name]
+   ```
+3. Confirm deletion in the completion report
+
+**Do NOT leave stale branches.** Merged branches must be deleted immediately.
+
+---
+
 ## TCC: Sync Confirmation (CRITICAL)
 
 After ANY merge or sync operation, TCC MUST explicitly confirm:
