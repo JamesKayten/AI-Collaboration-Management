@@ -25,7 +25,17 @@ git push origin main
 
 Record the **commit hash** - you'll need it for the board.
 
-## Step 3: Update BOARD.md
+## Step 3: Delete Merged Branch
+
+Clean up the merged branch from GitHub:
+
+```bash
+git push origin --delete <occ-branch>
+```
+
+This prevents stale branches from cluttering the repo and confusing the branch watcher.
+
+## Step 4: Update BOARD.md
 
 Add a ✅ COMPLETED section:
 
@@ -38,7 +48,7 @@ Add a ✅ COMPLETED section:
 - ✅ [any other actions]
 ```
 
-## Step 4: Sync Local & Push
+## Step 5: Sync Local & Push
 
 ```bash
 git pull origin main          # Sync local files for OCC testing
@@ -55,6 +65,7 @@ Before ending session, confirm ALL:
 
 - [ ] Branch validated and merged to main
 - [ ] Commit hash recorded
+- [ ] Merged branch deleted from GitHub
 - [ ] BOARD.md updated with ✅ COMPLETED section
 - [ ] Local repo synced (`git pull origin main`)
 - [ ] Board changes committed and pushed
@@ -67,7 +78,7 @@ Before ending session, confirm ALL:
 
 ```
 ✅ MERGE COMPLETE
-- Branch: [branch name]
+- Branch: [branch name] (deleted)
 - Commit: [hash]
 - Board: Updated with completion record
 - Local: Synced with remote
