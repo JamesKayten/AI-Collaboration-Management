@@ -45,11 +45,9 @@ show_notification() {
     fi
 }
 
-# Voice alert (macOS)
+# Voice alert (macOS) - disabled
 speak_alert() {
-    local branch="$1"
-    if [[ "$OSTYPE" == "darwin"* ]]; then
-    fi
+    :  # no-op
 }
 
 echo -e "${BOLD}==================================${RESET}"
