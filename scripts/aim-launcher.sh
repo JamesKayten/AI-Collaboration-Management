@@ -5,7 +5,6 @@
 # - Tab 1: Build Watcher (monitors Swift/Xcode builds)
 # - Tab 2: Branch Watcher (monitors OCC branches)
 # - Tab 3: Board Watcher (monitors BOARD.md for TCC tasks)
-# - Tab 4: PR Watcher (monitors GitHub PRs)
 #
 # Usage: ./scripts/aim-launcher.sh [project_path]
 
@@ -78,7 +77,6 @@ REQUIRED_SCRIPTS=(
     "watch-build.sh"
     "watch-branches.sh"
     "watch-board.sh"
-    "watch-pr.sh"
 )
 
 for script in "${REQUIRED_SCRIPTS[@]}"; do
@@ -135,21 +133,6 @@ tell application "iTerm"
         end tell
     end tell
 
-    -- Tab 4: PR Watcher
-    tell newWindow
-        set newTab to (create tab with default profile)
-        tell current session of newTab
-            set name to "🔔 PR Watcher"
-            write text "cd '$PROJECT_PATH' && clear"
-            write text "echo '═══════════════════════════════════════════════════'"
-            write text "echo '🔔 PR WATCHER - Pull Requests Awaiting Review'"
-            write text "echo '   Sound: Funk = PR needs your review'"
-            write text "echo '═══════════════════════════════════════════════════'"
-            write text "echo ''"
-            write text "'$SCRIPTS_DIR/watch-pr.sh'"
-        end tell
-    end tell
-
     -- Focus first tab
     tell newWindow
         select first session
@@ -165,12 +148,10 @@ echo -e "${CYAN}iTerm2 tabs opened:${RESET}"
 echo -e "  1. ${BOLD}🔨 Build Watcher${RESET} - Monitors builds (Basso = error, Blow = success)"
 echo -e "  2. ${BOLD}🌿 Branch Watcher${RESET} - OCC activity (Hero = branch ready)"
 echo -e "  3. ${BOLD}📋 Board Watcher${RESET} - TCC tasks (Glass = task posted)"
-echo -e "  4. ${BOLD}🔔 PR Watcher${RESET} - Pull requests (Funk = review needed)"
 echo ""
 echo -e "${YELLOW}Audio Alert Legend:${RESET}"
 echo -e "  • ${BOLD}Hero${RESET} = OCC finished work, branch ready"
 echo -e "  • ${BOLD}Glass${RESET} = TCC posted task to board"
-echo -e "  • ${BOLD}Funk${RESET} = PR needs your review"
 echo -e "  • ${BOLD}Basso${RESET} = Build error"
 echo -e "  • ${BOLD}Blow${RESET} = Build success"
 echo ""
