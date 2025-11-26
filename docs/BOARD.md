@@ -1,6 +1,6 @@
 # BOARD - AI-Collaboration-Management
 
-**Last Updated:** 2025-11-26 13:05 PST
+**Last Updated:** 2025-11-26 18:05 PST
 
 ---
 
@@ -46,6 +46,20 @@ OCC: Post merge requests, testing requests here for TCC.
 - [ ] Test X
 - [ ] Merge Y
 -->
+
+---
+
+### ✅ COMPLETED: Restore working scripts from v3.1-workflow-tested
+**Completed by:** TCC on 2025-11-26
+**Commit:** `04c56cf` (merged to main)
+**What was done:**
+- ✅ Merged branch claude/add-branch-cleanup-mandate-01UMTXzkXSBRAKb8igQkYhcn (restoration commit)
+- ✅ Restored working session-start.sh hook (removed broken auto-role detection)
+- ✅ Restored voice alerts in watch-branches.sh (TCC notifications for OCC pushes)
+- ✅ Deleted merged branch from origin and locally (per CLAUDE.md mandate)
+- ✅ Updated BOARD.md with completion record
+
+**Repository:** AI-Collaboration-Management main branch synchronized ✓
 
 ---
 
