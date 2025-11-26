@@ -45,9 +45,12 @@ show_notification() {
     fi
 }
 
-# Voice alert (macOS) - disabled
+# Voice alert (macOS)
 speak_alert() {
-    :  # no-op
+    local branch="$1"
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        say "OCC has pushed branch $branch ready for TCC review" 2>/dev/null &
+    fi
 }
 
 echo -e "${BOLD}==================================${RESET}"

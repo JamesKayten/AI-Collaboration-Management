@@ -113,24 +113,7 @@ echo -e "${BOLD}================================================================
 echo ""
 echo -e "REPOSITORY: ${GREEN}${BOLD}$REPO_NAME${RESET}"
 echo -e "BRANCH:     ${CYAN}${BOLD}$BRANCH${RESET}"
-
-# Auto-detect role based on branch
-if [[ "$BRANCH" == "main" || "$BRANCH" == "master" ]]; then
-    echo -e "ROLE:       ${YELLOW}${BOLD}TCC${RESET} (Project Manager) - auto-detected from main branch"
-    echo ""
-    echo -e "${BOLD}YOU ARE TCC. Your responsibilities:${RESET}"
-    echo "- Test and merge OCC feature branches"
-    echo "- Run /works-ready when OCC branches are waiting"
-    echo "- Update BOARD.md after completing tasks"
-    echo "- NEVER write implementation code"
-else
-    echo -e "ROLE:       ${BLUE}${BOLD}OCC${RESET} (Developer) - auto-detected from feature branch"
-    echo ""
-    echo -e "${BOLD}YOU ARE OCC. Your responsibilities:${RESET}"
-    echo "- Write code, fix bugs, implement features"
-    echo "- Commit to feature branches (never main)"
-    echo "- Post to BOARD.md when work is ready for TCC"
-fi
+echo -e "ROLE:       Check if you are ${BLUE}OCC${RESET} (developer) or ${YELLOW}TCC${RESET} (project manager)"
 echo ""
 echo -e "${BOLD}CRITICAL RULES${RESET} (from CLAUDE.md):"
 echo "1. ALWAYS specify repository name in every message"
