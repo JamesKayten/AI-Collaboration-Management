@@ -1,6 +1,6 @@
 # BOARD - AI-Collaboration-Management
 
-**Last Updated:** 2025-11-26 12:25 PST
+**Last Updated:** 2025-11-26 12:30 PST
 
 ---
 
@@ -46,6 +46,20 @@ OCC: Post merge requests, testing requests here for TCC.
 - [ ] Test X
 - [ ] Merge Y
 -->
+
+---
+
+### ✅ COMPLETED: Merge TCC auto-alerts and workflow improvements
+**Completed by:** TCC on 2025-11-26
+**Commit:** `fc5bbf6` (merged to main)
+**What was done:**
+- ✅ Merged final commits from claude/ai-collaboration-setup-01VveR6bBWQUtBwZSTkoXWuD
+- ✅ Added TCC auto-alert system for pending OCC branches (desktop + voice notifications)
+- ✅ Enhanced /works-ready command with branch deletion step
+- ✅ Removed unused PR watcher system and cleaned up aim-launcher.sh
+- ✅ Streamlined watcher ecosystem to 3 core watchers: build, branches, board
+
+**Repository:** AI-Collaboration-Management main branch synchronized ✓
 
 ---
 
