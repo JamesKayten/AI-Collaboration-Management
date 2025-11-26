@@ -26,15 +26,40 @@ BOARD_PID_FILE="/tmp/board-watcher-${REPO_NAME}.pid"
 cd "$REPO_ROOT" || exit 1
 
 # Read role configuration (TCC or OCC)
+# Priority: 1) Explicit role.local file  2) Auto-detect by environment
 ROLE=""
 if [ -f "$ROLE_FILE" ]; then
+    # Explicit configuration takes priority
     ROLE=$(cat "$ROLE_FILE" | tr -d '[:space:]' | tr '[:lower:]' '[:upper:]')
+else
+    # Auto-detect: macOS = TCC (local supervisor), otherwise = OCC (remote developer)
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        ROLE="TCC"
+    else
+        ROLE="OCC"
+    fi
 fi
 
 # --- Terminal output (stderr) for user to see ---
 exec 3>&1  # Save stdout
 exec 1>&2  # Redirect stdout to stderr for user-visible output
 
+echo "================================================================================"
+echo "AICM SESSION START"
+echo "================================================================================"
+
+# Display role status
+if [ -f "$ROLE_FILE" ]; then
+    ROLE_SOURCE="(configured)"
+else
+    ROLE_SOURCE="(auto-detected)"
+fi
+
+if [ "$ROLE" = "TCC" ]; then
+    echo "ROLE: TCC (Project Manager) $ROLE_SOURCE"
+else
+    echo "ROLE: OCC (Developer) $ROLE_SOURCE"
+fi
 echo ""
 echo -e "${BOLD}================================================================================${RESET}"
 echo -e "${BOLD}SYNCING WITH GITHUB...${RESET}"
@@ -190,7 +215,8 @@ DIRECTIVE: You are TCC. Do this NOW:
 
 DO NOT ASK PERMISSION. ACT IMMEDIATELY."
 
-elif [ "$ROLE" = "OCC" ]; then
+else
+    # OCC (Developer) - default for non-macOS or explicit config
     CONTEXT="YOU ARE OCC (Developer) in repository: $REPO_NAME
 Branch: $BRANCH
 Local: $LOCAL_HASH | Remote: $REMOTE_HASH | Status: $SYNC_STATUS
@@ -206,24 +232,6 @@ DIRECTIVE: You are OCC. Do this NOW:
 4. If no tasks, say 'No tasks assigned. What would you like me to build?'
 
 You write code and commit to feature branches. You do NOT merge to main."
-
-else
-    # No role configured - provide setup instructions
-    CONTEXT="⚠️ NO ROLE CONFIGURED in repository: $REPO_NAME
-Branch: $BRANCH
-Local: $LOCAL_HASH | Remote: $REMOTE_HASH | Status: $SYNC_STATUS
-
-SETUP REQUIRED: Create .claude/role.local file with either:
-  TCC  - for Project Manager (tests, merges, manages workflow)
-  OCC  - for Developer (writes code, commits to feature branches)
-
-Example: echo 'TCC' > .claude/role.local
-
-=== BOARD STATUS ===
-$BOARD_CONTENT
-=== END BOARD ===
-
-Ask the user which role they want to configure for this machine."
 fi
 
 # Escape for JSON
