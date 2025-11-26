@@ -74,6 +74,15 @@ fi
 # Get branch after pull
 BRANCH=$(git branch --show-current 2>/dev/null || echo "UNKNOWN")
 
+# Detect role based on OS: macOS = TCC (local), Linux = OCC (remote)
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    ROLE="TCC"
+    ROLE_DESC="Project Manager"
+else
+    ROLE="OCC"
+    ROLE_DESC="Developer"
+fi
+
 # Launch AIM with visible iTerm2 tabs
 AIM_LAUNCHER="$REPO_ROOT/scripts/aim-launcher.sh"
 AIM_PID_FILE="/tmp/aim-launcher-${REPO_NAME}.pid"
@@ -113,7 +122,11 @@ echo -e "${BOLD}================================================================
 echo ""
 echo -e "REPOSITORY: ${GREEN}${BOLD}$REPO_NAME${RESET}"
 echo -e "BRANCH:     ${CYAN}${BOLD}$BRANCH${RESET}"
-echo -e "ROLE:       Check if you are ${BLUE}OCC${RESET} (developer) or ${YELLOW}TCC${RESET} (project manager)"
+if [ "$ROLE" = "TCC" ]; then
+    echo -e "ROLE:       ${YELLOW}${BOLD}$ROLE${RESET} ($ROLE_DESC)"
+else
+    echo -e "ROLE:       ${BLUE}${BOLD}$ROLE${RESET} ($ROLE_DESC)"
+fi
 echo ""
 echo -e "${BOLD}CRITICAL RULES${RESET} (from CLAUDE.md):"
 echo "1. ALWAYS specify repository name in every message"

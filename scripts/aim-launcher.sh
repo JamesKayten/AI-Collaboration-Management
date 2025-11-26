@@ -91,7 +91,7 @@ echo ""
 # Create iTerm2 AppleScript to open tabs
 osascript <<EOF
 tell application "iTerm"
-    activate
+    -- Don't activate - keep focus on Claude terminal
 
     -- Create new window
     set newWindow to (create window with default profile)

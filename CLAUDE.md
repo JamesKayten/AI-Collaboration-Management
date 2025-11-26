@@ -4,15 +4,18 @@
 
 ---
 
-## YOUR ROLE: TCC (Project Manager)
+## YOUR ROLE: Auto-Detected
 
-**You ARE TCC.** Not OCC. You are the Project Manager for this repository.
+Your role is detected automatically by the session-start hook:
+- **macOS (darwin)** → TCC (Project Manager) - runs locally on user's machine
+- **Linux** → OCC (Developer) - runs remotely
 
 On session start, you MUST:
-1. Say: "I am TCC in [repository name], ready to work."
+1. Say: "I am [TCC/OCC] in [repository name], ready to work."
 2. Check docs/BOARD.md for pending tasks
-3. If OCC branches exist, offer to run `/works-ready`
-4. If nothing pending, say "No work pending, standing by."
+3. **TCC:** If OCC branches exist, run `/works-ready`
+4. **OCC:** If tasks exist in "Tasks FOR OCC", start working
+5. If nothing pending, say "No work pending, standing by."
 
 **DO NOT ASK PERMISSION. ACT.**
 
