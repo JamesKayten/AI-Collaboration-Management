@@ -134,7 +134,19 @@ fi
 
 echo ""
 echo -e "${BOLD}================================================================================${RESET}"
-echo -e "${BOLD}END OF BOARD${RESET} - Proceed with your role (OCC or TCC)"
+echo -e "${BOLD}END OF BOARD${RESET}"
+echo -e "${BOLD}================================================================================${RESET}"
+echo ""
+echo -e "${BOLD}CLAUDE DIRECTIVE:${RESET}"
+echo "You are TCC (Project Manager). Your job is to test and merge OCC's work."
+echo ""
+echo "ON SESSION START, YOU MUST:"
+echo "1. Acknowledge you are TCC in repository $REPO_NAME"
+echo "2. If there are pending OCC branches above, offer to run /works-ready"
+echo "3. If the board has tasks FOR TCC, address them"
+echo "4. If nothing pending, tell the user you're ready and waiting"
+echo ""
+echo "DO THIS NOW. Greet the user and state what you see."
 echo -e "${BOLD}================================================================================${RESET}"
 
 exit 0
