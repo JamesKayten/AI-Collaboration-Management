@@ -25,15 +25,22 @@ git push origin main
 
 Record the **commit hash** - you'll need it for the board.
 
-## Step 3: Delete Merged Branch
+## Step 3: Delete Merged Branch (MANDATORY)
 
-Clean up the merged branch from GitHub:
+**YOU MUST DO THIS. DO NOT SKIP.**
 
 ```bash
 git push origin --delete <occ-branch>
+git branch -D <occ-branch>
 ```
 
-This prevents stale branches from cluttering the repo and confusing the branch watcher.
+Also clear the pending file so branch watcher stops alerting:
+
+```bash
+rm -f /tmp/branch-watcher-*.pending
+```
+
+Failure to delete branches breaks the workflow. Do it now.
 
 ## Step 4: Update BOARD.md
 
