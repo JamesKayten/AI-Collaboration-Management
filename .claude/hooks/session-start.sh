@@ -1,5 +1,6 @@
 #!/bin/bash
-# SessionStart hook - forces context awareness and shows board status
+# SessionStart hook - outputs JSON additionalContext for Claude
+# Terminal output goes to stderr (user sees it), JSON goes to stdout (Claude sees it)
 
 # ANSI color codes
 RED='\033[0;31m'
@@ -14,6 +15,7 @@ REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null)
 REPO_NAME=$(basename "$REPO_ROOT" 2>/dev/null || echo "UNKNOWN")
 BOARD_FILE="$REPO_ROOT/docs/BOARD.md"
 PENDING_FILE="/tmp/branch-watcher-${REPO_NAME}.pending"
+ROLE_FILE="$REPO_ROOT/.claude/role.local"
 
 # Watcher scripts and PID files
 BRANCH_WATCHER="$REPO_ROOT/scripts/watch-branches.sh"
@@ -23,12 +25,20 @@ BOARD_PID_FILE="/tmp/board-watcher-${REPO_NAME}.pid"
 
 cd "$REPO_ROOT" || exit 1
 
+# Read role configuration (TCC or OCC)
+ROLE=""
+if [ -f "$ROLE_FILE" ]; then
+    ROLE=$(cat "$ROLE_FILE" | tr -d '[:space:]' | tr '[:lower:]' '[:upper:]')
+fi
+
+# --- Terminal output (stderr) for user to see ---
+exec 3>&1  # Save stdout
+exec 1>&2  # Redirect stdout to stderr for user-visible output
+
 echo ""
 echo -e "${BOLD}================================================================================${RESET}"
 echo -e "${BOLD}SYNCING WITH GITHUB...${RESET}"
 echo -e "${BOLD}================================================================================${RESET}"
-
-# Fetch and pull latest from GitHub
 git fetch origin main --quiet 2>/dev/null
 
 LOCAL_HASH=$(git rev-parse HEAD 2>/dev/null | cut -c1-7)
@@ -126,7 +136,9 @@ echo -e "${BOLD}CURRENT BOARD STATUS${RESET} ($REPO_NAME/docs/BOARD.md):"
 echo -e "${BOLD}================================================================================${RESET}"
 
 # Show board contents if it exists
+BOARD_CONTENT=""
 if [ -f "$BOARD_FILE" ]; then
+    BOARD_CONTENT=$(cat "$BOARD_FILE")
     cat "$BOARD_FILE"
 else
     echo -e "${RED}No BOARD.md found at $BOARD_FILE${RESET}"
@@ -136,5 +148,95 @@ echo ""
 echo -e "${BOLD}================================================================================${RESET}"
 echo -e "${BOLD}END OF BOARD${RESET} - Proceed with your role (OCC or TCC)"
 echo -e "${BOLD}================================================================================${RESET}"
+
+# --- JSON output (stdout) for Claude ---
+exec 1>&3  # Restore stdout
+
+# Check pending branches
+PENDING_BRANCHES=""
+if [ -f "$PENDING_FILE" ] && [ -s "$PENDING_FILE" ]; then
+    PENDING_BRANCHES=$(cat "$PENDING_FILE")
+fi
+
+SYNC_STATUS="IN SYNC"
+[[ "$LOCAL_HASH" != "$REMOTE_HASH" ]] && SYNC_STATUS="OUT OF SYNC"
+
+# Build context string based on role
+if [ "$ROLE" = "TCC" ]; then
+    CONTEXT="YOU ARE TCC (Project Manager) in repository: $REPO_NAME
+Branch: $BRANCH
+Local: $LOCAL_HASH | Remote: $REMOTE_HASH | Status: $SYNC_STATUS
+
+"
+    if [ -n "$PENDING_BRANCHES" ]; then
+        CONTEXT+="⚠️ PENDING OCC BRANCHES WAITING FOR REVIEW:
+$PENDING_BRANCHES
+
+ACTION REQUIRED: Check if these branches are already in COMPLETED section below.
+- If already completed: delete stale branch (git push origin --delete <branch>) and clear pending file (rm -f /tmp/branch-watcher-*.pending)
+- If NOT completed: run /works-ready to validate and merge
+
+"
+    fi
+    CONTEXT+="=== BOARD STATUS ===
+$BOARD_CONTENT
+=== END BOARD ===
+
+DIRECTIVE: You are TCC. Do this NOW:
+1. Say: 'I am TCC in $REPO_NAME, ready to work.'
+2. If pending branches above exist and are NOT in COMPLETED section, run /works-ready
+3. If pending branches are already COMPLETED, delete the stale branch and clear pending file
+4. If no pending work, say 'No work pending, standing by.'
+
+DO NOT ASK PERMISSION. ACT IMMEDIATELY."
+
+elif [ "$ROLE" = "OCC" ]; then
+    CONTEXT="YOU ARE OCC (Developer) in repository: $REPO_NAME
+Branch: $BRANCH
+Local: $LOCAL_HASH | Remote: $REMOTE_HASH | Status: $SYNC_STATUS
+
+=== BOARD STATUS ===
+$BOARD_CONTENT
+=== END BOARD ===
+
+DIRECTIVE: You are OCC. Do this NOW:
+1. Say: 'I am OCC in $REPO_NAME, ready to work.'
+2. Check the board for tasks assigned to OCC (Tasks FOR OCC section)
+3. If tasks exist, acknowledge them and ask what to work on first
+4. If no tasks, say 'No tasks assigned. What would you like me to build?'
+
+You write code and commit to feature branches. You do NOT merge to main."
+
+else
+    # No role configured - provide setup instructions
+    CONTEXT="⚠️ NO ROLE CONFIGURED in repository: $REPO_NAME
+Branch: $BRANCH
+Local: $LOCAL_HASH | Remote: $REMOTE_HASH | Status: $SYNC_STATUS
+
+SETUP REQUIRED: Create .claude/role.local file with either:
+  TCC  - for Project Manager (tests, merges, manages workflow)
+  OCC  - for Developer (writes code, commits to feature branches)
+
+Example: echo 'TCC' > .claude/role.local
+
+=== BOARD STATUS ===
+$BOARD_CONTENT
+=== END BOARD ===
+
+Ask the user which role they want to configure for this machine."
+fi
+
+# Escape for JSON
+CONTEXT_ESCAPED=$(echo "$CONTEXT" | python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))')
+
+# Output JSON
+cat <<EOF
+{
+  "hookSpecificOutput": {
+    "hookEventName": "SessionStart",
+    "additionalContext": $CONTEXT_ESCAPED
+  }
+}
+EOF
 
 exit 0

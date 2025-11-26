@@ -159,3 +159,6 @@ SESSION_EXIT_SNAPSHOT.md
 # Project Specific
 # Add any project-specific ignore patterns here
 VALIDATION_REPORT.md
+
+# AICM Role Configuration (machine-specific, not shared)
+.claude/role.local
