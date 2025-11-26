@@ -17,6 +17,10 @@ REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null)
 REPO_NAME=$(basename "$REPO_ROOT" 2>/dev/null || echo "UNKNOWN")
 BRANCH_PATTERN="claude/*"  # OCC branch naming convention
 STATE_FILE="/tmp/branch-watcher-${REPO_NAME}.state"
+PENDING_FILE="/tmp/branch-watcher-${REPO_NAME}.pending"
+
+# Set to false once sounds are working to disable desktop notifications
+DESKTOP_NOTIFICATIONS=true
 
 # Audio alert function (cross-platform)
 # SOUND: Hero (triumphant) - OCC completed work, ready for TCC review
@@ -33,11 +37,28 @@ play_alert() {
     fi
 }
 
+# Desktop notification (macOS) - disable once sounds work
+show_notification() {
+    local branch="$1"
+    if [[ "$DESKTOP_NOTIFICATIONS" == true ]] && [[ "$OSTYPE" == "darwin"* ]]; then
+        osascript -e "display notification \"Branch: $branch\" with title \"🌿 OCC Branch Ready\" subtitle \"TCC: Run /works-ready to process\"" 2>/dev/null
+    fi
+}
+
+# Voice alert (macOS)
+speak_alert() {
+    local branch="$1"
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        say "OCC has pushed branch $branch ready for TCC review" 2>/dev/null &
+    fi
+}
+
 echo -e "${BOLD}==================================${RESET}"
 echo -e "${BOLD}BRANCH WATCHER${RESET} - ${GREEN}$REPO_NAME${RESET}"
 echo -e "${BOLD}==================================${RESET}"
 echo -e "Monitoring for OCC branch activity (pattern: ${CYAN}$BRANCH_PATTERN${RESET})"
 echo "Polling every ${INTERVAL}s"
+echo "Desktop notifications: $DESKTOP_NOTIFICATIONS"
 echo "Press Ctrl+C to stop"
 echo ""
 
@@ -46,6 +67,9 @@ cd "$REPO_ROOT" || exit 1
 # Get initial state of remote branches
 git fetch origin --quiet 2>/dev/null
 git for-each-ref --format='%(refname:short) %(objectname:short)' refs/remotes/origin/$BRANCH_PATTERN 2>/dev/null > "$STATE_FILE"
+
+# Clear any old pending file
+rm -f "$PENDING_FILE"
 
 while true; do
     sleep "$INTERVAL"
@@ -75,16 +99,26 @@ while true; do
         done
         echo ""
 
-        # Find new or updated branches
+        # Find new or updated branches and notify
+        NEW_BRANCHES=""
         echo "$CURRENT_STATE" | while read branch hash; do
             if ! grep -q "$hash" "$STATE_FILE" 2>/dev/null; then
                 branch_short=$(echo "$branch" | sed 's|origin/||')
                 echo -e "  ${BOLD}${GREEN}⭐ NEW/UPDATED: $branch_short${RESET}"
+
+                # Write to pending file for TCC session-start to detect
+                echo "$branch_short $hash $(date +%Y-%m-%d_%H:%M:%S)" >> "$PENDING_FILE"
+
+                # Desktop notification
+                show_notification "$branch_short"
+
+                # Voice alert
+                speak_alert "$branch_short"
             fi
         done
 
         echo ""
-        echo -e "${BOLD}Action:${RESET} git merge origin/<branch-name> to review"
+        echo -e "${BOLD}TCC Action:${RESET} Run ${CYAN}/works-ready${RESET} to validate and merge"
         echo -e "${BOLD}${GREEN}════════════════════════════════════════════════════════════${RESET}"
         echo ""
 
