@@ -132,9 +132,28 @@ else
     echo -e "${RED}No BOARD.md found at $BOARD_FILE${RESET}"
 fi
 
+# Count pending branches
+PENDING_COUNT=0
+if [ -f "$PENDING_FILE" ] && [ -s "$PENDING_FILE" ]; then
+    PENDING_COUNT=$(wc -l < "$PENDING_FILE" | tr -d ' ')
+fi
+
 echo ""
 echo -e "${BOLD}================================================================================${RESET}"
-echo -e "${BOLD}END OF BOARD${RESET} - Proceed with your role (OCC or TCC)"
+echo -e "${BOLD}${GREEN}  ████████╗ ██████╗ ██████╗     ██████╗ ███████╗ █████╗ ██████╗ ██╗   ██╗${RESET}"
+echo -e "${BOLD}${GREEN}  ╚══██╔══╝██╔════╝██╔════╝     ██╔══██╗██╔════╝██╔══██╗██╔══██╗╚██╗ ██╔╝${RESET}"
+echo -e "${BOLD}${GREEN}     ██║   ██║     ██║          ██████╔╝█████╗  ███████║██║  ██║ ╚████╔╝ ${RESET}"
+echo -e "${BOLD}${GREEN}     ██║   ██║     ██║          ██╔══██╗██╔══╝  ██╔══██║██║  ██║  ╚██╔╝  ${RESET}"
+echo -e "${BOLD}${GREEN}     ██║   ╚██████╗╚██████╗     ██║  ██║███████╗██║  ██║██████╔╝   ██║   ${RESET}"
+echo -e "${BOLD}${GREEN}     ╚═╝    ╚═════╝ ╚═════╝     ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═════╝    ╚═╝   ${RESET}"
 echo -e "${BOLD}================================================================================${RESET}"
+echo ""
+if [ "$PENDING_COUNT" -gt 0 ]; then
+    echo -e "${BOLD}${YELLOW}  Status: ${PENDING_COUNT} branch(es) pending review${RESET}"
+    echo -e "${BOLD}  Say '${CYAN}works ready${RESET}' to validate and merge${RESET}"
+else
+    echo -e "${BOLD}${GREEN}  Status: No pending branches. Awaiting OCC work.${RESET}"
+fi
+echo ""
 
 exit 0
