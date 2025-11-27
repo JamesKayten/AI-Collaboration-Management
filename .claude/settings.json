@@ -13,5 +13,9 @@
         ]
       }
     ]
-  }
+  },
+  "allowedCommands": [
+    "./scripts/tcc-file-compliance.sh",
+    "./scripts/tcc-pre-merge-check.sh"
+  ]
 }
