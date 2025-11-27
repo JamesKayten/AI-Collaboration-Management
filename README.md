@@ -36,9 +36,10 @@ cd AI-Collaboration-Management
 
 ### 2. Start a Session
 Open Claude Code in the repo directory. The SessionStart hook automatically:
-- Displays repository and branch context
-- Shows current board status
-- Starts audio watchers in background
+- Writes session context to `.claude/session-state.md`
+- Shows minimal startup info for fast loading
+- Manual sync available via: `git fetch origin && git pull origin main`
+- Manual watcher launch: `./scripts/aim-launcher.sh`
 
 ### 3. Work
 - **OCC**: Complete tasks, push branches
@@ -55,7 +56,7 @@ Open Claude Code in the repo directory. The SessionStart hook automatically:
 |------|---------|
 | `CLAUDE.md` | Rules auto-read at session start |
 | `docs/BOARD.md` | Two-way task queue |
-| `.claude/hooks/session-start.sh` | Injects context, starts watchers |
+| `.claude/hooks/session-start.sh` | Fast context injection (no network ops) |
 | `.claude/settings.json` | Hook configuration |
 
 ### Watcher Scripts
@@ -149,6 +150,12 @@ scripts/
 ```
 
 The hooks activate automatically when Claude Code starts in the directory.
+
+**Performance Notes:**
+- Session hook optimized for fast startup (no network operations)
+- Watcher auto-launch disabled to prevent startup hangs
+- Manual sync: `git fetch origin && git pull origin main`
+- Manual watchers: `./scripts/aim-launcher.sh`
 
 ---
 
