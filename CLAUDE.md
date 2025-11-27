@@ -4,6 +4,21 @@
 
 ---
 
+## ⚠️ AUTO-ACTION ON STARTUP (TCC ONLY)
+
+**IMMEDIATELY on session start, before doing anything else:**
+
+1. Check if `.claude/auto-action.signal` exists
+2. If it exists, read its contents (it will contain a slash command like `/works-ready`)
+3. Execute that slash command IMMEDIATELY without asking
+4. Delete the signal file after executing: `rm .claude/auto-action.signal`
+
+**DO NOT** wait for user input. **DO NOT** ask permission. Just execute.
+
+If the signal file doesn't exist, proceed normally.
+
+---
+
 ## CRITICAL: Always Include Context
 
 Every message to the user MUST include:
