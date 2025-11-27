@@ -147,12 +147,15 @@ echo ""
 echo -e "${CYAN}✅ Step 1/4: CLAUDE.md read (session start)${RESET}"
 echo -e "${CYAN}🔄 Step 2/4: Checking board status...${RESET}"
 
-# Check board for tasks
+# Check board for actual tasks (not just status lines)
 BOARD_TASKS=""
 if [ -f "$BOARD_FILE" ]; then
-    # Count non-empty, non-comment lines that could be tasks
-    BOARD_CONTENT=$(grep -v "^#\|^$\|^-\|^\*No pending" "$BOARD_FILE" 2>/dev/null || true)
-    if [ -n "$BOARD_CONTENT" ]; then
+    # Look for actual task items - lines that aren't headers, status, or "No pending" messages
+    BOARD_CONTENT=$(grep -E "^[[:space:]]*[-*+] .+|^[[:digit:]]+\. .+" "$BOARD_FILE" 2>/dev/null || true)
+    # Also check for any non-empty lines in task sections that aren't the "No pending" placeholders
+    TASK_LINES=$(grep -A 20 "Tasks FOR" "$BOARD_FILE" 2>/dev/null | grep -v "^#\|^$\|^-\|^\*No pending\|^Tasks FOR\|^\*\*Board Status\|^\*\*Last Update" | grep -v "^---" | tr -d ' \t' | grep -v '^$' || true)
+
+    if [ -n "$BOARD_CONTENT" ] || [ -n "$TASK_LINES" ]; then
         BOARD_TASKS="found"
     fi
 fi
@@ -160,38 +163,26 @@ fi
 echo -e "${CYAN}✅ Step 3/4: Repository: $REPO_NAME, Branch: $BRANCH${RESET}"
 echo -e "${CYAN}🔄 Step 4/4: Acknowledging TCC role and proceeding...${RESET}"
 
-# Auto-proceed based on current state
-AUTO_ACTION=""
+# Complete TCC initialization automatically
+echo ""
 if [ "$OCC_BRANCHES" -gt 0 ] || [ -n "$PENDING_ALERTS" ]; then
-    echo -e "${YELLOW}📋 TCC PROCEEDING: OCC branches detected - automatic work validation${RESET}"
-    echo -e "   ${BOLD}Auto-triggering /works-ready process...${RESET}"
-    AUTO_ACTION="/works-ready"
+    echo -e "${YELLOW}📋 TCC AUTO-PROCEEDING: OCC branches detected${RESET}"
+    echo -e "${GREEN}✅ Step 4/4: TCC acknowledges role - ready for /works-ready${RESET}"
+    echo "/works-ready" > "$REPO_ROOT/.claude/auto-action.signal"
+    echo -e "${CYAN}🔄 Auto-action signal: /works-ready ready for Claude${RESET}"
 elif [ -n "$BOARD_TASKS" ]; then
-    echo -e "${YELLOW}📋 TCC PROCEEDING: Board tasks detected - automatic task review${RESET}"
-    echo -e "   ${BOLD}Auto-triggering /check-the-board process...${RESET}"
-    AUTO_ACTION="/check-the-board"
+    echo -e "${YELLOW}📋 TCC AUTO-PROCEEDING: Board tasks detected${RESET}"
+    echo -e "${GREEN}✅ Step 4/4: TCC acknowledges role - ready for /check-the-board${RESET}"
+    echo "/check-the-board" > "$REPO_ROOT/.claude/auto-action.signal"
+    echo -e "${CYAN}🔄 Auto-action signal: /check-the-board ready for Claude${RESET}"
 else
-    echo -e "${GREEN}✅ TCC INITIALIZATION COMPLETE${RESET}"
-    echo -e "${GREEN}Ready for collaboration - monitoring for new work${RESET}"
-    AUTO_ACTION="complete"
-fi
-
-# Write auto-action signal for Claude to pick up
-if [ -n "$AUTO_ACTION" ] && [ "$AUTO_ACTION" != "complete" ]; then
-    echo "$AUTO_ACTION" > "$REPO_ROOT/.claude/auto-action.signal"
-    echo -e "${CYAN}🔄 Auto-action signal created: $AUTO_ACTION${RESET}"
-else
-    # Remove any existing signal if initialization is complete with no work
+    echo -e "${GREEN}✅ Step 4/4: TCC acknowledges role - INITIALIZATION COMPLETE${RESET}"
+    echo -e "${GREEN}🎯 NO PENDING WORK - TCC ready for collaboration${RESET}"
+    # Remove any existing signal since initialization is complete
     rm -f "$REPO_ROOT/.claude/auto-action.signal" 2>/dev/null || true
 fi
 
 echo ""
-echo -e "${BOLD}🎯 TCC FULLY OPERATIONAL${RESET} | Context: .claude/session-state.md"
-
-# If there's an auto-action, provide clear instruction to Claude
-if [ -n "$AUTO_ACTION" ] && [ "$AUTO_ACTION" != "complete" ]; then
-    echo ""
-    echo -e "${BOLD}${YELLOW}🤖 CLAUDE: Execute '$AUTO_ACTION' to complete TCC initialization${RESET}"
-fi
+echo -e "${BOLD}🎯 TCC INITIALIZATION COMPLETE${RESET} | Context: .claude/session-state.md"
 
 exit 0
