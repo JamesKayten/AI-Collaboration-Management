@@ -83,35 +83,16 @@ else
     ROLE_DESC="Developer"
 fi
 
-# Launch AIM with visible iTerm2 tabs
-AIM_LAUNCHER="$REPO_ROOT/scripts/aim-launcher.sh"
-AIM_PID_FILE="/tmp/aim-launcher-${REPO_NAME}.pid"
-
-if [ -f "$AIM_LAUNCHER" ]; then
-    # Check if watchers are already running
-    if [ -f "$AIM_PID_FILE" ] && ps -p "$(cat "$AIM_PID_FILE")" > /dev/null 2>&1; then
-        echo -e "📺 AIM watchers ${GREEN}already running${RESET} in iTerm2 tabs"
-    else
-        # Launch iTerm2 with all watchers in separate tabs
-        if [[ "$OSTYPE" == "darwin"* ]] && [ -d "/Applications/iTerm.app" ]; then
-            "$AIM_LAUNCHER" "$REPO_ROOT" > /dev/null 2>&1 &
-            echo $! > "$AIM_PID_FILE"
-            echo -e "📺 ${GREEN}Launching iTerm2 watchers...${RESET}"
-            echo -e "   🔨 Build Watcher - Basso (error) / Blow (success)"
-            echo -e "   🌿 Branch Watcher - ${CYAN}Hero${RESET} (OCC branch ready)"
-            echo -e "   📋 Board Watcher - ${YELLOW}Glass${RESET} (TCC posted task)"
-        else
-            # Fallback to background processes if not on macOS
-            echo -e "${YELLOW}⚠️  iTerm2 not available, using background watchers${RESET}"
-            if [ -f "$BRANCH_WATCHER" ]; then
-                nohup "$BRANCH_WATCHER" > /tmp/branch-watcher.log 2>&1 &
-                echo -e "📡 Branch watcher ${GREEN}started${RESET} (background) - ${CYAN}Hero sound${RESET}"
-            fi
-            if [ -f "$BOARD_WATCHER" ]; then
-                nohup "$BOARD_WATCHER" > /tmp/board-watcher.log 2>&1 &
-                echo -e "📋 Board watcher ${GREEN}started${RESET} (background) - ${YELLOW}Glass sound${RESET}"
-            fi
-        fi
+# Watchers disabled on macOS - run ./scripts/aim-launcher.sh manually if needed
+# On Linux (OCC), start background watchers
+if [[ "$OSTYPE" != "darwin"* ]]; then
+    if [ -f "$BRANCH_WATCHER" ]; then
+        nohup "$BRANCH_WATCHER" > /tmp/branch-watcher.log 2>&1 &
+        echo -e "📡 Branch watcher ${GREEN}started${RESET} (background)"
+    fi
+    if [ -f "$BOARD_WATCHER" ]; then
+        nohup "$BOARD_WATCHER" > /tmp/board-watcher.log 2>&1 &
+        echo -e "📋 Board watcher ${GREEN}started${RESET} (background)"
     fi
 fi
 
