@@ -23,6 +23,9 @@ BOARD_PID_FILE="/tmp/board-watcher-${REPO_NAME}.pid"
 
 cd "$REPO_ROOT" || exit 1
 
+# State file that Claude will read
+STATE_FILE="$REPO_ROOT/.claude/session-state.md"
+
 echo ""
 echo -e "${BOLD}================================================================================${RESET}"
 echo -e "${BOLD}SYNCING WITH GITHUB...${RESET}"
@@ -118,6 +121,79 @@ if [[ "$OSTYPE" != "darwin"* ]]; then
     if [ -f "$BOARD_WATCHER" ]; then
         nohup "$BOARD_WATCHER" > /tmp/board-watcher.log 2>&1 &
     fi
+fi
+
+# Check for OCC branches
+OCC_BRANCHES=$(git branch -r 2>/dev/null | grep "origin/claude/" | grep -v "HEAD" | sed 's/origin\///' | tr -d ' ')
+OCC_BRANCH_COUNT=$(echo "$OCC_BRANCHES" | grep -c "claude/" 2>/dev/null || echo "0")
+
+# Determine sync status
+if [[ "$LOCAL_HASH" == "$REMOTE_HASH" ]]; then
+    SYNC_STATUS="IN SYNC ✓"
+else
+    SYNC_STATUS="OUT OF SYNC ✗"
+fi
+
+# Write state file for Claude to read
+cat > "$STATE_FILE" << STATEEOF
+# Session State (Auto-generated)
+
+**Read this file on startup. Act immediately based on contents.**
+
+## Current Context
+- **Repository:** $REPO_NAME
+- **Branch:** $BRANCH
+- **Role:** $ROLE ($ROLE_DESC)
+- **Sync:** $SYNC_STATUS (local: $LOCAL_HASH, remote: $REMOTE_HASH)
+- **Generated:** $(date '+%Y-%m-%d %H:%M:%S')
+
+## Pending Work
+
+STATEEOF
+
+# Add OCC branches if any exist
+if [[ "$OCC_BRANCH_COUNT" -gt 0 && -n "$OCC_BRANCHES" ]]; then
+    cat >> "$STATE_FILE" << BRANCHEOF
+### ⚠️ OCC BRANCHES WAITING FOR REVIEW
+\`\`\`
+$OCC_BRANCHES
+\`\`\`
+**ACTION REQUIRED:** Run \`/works-ready\` immediately to validate and merge.
+
+BRANCHEOF
+fi
+
+# Add pending file contents if exists
+if [ -f "$PENDING_FILE" ] && [ -s "$PENDING_FILE" ]; then
+    cat >> "$STATE_FILE" << PENDINGEOF
+### Pending Branch Details (from watcher)
+\`\`\`
+$(cat "$PENDING_FILE")
+\`\`\`
+
+PENDINGEOF
+fi
+
+# Add directive based on role
+if [ "$ROLE" = "TCC" ]; then
+    cat >> "$STATE_FILE" << TCCEOF
+## Your Directive (TCC)
+1. Say: "I am TCC in $REPO_NAME, ready to work. [CLAUDE.md verified ✓]"
+2. If OCC branches listed above → Run \`/works-ready\` NOW
+3. If tasks in BOARD.md "FOR TCC" → Start working
+4. If nothing pending → Say "No work pending, standing by."
+
+**DO NOT ASK PERMISSION. ACT.**
+TCCEOF
+else
+    cat >> "$STATE_FILE" << OCCEOF
+## Your Directive (OCC)
+1. Say: "I am OCC in $REPO_NAME, ready to work. [CLAUDE.md verified ✓]"
+2. If tasks in BOARD.md "FOR OCC" → Start working
+3. If nothing pending → Say "No work pending, standing by."
+
+**DO NOT ASK PERMISSION. ACT.**
+OCCEOF
 fi
 
 echo ""

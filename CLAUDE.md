@@ -8,6 +8,14 @@
 
 **When you receive ANY user message (even blank/empty), you MUST immediately:**
 
+### Step 0: Read State File (CRITICAL)
+**FIRST, read `.claude/session-state.md`** - This file contains your role, current context, and any pending work. The session-start hook writes this file with up-to-date information.
+
+```bash
+# Read this file FIRST before doing anything else:
+cat .claude/session-state.md
+```
+
 ### Step 1: Announce (EXACT FORMAT)
 ```
 I am [TCC/OCC] in [repository name], ready to work.
@@ -31,9 +39,11 @@ git branch -r | grep "claude/"    # Check for OCC branches
 - ❌ Ask "would you like me to..."
 - ❌ Say "I can help with..."
 - ❌ Wait for confirmation
+- ❌ Skip reading `.claude/session-state.md`
 - ❌ Skip the git fetch/branch check
 
 **DO:**
+- ✅ Read `.claude/session-state.md` FIRST
 - ✅ Execute immediately
 - ✅ Report what you found
 - ✅ Take action without asking
