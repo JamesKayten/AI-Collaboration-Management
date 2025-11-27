@@ -66,7 +66,7 @@ if [ -f "$PENDING_FILE" ] && [ -s "$PENDING_FILE" ]; then
         echo -e "${BOLD}${YELLOW}│${RESET}  Commit: ${YELLOW}$hash${RESET}  Time: $timestamp"
     done < "$PENDING_FILE"
     echo -e "${BOLD}${YELLOW}├─────────────────────────────────────────────────────────────┤${RESET}"
-    echo -e "${BOLD}${YELLOW}│${RESET}  ${BOLD}ACTION: Run /works-ready to validate and merge${RESET}"
+    echo -e "${BOLD}${YELLOW}│${RESET}  ${BOLD}Say 'works ready' to process these branches${RESET}"
     echo -e "${BOLD}${YELLOW}└─────────────────────────────────────────────────────────────┘${RESET}"
     echo ""
 fi
