@@ -83,30 +83,14 @@ else
     ROLE_DESC="Developer"
 fi
 
-# Launch watchers
-AIM_LAUNCHER="$REPO_ROOT/scripts/aim-launcher.sh"
-AIM_PID_FILE="/tmp/aim-launcher-${REPO_NAME}.pid"
-
-if [[ "$OSTYPE" == "darwin"* ]]; then
-    # macOS: Launch iTerm2 watcher window (focus will be restored to Claude terminal)
-    if [ -f "$AIM_LAUNCHER" ] && [ -d "/Applications/iTerm.app" ]; then
-        if [ ! -f "$AIM_PID_FILE" ] || ! ps -p "$(cat "$AIM_PID_FILE" 2>/dev/null)" > /dev/null 2>&1; then
-            "$AIM_LAUNCHER" "$REPO_ROOT" > /dev/null 2>&1 &
-            echo $! > "$AIM_PID_FILE"
-            echo -e "📺 Watchers launched in separate window"
-        else
-            echo -e "📺 Watchers already running"
-        fi
-    fi
-else
-    # Linux: Background watchers
+# Watchers - macOS: run ./scripts/aim-launcher.sh manually AFTER Claude starts
+# Linux: background watchers
+if [[ "$OSTYPE" != "darwin"* ]]; then
     if [ -f "$BRANCH_WATCHER" ]; then
         nohup "$BRANCH_WATCHER" > /tmp/branch-watcher.log 2>&1 &
-        echo -e "📡 Branch watcher ${GREEN}started${RESET} (background)"
     fi
     if [ -f "$BOARD_WATCHER" ]; then
         nohup "$BOARD_WATCHER" > /tmp/board-watcher.log 2>&1 &
-        echo -e "📋 Board watcher ${GREEN}started${RESET} (background)"
     fi
 fi
 
