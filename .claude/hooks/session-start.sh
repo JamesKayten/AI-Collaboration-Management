@@ -100,7 +100,7 @@ READINESS_DETAIL="TCC ready for new work assignments"
 
 if [ "$OCC_BRANCHES" -gt 0 ] || [ -n "$PENDING_ALERTS" ]; then
     READINESS_STATUS="OCC WORK PENDING"
-    READINESS_DETAIL="$OCC_BRANCHES OCC branch(es) waiting for review - run /works-ready"
+    READINESS_DETAIL="$OCC_BRANCHES OCC branch(es) waiting for review - auto-initializing TCC"
 fi
 
 cat > "$REPO_ROOT/.claude/session-state.md" << EOF
@@ -131,13 +131,67 @@ $READINESS_DETAIL
 ## Manual Operations
 - Sync: \`git fetch origin && git pull origin main\`
 - Manual watchers: \`./scripts/aim-launcher.sh\`
+
+## TCC Auto-Initialization Required
+TCC should automatically complete initialization checklist from CLAUDE.md:
+1. ✅ Read CLAUDE.md (done by session start)
+2. 🔄 Check docs/BOARD.md for current status
+3. 🔄 Identify repository location and branch
+4. 🔄 Acknowledge TCC role and proceed with work
 EOF
 
 echo ""
+echo -e "${BOLD}🎯 TCC AUTO-INITIALIZING${RESET}"
+echo -e "${GREEN}Completing TCC initialization checklist automatically...${RESET}"
+echo ""
+echo -e "${CYAN}✅ Step 1/4: CLAUDE.md read (session start)${RESET}"
+echo -e "${CYAN}🔄 Step 2/4: Checking board status...${RESET}"
+
+# Check board for tasks
+BOARD_TASKS=""
+if [ -f "$BOARD_FILE" ]; then
+    # Count non-empty, non-comment lines that could be tasks
+    BOARD_CONTENT=$(grep -v "^#\|^$\|^-\|^\*No pending" "$BOARD_FILE" 2>/dev/null || true)
+    if [ -n "$BOARD_CONTENT" ]; then
+        BOARD_TASKS="found"
+    fi
+fi
+
+echo -e "${CYAN}✅ Step 3/4: Repository: $REPO_NAME, Branch: $BRANCH${RESET}"
+echo -e "${CYAN}🔄 Step 4/4: Acknowledging TCC role and proceeding...${RESET}"
+
+# Auto-proceed based on current state
+AUTO_ACTION=""
 if [ "$OCC_BRANCHES" -gt 0 ] || [ -n "$PENDING_ALERTS" ]; then
-    echo -e "${BOLD}🎯 TCC ALERT${RESET} - OCC work pending review | Context: .claude/session-state.md"
+    echo -e "${YELLOW}📋 TCC PROCEEDING: OCC branches detected - automatic work validation${RESET}"
+    echo -e "   ${BOLD}Auto-triggering /works-ready process...${RESET}"
+    AUTO_ACTION="/works-ready"
+elif [ -n "$BOARD_TASKS" ]; then
+    echo -e "${YELLOW}📋 TCC PROCEEDING: Board tasks detected - automatic task review${RESET}"
+    echo -e "   ${BOLD}Auto-triggering /check-the-board process...${RESET}"
+    AUTO_ACTION="/check-the-board"
 else
-    echo -e "${BOLD}🎯 TCC READY${RESET} - Automatic readiness achieved | Context: .claude/session-state.md"
+    echo -e "${GREEN}✅ TCC INITIALIZATION COMPLETE${RESET}"
+    echo -e "${GREEN}Ready for collaboration - monitoring for new work${RESET}"
+    AUTO_ACTION="complete"
+fi
+
+# Write auto-action signal for Claude to pick up
+if [ -n "$AUTO_ACTION" ] && [ "$AUTO_ACTION" != "complete" ]; then
+    echo "$AUTO_ACTION" > "$REPO_ROOT/.claude/auto-action.signal"
+    echo -e "${CYAN}🔄 Auto-action signal created: $AUTO_ACTION${RESET}"
+else
+    # Remove any existing signal if initialization is complete with no work
+    rm -f "$REPO_ROOT/.claude/auto-action.signal" 2>/dev/null || true
+fi
+
+echo ""
+echo -e "${BOLD}🎯 TCC FULLY OPERATIONAL${RESET} | Context: .claude/session-state.md"
+
+# If there's an auto-action, provide clear instruction to Claude
+if [ -n "$AUTO_ACTION" ] && [ "$AUTO_ACTION" != "complete" ]; then
+    echo ""
+    echo -e "${BOLD}${YELLOW}🤖 CLAUDE: Execute '$AUTO_ACTION' to complete TCC initialization${RESET}"
 fi
 
 exit 0
