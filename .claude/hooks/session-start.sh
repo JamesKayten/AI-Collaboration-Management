@@ -142,7 +142,21 @@ fi
 
 echo ""
 echo -e "${BOLD}================================================================================${RESET}"
-echo -e "${BOLD}END OF BOARD${RESET} - Proceed with your role (OCC or TCC)"
+echo -e "${BOLD}YOUR DIRECTIVE${RESET}"
+echo -e "${BOLD}================================================================================${RESET}"
+echo ""
+if [ "$ROLE" = "TCC" ]; then
+    echo "You are TCC (Project Manager) in $REPO_NAME."
+    echo "Say: 'I am TCC in $REPO_NAME, ready to work.'"
+    echo "Then check BOARD.md for tasks. If OCC branches exist, run /works-ready."
+    echo "If nothing pending, say 'No work pending, standing by.'"
+else
+    echo "You are OCC (Developer) in $REPO_NAME."
+    echo "Say: 'I am OCC in $REPO_NAME, ready to work.'"
+    echo "Then check BOARD.md for tasks. Work on any tasks in 'Tasks FOR OCC'."
+    echo "If nothing pending, say 'No work pending, standing by.'"
+fi
+echo ""
 echo -e "${BOLD}================================================================================${RESET}"
 
 exit 0
