@@ -4,6 +4,19 @@
 
 ---
 
+## TCC AUTO-INITIALIZATION (macOS only)
+
+**On session start, if you are on macOS (TCC role), IMMEDIATELY:**
+
+1. Announce: "I am TCC in [repo name], ready to work."
+2. Check for OCC branches: `git branch -r | grep "origin/claude/"`
+3. If branches exist, report: "OCC branch detected: [branch name]. Say 'works ready' to process."
+4. If no branches, report: "No pending branches. Monitoring for new work."
+
+**Do this automatically. Do not wait for user input.**
+
+---
+
 ## CRITICAL: Always Include Context
 
 Every message to the user MUST include:
