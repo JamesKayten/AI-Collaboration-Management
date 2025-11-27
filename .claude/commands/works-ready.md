@@ -12,8 +12,35 @@ You are TCC. Complete ALL steps below without pausing or asking for confirmation
 ```bash
 git fetch origin
 git checkout <occ-branch>
-# Run validation: tests, linters, build checks
 ```
+
+### File Size Compliance Check (MANDATORY)
+
+Run the file size compliance checker:
+
+```bash
+./scripts/tcc-file-compliance.sh main
+```
+
+**File Size Limits (lines per file):**
+- Python (`.py`): 250 lines
+- JavaScript/TypeScript (`.js`, `.ts`, `.jsx`, `.tsx`): 150 lines
+- Java (`.java`): 400 lines
+- Go/Swift (`.go`, `.swift`): 300 lines
+- Markdown (`.md`): 500 lines
+- Shell scripts (`.sh`): 200 lines
+- YAML/JSON (`.yaml`, `.json`): 300 lines
+
+**If ANY file exceeds limits:**
+1. STOP - do not merge
+2. Post violation report to BOARD.md for OCC
+3. List each violation with file path and line count
+4. Wait for OCC to fix and re-submit
+
+### Other Validation
+- Run tests if available: `npm test` or `make test`
+- Check for linter errors
+- Verify build passes
 
 If validation fails → stop and post issues to BOARD.md for OCC.
 
@@ -72,6 +99,7 @@ git push origin main
 
 Before ending session, confirm ALL:
 
+- [ ] File size compliance checked (no violations)
 - [ ] Branch validated and merged to main
 - [ ] Commit hash recorded
 - [ ] Merged branch deleted from GitHub
