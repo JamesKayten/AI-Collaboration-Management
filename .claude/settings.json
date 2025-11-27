@@ -26,8 +26,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "echo 'TRIGGER: User said works ready. Execute /works-ready NOW. No preamble, no explanation.'",
-            "timeout": 2
+            "command": ".claude/hooks/works-ready-hook.sh",
+            "timeout": 15
           }
         ]
       }

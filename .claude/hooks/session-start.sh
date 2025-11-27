@@ -132,9 +132,24 @@ else
     echo -e "${RED}No BOARD.md found at $BOARD_FILE${RESET}"
 fi
 
+# Count pending OCC branches for TCC directive
+PENDING_COUNT=0
+if [ -f "$PENDING_FILE" ] && [ -s "$PENDING_FILE" ]; then
+    PENDING_COUNT=$(wc -l < "$PENDING_FILE" | tr -d ' ')
+fi
+
 echo ""
 echo -e "${BOLD}================================================================================${RESET}"
-echo -e "${BOLD}END OF BOARD${RESET} - Proceed with your role (OCC or TCC)"
+echo -e "${BOLD}END OF BOARD${RESET}"
 echo -e "${BOLD}================================================================================${RESET}"
+echo ""
+echo -e "${BOLD}${GREEN}TCC DIRECTIVE:${RESET} You are TCC (Project Manager). Respond with ONLY:"
+if [ "$PENDING_COUNT" -gt 0 ]; then
+    echo -e "  ${CYAN}\"TCC ready. ${PENDING_COUNT} branch(es) pending.\"${RESET}"
+else
+    echo -e "  ${CYAN}\"TCC ready. No pending branches.\"${RESET}"
+fi
+echo ""
+echo -e "${YELLOW}Do NOT explain your role. Do NOT summarize. Just that one line.${RESET}"
 
 exit 0
