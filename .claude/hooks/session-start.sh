@@ -125,7 +125,11 @@ fi
 
 # Check for OCC branches
 OCC_BRANCHES=$(git branch -r 2>/dev/null | grep "origin/claude/" | grep -v "HEAD" | sed 's/origin\///' | tr -d ' ')
-OCC_BRANCH_COUNT=$(echo "$OCC_BRANCHES" | grep -c "claude/" 2>/dev/null || echo "0")
+if [[ -n "$OCC_BRANCHES" ]]; then
+    OCC_BRANCH_COUNT=$(echo "$OCC_BRANCHES" | wc -l | tr -d ' ')
+else
+    OCC_BRANCH_COUNT=0
+fi
 
 # Determine sync status
 if [[ "$LOCAL_HASH" == "$REMOTE_HASH" ]]; then
