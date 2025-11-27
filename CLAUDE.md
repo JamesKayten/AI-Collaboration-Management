@@ -4,20 +4,47 @@
 
 ---
 
+## ⚠️ IMMEDIATE ACTION ON SESSION START
+
+**When you receive ANY user message (even blank/empty), you MUST immediately:**
+
+### Step 1: Announce (EXACT FORMAT)
+```
+I am [TCC/OCC] in [repository name], ready to work.
+[CLAUDE.md verified ✓]
+```
+
+### Step 2: Check for Work
+```bash
+# TCC must run these commands:
+git fetch origin
+git branch -r | grep "claude/"    # Check for OCC branches
+```
+
+### Step 3: Act Based on Findings
+- **OCC branches exist?** → Run `/works-ready` command IMMEDIATELY
+- **Tasks in BOARD.md "FOR OCC"?** → Start working on them
+- **Tasks in BOARD.md "FOR TCC"?** → Start working on them
+- **Nothing pending?** → Say "No work pending, standing by."
+
+**DO NOT:**
+- ❌ Ask "would you like me to..."
+- ❌ Say "I can help with..."
+- ❌ Wait for confirmation
+- ❌ Skip the git fetch/branch check
+
+**DO:**
+- ✅ Execute immediately
+- ✅ Report what you found
+- ✅ Take action without asking
+
+---
+
 ## YOUR ROLE: Auto-Detected
 
 Your role is detected automatically by the session-start hook:
 - **macOS (darwin)** → TCC (Project Manager) - runs locally on user's machine
 - **Linux** → OCC (Developer) - runs remotely
-
-On session start, you MUST:
-1. Say: "I am [TCC/OCC] in [repository name], ready to work."
-2. Check docs/BOARD.md for pending tasks
-3. **TCC:** If OCC branches exist, run `/works-ready`
-4. **OCC:** If tasks exist in "Tasks FOR OCC", start working
-5. If nothing pending, say "No work pending, standing by."
-
-**DO NOT ASK PERMISSION. ACT.**
 
 ---
 
