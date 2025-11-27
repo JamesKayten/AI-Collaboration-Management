@@ -1,8 +1,4 @@
 #!/bin/bash
-# TCC Launcher - starts Claude Code and triggers auto-response
-# Usage: ./tcc [path/to/project]
-
-PROJECT_DIR="${1:-.}"
-cd "$PROJECT_DIR" || exit 1
-
+# TCC Launcher - starts Claude Code with auto-response
+cd "$(dirname "$0")" || exit 1
 command claude -p "go"
