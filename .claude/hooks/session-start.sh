@@ -37,14 +37,41 @@ echo -e "${BOLD}│${RESET}  Role:       ${YELLOW}TCC (Project Manager)${RESET}"
 echo -e "${BOLD}│${RESET}  Commit:     ${CYAN}${LOCAL_HASH}${RESET}"
 echo -e "${BOLD}└─────────────────────────────────────┘${RESET}"
 
-# Check for pending OCC branches (TCC alert)
+# TCC Readiness Assessment - Check for OCC work and establish status
+echo ""
+git fetch origin --quiet 2>/dev/null || true
+
+# Check for OCC branches (claude/* pattern)
+OCC_BRANCHES=$(git branch -r 2>/dev/null | grep "origin/claude/" | grep -v HEAD | wc -l | tr -d ' ')
+
+# Check pending file for branch watcher alerts
+PENDING_ALERTS=""
 if [ -f "$PENDING_FILE" ] && [ -s "$PENDING_FILE" ]; then
-    echo ""
+    PENDING_ALERTS=$(cat "$PENDING_FILE")
+fi
+
+if [ "$OCC_BRANCHES" -gt 0 ] || [ -n "$PENDING_ALERTS" ]; then
     echo -e "${BOLD}${YELLOW}⚠️  TCC ALERT: OCC BRANCHES WAITING FOR REVIEW${RESET}"
-    while read -r branch hash timestamp; do
-        echo -e "   Branch: ${CYAN}$branch${RESET} (${YELLOW}$hash${RESET}) - $timestamp"
-    done < "$PENDING_FILE"
+
+    if [ -n "$PENDING_ALERTS" ]; then
+        while read -r branch hash timestamp; do
+            echo -e "   Branch: ${CYAN}$branch${RESET} (${YELLOW}$hash${RESET}) - $timestamp"
+        done < "$PENDING_FILE"
+    else
+        git branch -r 2>/dev/null | grep "origin/claude/" | grep -v HEAD | while read -r branch; do
+            branch_name=$(echo "$branch" | sed 's/origin\///')
+            echo -e "   Branch: ${CYAN}$branch_name${RESET} - Ready for review"
+        done
+    fi
     echo -e "   ${BOLD}ACTION: Run /works-ready to validate and merge${RESET}"
+else
+    echo -e "${BOLD}${GREEN}✅ TCC STANDING BY${RESET}"
+    echo -e "${GREEN}TCC is standing by and ready to process work once an OCC branch is available.${RESET}"
+    echo ""
+    echo -e "${CYAN}Monitoring for OCC submissions:${RESET}"
+    echo -e "  • Branch submissions will trigger ${CYAN}Hero${RESET} sound alert"
+    echo -e "  • Use ${BOLD}/works-ready${RESET} when OCC work arrives"
+    echo -e "  • Use ${BOLD}/check-the-board${RESET} to review current tasks"
 fi
 
 # Launch watchers for TCC monitoring
@@ -67,7 +94,15 @@ if [ -f "$AIM_LAUNCHER" ]; then
     fi
 fi
 
-# Write detailed session state
+# Write detailed session state with current readiness status
+READINESS_STATUS="STANDING BY"
+READINESS_DETAIL="Ready to process work once OCC branch is available"
+
+if [ "$OCC_BRANCHES" -gt 0 ] || [ -n "$PENDING_ALERTS" ]; then
+    READINESS_STATUS="OCC WORK PENDING"
+    READINESS_DETAIL="$OCC_BRANCHES OCC branch(es) waiting for review - run /works-ready"
+fi
+
 cat > "$REPO_ROOT/.claude/session-state.md" << EOF
 # TCC Session Context
 
@@ -77,6 +112,10 @@ cat > "$REPO_ROOT/.claude/session-state.md" << EOF
 - **Commit:** $LOCAL_HASH
 - **Platform:** macOS
 - **Board:** docs/BOARD.md $([ -f "$BOARD_FILE" ] && echo "(exists)" || echo "(missing)")
+- **Status:** $READINESS_STATUS
+
+## Current Readiness
+$READINESS_DETAIL
 
 ## TCC Protocol Active
 - Monitor for OCC branch submissions (Hero sound)

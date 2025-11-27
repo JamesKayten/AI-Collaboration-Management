@@ -37,10 +37,12 @@ cd AI-Collaboration-Management
 ### 2. Start a Session
 Open Claude Code in the repo directory. The SessionStart hook automatically:
 - Establishes TCC (Project Manager) role on macOS
+- **Checks for OCC branches and declares readiness status**
+- Shows "TCC STANDING BY" when ready for work
+- Alerts if OCC branches are waiting for review
+- Launches monitoring watchers (Hero/Glass/Basso sounds)
 - Writes session context to `.claude/session-state.md`
-- Shows minimal startup info for fast loading (0.04s execution)
 - Manual sync available via: `git fetch origin && git pull origin main`
-- Manual watcher launch: `./scripts/aim-launcher.sh`
 
 ### 3. Work
 - **OCC**: Complete tasks, push branches
