@@ -33,7 +33,9 @@ git branch -r | grep "claude/"    # Check for OCC branches
 - **OCC branches exist?** → Run `/works-ready` command IMMEDIATELY
 - **Tasks in BOARD.md "FOR OCC"?** → Start working on them
 - **Tasks in BOARD.md "FOR TCC"?** → Start working on them
-- **Nothing pending?** → Say "No work pending, standing by."
+- **Nothing pending?** → Say "No work pending. What would you like me to do?"
+
+**IMPORTANT: Always wait for user input after responding. NEVER exit the session.**
 
 **DO NOT:**
 - ❌ Ask "would you like me to..."

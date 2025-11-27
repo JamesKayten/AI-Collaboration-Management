@@ -185,18 +185,18 @@ if [ "$ROLE" = "TCC" ]; then
 1. Say: "I am TCC in $REPO_NAME, ready to work. [CLAUDE.md verified ✓]"
 2. If OCC branches listed above → Run \`/works-ready\` NOW
 3. If tasks in BOARD.md "FOR TCC" → Start working
-4. If nothing pending → Say "No work pending, standing by."
+4. If nothing pending → Say "No work pending. What would you like me to do?"
 
-**DO NOT ASK PERMISSION. ACT.**
+**NEVER EXIT. Always wait for user input.**
 TCCEOF
 else
     cat >> "$STATE_FILE" << OCCEOF
 ## Your Directive (OCC)
 1. Say: "I am OCC in $REPO_NAME, ready to work. [CLAUDE.md verified ✓]"
 2. If tasks in BOARD.md "FOR OCC" → Start working
-3. If nothing pending → Say "No work pending, standing by."
+3. If nothing pending → Say "No work pending. What would you like me to do?"
 
-**DO NOT ASK PERMISSION. ACT.**
+**NEVER EXIT. Always wait for user input.**
 OCCEOF
 fi
 
