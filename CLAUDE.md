@@ -227,6 +227,33 @@ After AICM work in either repo, TCC must update the other and report:
 
 ---
 
+## Watcher Management
+
+**Audio watchers monitor for OCC→TCC workflow events:**
+
+### Auto-Launch Behavior:
+- **Linux (OCC)**: Watchers auto-start in background via `nohup`
+- **macOS (TCC)**: Watchers require manual launch to prevent focus stealing
+
+### Manual Launch on macOS:
+```bash
+./scripts/aim-launcher.sh
+```
+This opens iTerm2 with 3 tabs:
+- **Build watcher** - Monitors Swift builds (Basso/Blow sounds)
+- **Branch watcher** - Monitors for OCC branches (Hero sound)
+- **Board watcher** - Monitors BOARD.md changes (Glass sound)
+
+### Cleanup Stuck Watchers:
+```bash
+# Kill any stuck watcher processes
+pkill -f "watch-.*\.sh"
+# Clean up state files
+rm -f /tmp/branch-watcher-*.pending /tmp/board-watcher.log
+```
+
+---
+
 ## Session Start Checklist
 
 1. Read this file (you just did)

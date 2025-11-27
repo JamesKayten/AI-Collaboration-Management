@@ -74,13 +74,39 @@ fi
 # Get branch after pull
 BRANCH=$(git branch --show-current 2>/dev/null || echo "UNKNOWN")
 
-# Detect role based on OS: macOS = TCC (local), Linux = OCC (remote)
-if [[ "$OSTYPE" == "darwin"* ]]; then
-    ROLE="TCC"
-    ROLE_DESC="Project Manager"
+# Detect role: Check .claude/role.local first, then fall back to OS detection
+ROLE_LOCAL_FILE="$REPO_ROOT/.claude/role.local"
+
+if [[ -f "$ROLE_LOCAL_FILE" && -r "$ROLE_LOCAL_FILE" ]]; then
+    # Read role from local override file
+    ROLE_OVERRIDE=$(cat "$ROLE_LOCAL_FILE" 2>/dev/null | tr -d '[:space:]' | tr '[:lower:]' '[:upper:]')
+    if [[ "$ROLE_OVERRIDE" == "TCC" || "$ROLE_OVERRIDE" == "OCC" ]]; then
+        ROLE="$ROLE_OVERRIDE"
+        if [[ "$ROLE" == "TCC" ]]; then
+            ROLE_DESC="Project Manager (via role.local)"
+        else
+            ROLE_DESC="Developer (via role.local)"
+        fi
+    else
+        # Invalid role in file, fall back to OS detection
+        ROLE_DESC_SUFFIX=" (role.local invalid: '$ROLE_OVERRIDE', using OS detection)"
+        if [[ "$OSTYPE" == "darwin"* ]]; then
+            ROLE="TCC"
+            ROLE_DESC="Project Manager${ROLE_DESC_SUFFIX}"
+        else
+            ROLE="OCC"
+            ROLE_DESC="Developer${ROLE_DESC_SUFFIX}"
+        fi
+    fi
 else
-    ROLE="OCC"
-    ROLE_DESC="Developer"
+    # No override file, use OS detection (original behavior)
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        ROLE="TCC"
+        ROLE_DESC="Project Manager"
+    else
+        ROLE="OCC"
+        ROLE_DESC="Developer"
+    fi
 fi
 
 # Watchers - macOS: run ./scripts/aim-launcher.sh manually AFTER Claude starts
