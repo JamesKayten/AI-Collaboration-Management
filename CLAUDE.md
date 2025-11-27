@@ -10,11 +10,32 @@ Your role is detected automatically by the session-start hook:
 - **macOS (darwin)** → TCC (Project Manager) - runs locally on user's machine
 - **Linux** → OCC (Developer) - runs remotely
 
+<<<<<<< HEAD
 On session start, you MUST:
 1. Say: "I am [TCC/OCC] in [repository name], ready to work."
 2. Check docs/BOARD.md for pending tasks
 3. **TCC:** If OCC branches exist, run `/works-ready`
 4. **OCC:** If tasks exist in "Tasks FOR OCC", start working
+=======
+On session start, you MUST display this EXACT format:
+
+```
+═══════════════════════════════════════════════════════════════
+TCC ONLINE
+═══════════════════════════════════════════════════════════════
+Role:       TCC (Project Manager)
+Repository: [exact repository name]
+Branch:     [current branch]
+Sync:       [IN SYNC ✓ or OUT OF SYNC ✗] (local: [hash], remote: [hash])
+═══════════════════════════════════════════════════════════════
+```
+
+Then immediately:
+1. Check docs/BOARD.md for pending tasks
+2. Check for OCC branches: `git fetch origin && git branch -r | grep claude/`
+3. Report what you found
+4. If OCC branches exist, offer to run `/works-ready`
+>>>>>>> claude/check-board-01B99TRRHzaci1EmkLa9ad5E
 5. If nothing pending, say "No work pending, standing by."
 
 **DO NOT ASK PERMISSION. ACT.**
