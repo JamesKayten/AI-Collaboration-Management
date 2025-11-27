@@ -36,8 +36,9 @@ cd AI-Collaboration-Management
 
 ### 2. Start a Session
 Open Claude Code in the repo directory. The SessionStart hook automatically:
+- Establishes TCC (Project Manager) role on macOS
 - Writes session context to `.claude/session-state.md`
-- Shows minimal startup info for fast loading
+- Shows minimal startup info for fast loading (0.04s execution)
 - Manual sync available via: `git fetch origin && git pull origin main`
 - Manual watcher launch: `./scripts/aim-launcher.sh`
 
@@ -54,10 +55,11 @@ Open Claude Code in the repo directory. The SessionStart hook automatically:
 
 | File | Purpose |
 |------|---------|
-| `CLAUDE.md` | Rules auto-read at session start |
+| `CLAUDE.md` | TCC session rules auto-read at startup |
 | `docs/BOARD.md` | Two-way task queue |
-| `.claude/hooks/session-start.sh` | Fast context injection (no network ops) |
-| `.claude/settings.json` | Hook configuration |
+| `.claude/hooks/session-start.sh` | Fast TCC role establishment (0.04s) |
+| `.claude/settings.json` | Minimal hook configuration |
+| `.claude/commands/works-ready.md` | TCC merge workflow |
 
 ### Watcher Scripts
 
@@ -152,10 +154,10 @@ scripts/
 The hooks activate automatically when Claude Code starts in the directory.
 
 **Performance Notes:**
-- Session hook optimized for fast startup (no network operations)
-- Watcher auto-launch disabled to prevent startup hangs
+- Minimal session hook for fast TCC role establishment (0.04s)
+- No network operations during startup to prevent hangs
+- Watcher auto-launch disabled (manual: `./scripts/aim-launcher.sh`)
 - Manual sync: `git fetch origin && git pull origin main`
-- Manual watchers: `./scripts/aim-launcher.sh`
 
 ---
 
