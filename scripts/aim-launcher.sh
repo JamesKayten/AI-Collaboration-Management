@@ -88,12 +88,15 @@ done
 echo -e "${CYAN}Launching iTerm2 with watchers...${RESET}"
 echo ""
 
-# Create iTerm2 AppleScript to open tabs
+# Create iTerm2 AppleScript to open tabs without stealing focus
 osascript <<EOF
-tell application "iTerm"
-    -- Don't activate - keep focus on Claude terminal
+-- Save the frontmost application before doing anything
+tell application "System Events"
+    set frontApp to name of first application process whose frontmost is true
+end tell
 
-    -- Create new window
+tell application "iTerm"
+    -- Create new window (will temporarily take focus)
     set newWindow to (create window with default profile)
 
     tell current session of newWindow
@@ -133,12 +136,15 @@ tell application "iTerm"
         end tell
     end tell
 
-    -- Focus first tab
+    -- Focus first tab of watcher window
     tell newWindow
         select first session
     end tell
 
 end tell
+
+-- Restore focus to the original application (Claude terminal)
+tell application frontApp to activate
 EOF
 
 echo ""
