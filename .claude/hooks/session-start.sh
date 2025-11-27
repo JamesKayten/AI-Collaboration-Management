@@ -65,13 +65,13 @@ if [ "$OCC_BRANCHES" -gt 0 ] || [ -n "$PENDING_ALERTS" ]; then
     fi
     echo -e "   ${BOLD}ACTION: Run /works-ready to validate and merge${RESET}"
 else
-    echo -e "${BOLD}${GREEN}✅ TCC STANDING BY${RESET}"
-    echo -e "${GREEN}TCC is standing by and ready to process work once an OCC branch is available.${RESET}"
+    echo -e "${BOLD}${GREEN}✅ TCC READY - NO PENDING WORK${RESET}"
+    echo -e "${GREEN}No OCC branches or pending tasks found. TCC is ready for new work.${RESET}"
     echo ""
-    echo -e "${CYAN}Monitoring for OCC submissions:${RESET}"
+    echo -e "${CYAN}Monitoring for new submissions:${RESET}"
     echo -e "  • Branch submissions will trigger ${CYAN}Hero${RESET} sound alert"
-    echo -e "  • Use ${BOLD}/works-ready${RESET} when OCC work arrives"
     echo -e "  • Use ${BOLD}/check-the-board${RESET} to review current tasks"
+    echo -e "  • Ready to accept new work assignments"
 fi
 
 # Launch watchers for TCC monitoring
@@ -95,8 +95,8 @@ if [ -f "$AIM_LAUNCHER" ]; then
 fi
 
 # Write detailed session state with current readiness status
-READINESS_STATUS="STANDING BY"
-READINESS_DETAIL="Ready to process work once OCC branch is available"
+READINESS_STATUS="READY"
+READINESS_DETAIL="TCC ready for new work assignments"
 
 if [ "$OCC_BRANCHES" -gt 0 ] || [ -n "$PENDING_ALERTS" ]; then
     READINESS_STATUS="OCC WORK PENDING"
@@ -134,6 +134,10 @@ $READINESS_DETAIL
 EOF
 
 echo ""
-echo -e "${BOLD}🎯 TCC READY${RESET} - Monitoring for OCC work | Context: .claude/session-state.md"
+if [ "$OCC_BRANCHES" -gt 0 ] || [ -n "$PENDING_ALERTS" ]; then
+    echo -e "${BOLD}🎯 TCC ALERT${RESET} - OCC work pending review | Context: .claude/session-state.md"
+else
+    echo -e "${BOLD}🎯 TCC READY${RESET} - Automatic readiness achieved | Context: .claude/session-state.md"
+fi
 
 exit 0
