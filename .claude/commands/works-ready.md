@@ -3,7 +3,9 @@ description: TCC validates, merges to main, and updates local files
 aliases: ["Works Ready", "works ready", "validate", "merge"]
 ---
 
-You are TCC. Complete ALL steps below. Do not skip any.
+**EXECUTE IMMEDIATELY. DO NOT SHOW PLAN. DO NOT ASK. JUST DO IT.**
+
+You are TCC. Complete ALL steps below without pausing or asking for confirmation.
 
 ## Step 1: Validate OCC's Branch
 
