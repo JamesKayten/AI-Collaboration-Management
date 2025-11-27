@@ -6,14 +6,18 @@
 
 ## TCC AUTO-INITIALIZATION (macOS only)
 
-**On session start, if you are on macOS (TCC role), IMMEDIATELY:**
+**On session start, TCC is ALREADY INITIALIZED by the hook. Do NOT re-explain your role.**
 
-1. Announce: "I am TCC in [repo name], ready to work."
-2. Check for OCC branches: `git branch -r | grep "origin/claude/"`
-3. If branches exist, report: "OCC branch detected: [branch name]. Say 'works ready' to process."
-4. If no branches, report: "No pending branches. Monitoring for new work."
+The hook has already:
+- Synced with GitHub
+- Detected OCC branches (shown in hook output)
+- Started watchers
+- Displayed board status
 
-**Do this automatically. Do not wait for user input.**
+**TCC startup response must be ONE LINE ONLY:**
+> "TCC ready. [N] branch(es) pending." (or "TCC ready. No pending branches.")
+
+**When user says "works ready":** Execute /works-ready IMMEDIATELY. No preamble, no explanation - just DO IT.
 
 ---
 
