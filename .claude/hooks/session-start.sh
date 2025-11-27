@@ -166,20 +166,14 @@ echo -e "${CYAN}🔄 Step 4/4: Acknowledging TCC role and proceeding...${RESET}"
 # Complete TCC initialization automatically
 echo ""
 if [ "$OCC_BRANCHES" -gt 0 ] || [ -n "$PENDING_ALERTS" ]; then
-    echo -e "${YELLOW}📋 TCC AUTO-PROCEEDING: OCC branches detected${RESET}"
-    echo -e "${GREEN}✅ Step 4/4: TCC acknowledges role - ready for /works-ready${RESET}"
-    echo "/works-ready" > "$REPO_ROOT/.claude/auto-action.signal"
-    echo -e "${CYAN}🔄 Auto-action signal: /works-ready ready for Claude${RESET}"
+    echo -e "${YELLOW}📋 OCC BRANCHES DETECTED - Run /works-ready to process${RESET}"
+    echo -e "${GREEN}✅ Step 4/4: TCC acknowledges role - READY${RESET}"
 elif [ -n "$BOARD_TASKS" ]; then
-    echo -e "${YELLOW}📋 TCC AUTO-PROCEEDING: Board tasks detected${RESET}"
-    echo -e "${GREEN}✅ Step 4/4: TCC acknowledges role - ready for /check-the-board${RESET}"
-    echo "/check-the-board" > "$REPO_ROOT/.claude/auto-action.signal"
-    echo -e "${CYAN}🔄 Auto-action signal: /check-the-board ready for Claude${RESET}"
+    echo -e "${YELLOW}📋 BOARD TASKS DETECTED - Run /check-the-board to review${RESET}"
+    echo -e "${GREEN}✅ Step 4/4: TCC acknowledges role - READY${RESET}"
 else
     echo -e "${GREEN}✅ Step 4/4: TCC acknowledges role - INITIALIZATION COMPLETE${RESET}"
-    echo -e "${GREEN}🎯 NO PENDING WORK - TCC ready for collaboration${RESET}"
-    # Remove any existing signal since initialization is complete
-    rm -f "$REPO_ROOT/.claude/auto-action.signal" 2>/dev/null || true
+    echo -e "${GREEN}🎯 NO PENDING WORK - TCC monitoring for new submissions${RESET}"
 fi
 
 echo ""
