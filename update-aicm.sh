@@ -1,10 +1,28 @@
 #!/bin/bash
-# AICM Install Script - adds claude wrapper function to shell
+# AICM Update Script - updates existing claude wrapper function with new auto-TCC functionality
 
 SHELL_CONFIG="$HOME/.zshrc"
 [[ "$SHELL" == *"bash"* ]] && SHELL_CONFIG="$HOME/.bashrc"
 
-FUNCTION_CODE='
+echo "🔄 Updating AICM claude wrapper..."
+
+# Check if AICM is installed
+if ! grep -q "AICM:" "$SHELL_CONFIG" 2>/dev/null; then
+    echo "❌ AICM not found in $SHELL_CONFIG"
+    echo "Run ./install.sh to install AICM"
+    exit 1
+fi
+
+# Backup current shell config
+cp "$SHELL_CONFIG" "$SHELL_CONFIG.backup.$(date +%Y%m%d_%H%M%S)"
+echo "✅ Backed up $SHELL_CONFIG"
+
+# Remove old AICM function
+sed -i.tmp '/# AICM:/,/^}/d' "$SHELL_CONFIG" && rm "$SHELL_CONFIG.tmp"
+echo "✅ Removed old AICM function"
+
+# Add new function code
+NEW_FUNCTION_CODE='
 # AICM: Auto-detect TCC projects with automatic TCC initialization
 claude() {
     if [ -f "./tcc" ]; then
@@ -53,15 +71,17 @@ claude() {
     fi
 }'
 
-# Check if already installed
-if grep -q "AICM: Auto-detect TCC" "$SHELL_CONFIG" 2>/dev/null; then
-    echo "AICM already installed in $SHELL_CONFIG"
-    exit 0
-fi
+echo "$NEW_FUNCTION_CODE" >> "$SHELL_CONFIG"
+echo "✅ Installed new AICM function with auto-TCC initialization"
 
-# Add to shell config
-echo "$FUNCTION_CODE" >> "$SHELL_CONFIG"
-echo "Installed AICM claude wrapper to $SHELL_CONFIG"
-echo "Run: source $SHELL_CONFIG"
 echo ""
-echo "Now 'claude' will auto-respond in AICM projects."
+echo "🎉 AICM Update Complete!"
+echo ""
+echo "Run: source $SHELL_CONFIG"
+echo "Then: cd to your AICM project and type 'claude'"
+echo ""
+echo "The new claude wrapper will automatically:"
+echo "  1. Check for pending OCC branches"
+echo "  2. If branches pending → Auto-execute /works-ready workflow"
+echo "  3. If no branches → Initialize as TCC normally"
+echo "  4. Resume session interactively with full context"

@@ -1,4 +1,23 @@
 #!/bin/bash
-# TCC Launcher - starts Claude Code with auto-response
+# TCC Launcher - starts Claude Code with automatic TCC workflow
 cd "$(dirname "$0")" || exit 1
-command claude -p "go"
+
+# Get repository name for pending branch detection
+REPO_NAME=$(basename "$(git rev-parse --show-toplevel 2>/dev/null)" 2>/dev/null || echo "UNKNOWN")
+
+echo "🚀 Starting TCC session for $REPO_NAME..."
+
+# Check for pending OCC branches
+PENDING_FILE="/tmp/branch-watcher-${REPO_NAME}.pending"
+if [ -f "$PENDING_FILE" ] && [ -s "$PENDING_FILE" ]; then
+    PENDING_COUNT=$(wc -l < "$PENDING_FILE" | tr -d ' ')
+    echo "📋 Found $PENDING_COUNT pending branch(es) - executing works-ready automatically..."
+    echo ""
+
+    # Execute works-ready workflow in headless mode (this WORKS!)
+    command claude -p "works ready"
+else
+    echo "📋 No pending branches - starting interactive TCC session..."
+    echo ""
+    command claude
+fi
