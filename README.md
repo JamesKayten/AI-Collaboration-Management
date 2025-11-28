@@ -139,21 +139,6 @@ Key rules enforced at session start:
 2. **Completion reports** - Structured format when finishing tasks
 3. **Merge verification** - TCC reports commit hash to prevent stale merges
 4. **Board updates** - TCC updates board after completing tasks
-5. **AICM sync** - Changes sync back to main AICM repo
-
----
-
-## Deploy to Another Project
-
-Copy these to your project root:
-```
-CLAUDE.md
-.claude/
-docs/BOARD.md
-scripts/
-```
-
-The hooks activate automatically when Claude Code starts in the directory.
 
 **Performance Notes:**
 - Minimal session hook for fast TCC role establishment (0.04s)
@@ -229,6 +214,12 @@ MIT
 ---
 
 ## Version History
+
+### v4.1 (November 2025)
+- **Hard disconnect protocol** - AICM remains standalone only
+- Removed deployment instructions to prevent repository contamination
+- Framework exists exclusively in dedicated AICM repository
+- Established "first do no harm" principle for framework development
 
 ### v4.0 (November 2025)
 - Added SessionStart hooks with auto-context injection

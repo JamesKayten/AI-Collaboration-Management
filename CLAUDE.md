@@ -164,30 +164,6 @@ git diff main...origin/claude/branch-name
 
 ---
 
-## AICM Sync Rule (Bidirectional)
-
-AICM framework files must stay synchronized between repositories:
-
-**Working in SimpleCP → sync TO main AICM repo:**
-- Any AICM improvements discovered during project work
-- Copy changes to AI-Collaboration-Management and commit
-
-**Working in AICM repo → sync TO SimpleCP:**
-- Any updates to CLAUDE.md, hooks, scripts, or BOARD.md
-- Copy changes to SimpleCP's AICM copy and commit
-
-**TCC is responsible for both sync directions.**
-
-After AICM work in either repo, TCC must update the other and report:
-```
-✅ AICM SYNC
-- Source: [repo where changes were made]
-- Target: [repo that was updated]
-- Files synced: [list]
-```
-
----
-
 ## Session Start Checklist
 
 1. Read this file (you just did)

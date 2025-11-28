@@ -1,67 +1,15 @@
 #!/bin/bash
-# AICM Install Script - adds claude wrapper function to shell
+# AICM Simple Install Script
 
-SHELL_CONFIG="$HOME/.zshrc"
-[[ "$SHELL" == *"bash"* ]] && SHELL_CONFIG="$HOME/.bashrc"
-
-FUNCTION_CODE='
-# AICM: Auto-detect TCC projects with automatic TCC initialization
-claude() {
-    if [ -f "./tcc" ]; then
-        # Get repository name for session identification
-        REPO_NAME=$(basename "$(git rev-parse --show-toplevel 2>/dev/null)" 2>/dev/null || echo "UNKNOWN")
-
-        echo "🚀 Initializing TCC session for $REPO_NAME..."
-
-        # Check for pending OCC branches to determine what to auto-execute
-        PENDING_FILE="/tmp/branch-watcher-${REPO_NAME}.pending"
-        if [ -f "$PENDING_FILE" ] && [ -s "$PENDING_FILE" ]; then
-            PENDING_COUNT=$(wc -l < "$PENDING_FILE" | tr -d ' ')
-            echo "📋 Found $PENDING_COUNT pending branch(es) - auto-executing works-ready workflow..."
-            TCC_PROMPT="/works-ready"
-        else
-            echo "📋 No pending branches - initializing as TCC..."
-            TCC_PROMPT="You are starting in an AICM TCC project. Initialize as TCC (Project Manager) and respond only with: TCC - Role and Rules Confirmed. Standing by."
-        fi
-
-        # Auto-submit appropriate command in headless mode
-        SESSION_OUTPUT=$(command claude -p "$TCC_PROMPT" --output-format json 2>/dev/null)
-
-        if [ $? -eq 0 ] && [ -n "$SESSION_OUTPUT" ]; then
-            # Extract session ID - try multiple methods for robustness
-            SESSION_ID=$(echo "$SESSION_OUTPUT" | python3 -c "import sys, json; print(json.loads(sys.stdin.read()).get('session_id', ''))" 2>/dev/null)
-            [ -z "$SESSION_ID" ] && SESSION_ID=$(echo "$SESSION_OUTPUT" | grep -o '"session_id":"[^"]*"' | cut -d'"' -f4)
-
-            if [ -n "$SESSION_ID" ]; then
-                if [ "$TCC_PROMPT" = "/works-ready" ]; then
-                    echo "✅ Works-ready workflow completed - resuming session $SESSION_ID"
-                else
-                    echo "✅ TCC initialized - resuming session $SESSION_ID"
-                fi
-                echo ""
-                command claude --resume "$SESSION_ID"
-            else
-                echo "⚠️  Session management failed - starting normally"
-                command claude
-            fi
-        else
-            echo "⚠️  Auto-initialization failed - starting normally"
-            command claude
-        fi
-    else
-        command claude "$@"
-    fi
-}'
-
-# Check if already installed
-if grep -q "AICM: Auto-detect TCC" "$SHELL_CONFIG" 2>/dev/null; then
-    echo "AICM already installed in $SHELL_CONFIG"
-    exit 0
-fi
-
-# Add to shell config
-echo "$FUNCTION_CODE" >> "$SHELL_CONFIG"
-echo "Installed AICM claude wrapper to $SHELL_CONFIG"
-echo "Run: source $SHELL_CONFIG"
+echo "🚀 AI Collaboration Management Framework"
 echo ""
-echo "Now 'claude' will auto-respond in AICM projects."
+echo "Installation complete!"
+echo ""
+echo "To use AICM:"
+echo "1. cd to this directory"
+echo "2. Run 'claude' to start a TCC session"
+echo "3. Use '/works-ready' when OCC branches need review"
+echo ""
+echo "The SessionStart hooks will automatically establish TCC role."
+echo ""
+echo "Simple is better."
