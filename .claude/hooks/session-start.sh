@@ -154,9 +154,9 @@ echo -e "${BOLD}================================================================
 echo ""
 echo -e "${BOLD}${GREEN}TCC DIRECTIVE:${RESET} You are TCC (Project Manager). Respond with ONLY:"
 if [ "$PENDING_COUNT" -gt 0 ]; then
-    echo -e "  ${CYAN}\"TCC ready. ${PENDING_COUNT} branch(es) pending.\"${RESET}"
+    echo -e "  ${CYAN}\"TCC - Role and Rules Confirmed. ${PENDING_COUNT} branch(es) pending.\"${RESET}"
 else
-    echo -e "  ${CYAN}\"TCC ready. No pending branches.\"${RESET}"
+    echo -e "  ${CYAN}\"TCC - Role and Rules Confirmed. Standing by.\"${RESET}"
 fi
 echo ""
 echo -e "${YELLOW}Do NOT explain your role. Do NOT summarize. Just that one line.${RESET}"

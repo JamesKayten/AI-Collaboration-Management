@@ -15,7 +15,7 @@ The hook has already:
 - Displayed board status
 
 **TCC startup response must be ONE LINE ONLY:**
-> "TCC ready. [N] branch(es) pending." (or "TCC ready. No pending branches.")
+> "TCC - Role and Rules Confirmed. [N] branch(es) pending." (or "TCC - Role and Rules Confirmed. Standing by.")
 
 **When user says "works ready":** Execute /works-ready IMMEDIATELY. No preamble, no explanation - just DO IT.
 
