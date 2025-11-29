@@ -1,4 +1,4 @@
-# AICM Task Board
+# AIM Task Board
 
 ## Tasks FOR OCC (TCC writes here, OCC reads)
 
@@ -10,39 +10,5 @@
 
 ---
 
-## Completed Tasks
-
-### ✅ COMPLETED: Board Update Cleanup
-**Completed by:** TCC on 2025-11-29
-**Commit:** `7e7bce9` (already in main)
-**What was done:**
-- ✅ Cleaned up stale branch `claude/board-update-01YbNHDNZnoPQDcv8hmN4CoK`
-- ✅ Removed branch reference (no new commits to merge)
-
-### ✅ COMPLETED: AIM Docker Setup
-**Completed by:** TCC on 2025-11-29
-**Commit:** `751c26d` (merged to main)
-**Branch:** `claude/aim-docker-setup-01YbNHDNZnoPQDcv8hmN4CoK` (deleted)
-**What was done:**
-- ✅ Created Dockerfile for AIM container
-- ✅ Created `aim` CLI launcher script
-- ✅ Created `docker/aim-entrypoint.sh`
-- ✅ Created comprehensive `docs/AIM-DOCKER-SETUP.md` guide
-- ✅ Added troubleshooting and deployment workflow
-- ✅ Merged to main and branch deleted
-
-### 2025-11-29: Repository Issues Fixed
-- **Branch:** `claude/examine-repo-issues-01YbNHDNZnoPQDcv8hmN4CoK`
-- **Merged:** Commit `0315bb3`
-- **Changes:**
-  - Fixed merge conflict in `.github/workflows/ci.yml`
-  - Created missing `SECURITY.md` and `DEVELOPMENT.md`
-  - Fixed `.ai-framework` references in scripts (Hard Disconnect compliance)
-  - Corrected `tcc-setup` → `scripts` path references
-  - Updated `.claude/commands/merge-to-main.md`
-  - Marked stale test in `docs/WORKFLOW_TEST.md` as passed
-
----
-
-**Board Status:** Clean and ready for collaboration
-**Last Update:** November 29, 2025 - Repository fixes merged
+**Board Status:** Clean
+**Last Update:** November 29, 2025
