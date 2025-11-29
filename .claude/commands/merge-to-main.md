@@ -11,15 +11,7 @@ You have been granted permission to merge the current branch to main.
 
 Execute these checks IN ORDER. Any failure BLOCKS the merge.
 
-### Step 1: Repository Sync Check
-
-```bash
-bash .ai-framework/scripts/pre-work-sync.sh
-```
-
-**Required:** Must show "PRE-WORK SYNC COMPLETE ✅"
-
-### Step 2: File Size Compliance Check
+### Step 1: File Size Compliance Check
 
 **Default Limits (lines per file):**
 - Python (`.py`): 250 lines
@@ -38,8 +30,8 @@ CURRENT_BRANCH=$(git branch --show-current)
 echo "Checking file size compliance for branch: $CURRENT_BRANCH"
 echo ""
 
-# Run file size compliance checker (uses .ai-framework/scripts/check-file-sizes.sh)
-if ! bash .ai-framework/scripts/check-file-sizes.sh origin/main; then
+# Run file size compliance checker
+if ! ./scripts/tcc-file-compliance.sh main; then
   echo ""
   echo "❌ MERGE BLOCKED: File size violations detected"
   echo "Please fix violations before attempting merge"
@@ -52,7 +44,7 @@ echo "✅ All file size compliance checks passed"
 
 **If ANY violations found:** STOP and report violations. DO NOT proceed with merge.
 
-### Step 3: Show Merge Summary
+### Step 2: Show Merge Summary
 
 ```bash
 echo "=== Merge Summary ==="
@@ -66,7 +58,7 @@ echo "File changes:"
 git diff --stat origin/main...HEAD
 ```
 
-### Step 4: Verify No Uncommitted Changes
+### Step 3: Verify No Uncommitted Changes
 
 ```bash
 if ! git diff-index --quiet HEAD --; then
@@ -81,7 +73,7 @@ echo "✅ No uncommitted changes"
 
 **Only proceed if ALL validations passed.**
 
-### Step 5: Execute Merge
+### Step 4: Execute Merge
 
 ```bash
 # Record current branch for cleanup
@@ -106,7 +98,7 @@ All validation checks passed:
 echo "✅ Merge completed locally"
 ```
 
-### Step 6: Push to Remote
+### Step 5: Push to Remote
 
 ```bash
 # Push merged main
@@ -115,7 +107,7 @@ git push origin main
 echo "✅ Pushed to origin/main"
 ```
 
-### Step 7: Verify Merge Success
+### Step 6: Verify Merge Success
 
 ```bash
 # Verify local matches remote
@@ -132,7 +124,7 @@ else
 fi
 ```
 
-### Step 8: Clean Up Feature Branch
+### Step 7: Clean Up Feature Branch
 
 ```bash
 # Delete local feature branch
@@ -144,7 +136,7 @@ git push origin --delete $FEATURE_BRANCH
 echo "✅ Deleted remote branch: $FEATURE_BRANCH"
 ```
 
-### Step 9: Final Verification
+### Step 8: Final Verification
 
 ```bash
 echo ""
@@ -174,7 +166,6 @@ echo "=========================================="
 
 Merge is ONLY successful when:
 
-- [ ] Pre-work sync completed
 - [ ] All file sizes within limits
 - [ ] No uncommitted changes
 - [ ] Merge completed without conflicts
@@ -190,15 +181,6 @@ Merge is ONLY successful when:
 ✅ Pushed to origin/main
 ✅ Feature branch deleted
 ✅ Repository ready for next task
-```
-
-## 📝 Post-Merge
-
-After successful merge, log the completion:
-
-```bash
-source .ai-framework/scripts/session-logging.sh
-checkpoint "Merged $FEATURE_BRANCH to main - all validations passed"
 ```
 
 ---
