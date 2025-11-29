@@ -17,10 +17,8 @@ BOARD_FILE="$REPO_ROOT/docs/BOARD.md"
 PENDING_FILE="/tmp/branch-watcher-${REPO_NAME}.pending"
 
 # Watcher scripts and PID files
-BRANCH_WATCHER="$REPO_ROOT/scripts/watch-branches.sh"
-BRANCH_PID_FILE="/tmp/branch-watcher-${REPO_NAME}.pid"
-BOARD_WATCHER="$REPO_ROOT/scripts/watch-board.sh"
-BOARD_PID_FILE="/tmp/board-watcher-${REPO_NAME}.pid"
+UNIFIED_WATCHER="$REPO_ROOT/scripts/watch-all.sh"
+UNIFIED_PID_FILE="/tmp/aim-watcher-${REPO_NAME}.pid"
 
 cd "$REPO_ROOT" || exit 1
 
@@ -82,26 +80,22 @@ AIM_PID_FILE="/tmp/aim-launcher-${REPO_NAME}.pid"
 if [ -f "$AIM_LAUNCHER" ]; then
     # Check if watchers are already running
     if [ -f "$AIM_PID_FILE" ] && ps -p "$(cat "$AIM_PID_FILE")" > /dev/null 2>&1; then
-        echo -e "📺 AIM watchers ${GREEN}already running${RESET} in iTerm2 tabs" >&2
+        echo -e "📺 AIM watchers ${GREEN}already running${RESET} in iTerm2" >&2
     else
-        # Launch iTerm2 with all watchers in separate tabs
+        # Launch iTerm2 with watchers
         if [[ "$OSTYPE" == "darwin"* ]] && [ -d "/Applications/iTerm.app" ]; then
             "$AIM_LAUNCHER" "$REPO_ROOT" > /dev/null 2>&1 &
             echo $! > "$AIM_PID_FILE"
             echo -e "📺 ${GREEN}Launching iTerm2 watchers...${RESET}" >&2
             echo -e "   🔨 Build Watcher - Basso (error) / Blow (success)" >&2
-            echo -e "   🌿 Branch Watcher - ${CYAN}Hero${RESET} (OCC branch ready)" >&2
-            echo -e "   📋 Board Watcher - ${YELLOW}Glass${RESET} (TCC posted task)" >&2
+            echo -e "   📡 AIM Watcher - ${CYAN}Hero${RESET} (branch) / ${YELLOW}Glass${RESET} (board)" >&2
         else
-            # Fallback to background processes if not on macOS
-            echo -e "${YELLOW}⚠️  iTerm2 not available, using background watchers${RESET}" >&2
-            if [ -f "$BRANCH_WATCHER" ]; then
-                nohup "$BRANCH_WATCHER" > /tmp/branch-watcher.log 2>&1 &
-                echo -e "📡 Branch watcher ${GREEN}started${RESET} (background) - ${CYAN}Hero sound${RESET}" >&2
-            fi
-            if [ -f "$BOARD_WATCHER" ]; then
-                nohup "$BOARD_WATCHER" > /tmp/board-watcher.log 2>&1 &
-                echo -e "📋 Board watcher ${GREEN}started${RESET} (background) - ${YELLOW}Glass sound${RESET}" >&2
+            # Fallback to background unified watcher if not on macOS/iTerm2
+            echo -e "${YELLOW}⚠️  iTerm2 not available, using background watcher${RESET}" >&2
+            if [ -f "$UNIFIED_WATCHER" ]; then
+                nohup "$UNIFIED_WATCHER" > /tmp/aim-watcher.log 2>&1 &
+                echo $! > "$UNIFIED_PID_FILE"
+                echo -e "📡 AIM watcher ${GREEN}started${RESET} (background)" >&2
             fi
         fi
     fi
