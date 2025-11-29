@@ -44,8 +44,7 @@ kill_processes() {
 # 1. Kill watcher processes
 echo "Checking for running watcher processes..."
 kill_processes "watch-build\.sh" "build watchers"
-kill_processes "watch-branches\.sh" "branch watchers"
-kill_processes "watch-board\.sh" "board watchers"
+kill_processes "watch-all\.sh" "unified watchers"
 kill_processes "aim-launcher\.sh" "launcher processes"
 
 echo ""
