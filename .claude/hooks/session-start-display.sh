@@ -67,7 +67,7 @@ if [ -f "$PENDING_FILE" ] && [ -s "$PENDING_FILE" ]; then
         echo -e "${BOLD}${YELLOW}│${RESET}  Commit: ${YELLOW}$hash${RESET}  Time: $timestamp" >&2
     done < "$PENDING_FILE"
     echo -e "${BOLD}${YELLOW}├─────────────────────────────────────────────────────────────┤${RESET}" >&2
-    echo -e "${BOLD}${YELLOW}│${RESET}  ${BOLD}Say 'works ready' to process these branches${RESET}" >&2
+    echo -e "${BOLD}${YELLOW}│${RESET}  ${BOLD}AUTO-PROCESSING ENABLED - branches will be validated${RESET}" >&2
     echo -e "${BOLD}${YELLOW}└─────────────────────────────────────────────────────────────┘${RESET}" >&2
     echo "" >&2
 fi
@@ -154,10 +154,32 @@ echo -e "${BOLD}${GREEN}     ╚═╝    ╚═════╝ ╚════�
 echo -e "${BOLD}================================================================================${RESET}" >&2
 
 echo "" >&2
-echo -e "${BOLD}${GREEN}AUTO-INITIALIZING TCC ROLE...${RESET}" >&2
+echo -e "${BOLD}${GREEN}TCC AUTO-INITIALIZED${RESET}" >&2
 echo "" >&2
-echo -e "${GREEN}✓${RESET} All systems initialized - activating TCC role automatically" >&2
+
+# Auto-process directive if branches are pending
+if [[ $PENDING_COUNT -gt 0 ]]; then
+    # Get first pending branch
+    FIRST_BRANCH=$(head -1 "$PENDING_FILE" | cut -d' ' -f1)
+    echo -e "${BOLD}${CYAN}═══════════════════════════════════════════════════════════════════════════════${RESET}" >&2
+    echo -e "${BOLD}${CYAN}AUTO-PROCESS MODE - $PENDING_COUNT BRANCH(ES) PENDING${RESET}" >&2
+    echo -e "${BOLD}${CYAN}═══════════════════════════════════════════════════════════════════════════════${RESET}" >&2
+    echo "" >&2
+    echo "INSTRUCTION: You are TCC. Execute ALL steps below WITHOUT asking:" >&2
+    echo "" >&2
+    echo "1. Run: ./scripts/tcc-validate-branch.sh $FIRST_BRANCH" >&2
+    echo "2. If validation passes, merge to main" >&2
+    echo "3. Delete merged branch (local and remote)" >&2
+    echo "4. Update docs/BOARD.md with completion record" >&2
+    echo "5. Commit and push board update" >&2
+    echo "6. Report completion to user" >&2
+    echo "" >&2
+    echo "DO NOT ASK QUESTIONS. JUST EXECUTE." >&2
+else
+    echo -e "${GREEN}✓${RESET} No pending branches - standing by" >&2
+fi
+
 echo "" >&2
 echo -e "${BOLD}${CYAN}═══════════════════════════════════════════════════════════════════════════════${RESET}" >&2
-echo -e "${BOLD}${CYAN}SESSION READY - TCC AUTO-INITIALIZATION ACTIVE${RESET}" >&2
+echo -e "${BOLD}${CYAN}SESSION READY${RESET}" >&2
 echo -e "${BOLD}${CYAN}═══════════════════════════════════════════════════════════════════════════════${RESET}" >&2
