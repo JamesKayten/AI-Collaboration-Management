@@ -75,8 +75,7 @@ fi
 # Check if required scripts exist
 REQUIRED_SCRIPTS=(
     "watch-build.sh"
-    "watch-branches.sh"
-    "watch-board.sh"
+    "watch-all.sh"
 )
 
 for script in "${REQUIRED_SCRIPTS[@]}"; do
@@ -106,39 +105,19 @@ tell application "iTerm"
         write text "'$SCRIPTS_DIR/watch-build.sh' '$PROJECT_PATH'"
     end tell
 
-    -- Tab 2: Branch Watcher (OCC)
+    -- Tab 2: Unified Watcher (Branch + Board combined)
     tell newWindow
         set newTab to (create tab with default profile)
         tell current session of newTab
-            set name to "🌿 OCC Branch Watcher"
+            set name to "📡 AIM Watcher"
             write text "cd '$PROJECT_PATH' && clear"
-            write text "echo '═══════════════════════════════════════════════════'"
-            write text "echo '🌿 BRANCH WATCHER - OCC Activity'"
-            write text "echo '   Sound: Hero = OCC branch ready'"
-            write text "echo '═══════════════════════════════════════════════════'"
-            write text "echo ''"
-            write text "'$SCRIPTS_DIR/watch-branches.sh'"
+            write text "'$SCRIPTS_DIR/watch-all.sh'"
         end tell
     end tell
 
-    -- Tab 3: Board Watcher (TCC)
+    -- Focus the unified watcher tab
     tell newWindow
-        set newTab to (create tab with default profile)
-        tell current session of newTab
-            set name to "📋 TCC Board Watcher"
-            write text "cd '$PROJECT_PATH' && clear"
-            write text "echo '═══════════════════════════════════════════════════'"
-            write text "echo '📋 BOARD WATCHER - TCC Task Updates'"
-            write text "echo '   Sound: Glass = TCC posted task'"
-            write text "echo '═══════════════════════════════════════════════════'"
-            write text "echo ''"
-            write text "'$SCRIPTS_DIR/watch-board.sh'"
-        end tell
-    end tell
-
-    -- Focus first tab of watcher window
-    tell newWindow
-        select first session
+        select tab 2
     end tell
 
 end tell
@@ -152,15 +131,14 @@ echo -e "${BOLD}${GREEN}✨ AIM LAUNCHER COMPLETE${RESET}"
 echo ""
 echo -e "${CYAN}iTerm2 tabs opened:${RESET}"
 echo -e "  1. ${BOLD}🔨 Build Watcher${RESET} - Monitors builds (Basso = error, Blow = success)"
-echo -e "  2. ${BOLD}🌿 Branch Watcher${RESET} - OCC activity (Hero = branch ready)"
-echo -e "  3. ${BOLD}📋 Board Watcher${RESET} - TCC tasks (Glass = task posted)"
+echo -e "  2. ${BOLD}📡 AIM Watcher${RESET} - Branch + Board unified (Hero/Glass sounds)"
 echo ""
 echo -e "${YELLOW}Audio Alert Legend:${RESET}"
 echo -e "  • ${BOLD}Hero${RESET} = OCC finished work, branch ready"
-echo -e "  • ${BOLD}Glass${RESET} = TCC posted task to board"
+echo -e "  • ${BOLD}Glass${RESET} = Board updated (TCC posted task or completed work)"
 echo -e "  • ${BOLD}Basso${RESET} = Build error"
 echo -e "  • ${BOLD}Blow${RESET} = Build success"
 echo ""
 echo -e "${CYAN}═══════════════════════════════════════════════════${RESET}"
-echo -e "${CYAN}All watchers are now monitoring in background${RESET}"
+echo -e "${CYAN}Watchers monitoring in background${RESET}"
 echo -e "${CYAN}═══════════════════════════════════════════════════${RESET}"
