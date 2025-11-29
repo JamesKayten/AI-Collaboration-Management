@@ -48,7 +48,6 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest]
-<<<<<<< HEAD
       fail-fast: false
 
     steps:

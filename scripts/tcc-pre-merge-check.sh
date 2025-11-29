@@ -44,23 +44,15 @@ echo -e "${GREEN}✅ No uncommitted changes${NC}"
 
 # Step 3: File size compliance check
 echo -e "${YELLOW}🔍 Step 3: Running file size compliance check...${NC}"
-if ! ./tcc-setup/tcc-file-compliance.sh "$TARGET_BRANCH"; then
+if ! ./scripts/tcc-file-compliance.sh "$TARGET_BRANCH"; then
     echo ""
     echo -e "${RED}🚫 MERGE BLOCKED: File size compliance failed${NC}"
-    echo -e "${YELLOW}📝 Violation report created in .ai-framework/communications/reports/${NC}"
+    echo -e "${YELLOW}📝 Violation report created in reports/${NC}"
     echo -e "${BLUE}🔧 Action Required: Fix file size violations before merge${NC}"
     exit 1
 fi
 
-# Step 4: Framework sync check (if script exists)
-if [[ -f ".ai-framework/scripts/pre-work-sync.sh" ]]; then
-    echo -e "${YELLOW}🔍 Step 4: Running framework sync check...${NC}"
-    if ! bash .ai-framework/scripts/pre-work-sync.sh; then
-        echo -e "${RED}❌ Framework sync check failed${NC}"
-        exit 1
-    fi
-    echo -e "${GREEN}✅ Framework sync verified${NC}"
-fi
+# Step 4: Skipped (framework sync removed per Hard Disconnect Protocol)
 
 # Step 5: Check for merge conflicts
 echo -e "${YELLOW}🔍 Step 5: Checking for potential merge conflicts...${NC}"
