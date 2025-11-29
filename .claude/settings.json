@@ -22,7 +22,7 @@
     ],
     "UserPromptSubmit": [
       {
-        "matcher": "works ready",
+        "matcher": "^(wr|works ready)$",
         "hooks": [
           {
             "type": "command",
