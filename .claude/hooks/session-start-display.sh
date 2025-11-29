@@ -138,9 +138,10 @@ OCC_TASKS=""
 if [ -f "$BOARD_FILE" ]; then
     # Extract content between "## Tasks FOR OCC" and "## Tasks FOR TCC"
     OCC_SECTION=$(sed -n '/## Tasks FOR OCC/,/## Tasks FOR TCC/p' "$BOARD_FILE" | tail -n +2 | head -n -1)
-    # Check if there's actual content (not just "*No pending OCC tasks*")
-    if echo "$OCC_SECTION" | grep -qv "^\*No pending OCC tasks\*$" && echo "$OCC_SECTION" | grep -q "[A-Za-z]"; then
-        OCC_TASKS="$OCC_SECTION"
+    # Strip empty lines and check if there's content OTHER than the placeholder
+    OCC_CONTENT=$(echo "$OCC_SECTION" | grep -v "^$" | grep -v "^\*No pending OCC tasks\*$")
+    if [ -n "$OCC_CONTENT" ]; then
+        OCC_TASKS="$OCC_CONTENT"
     fi
 fi
 
