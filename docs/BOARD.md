@@ -8,6 +8,15 @@
 
 *No pending TCC tasks*
 
+### ✅ COMPLETED: Auto TCC initialization enhancement
+**Completed by:** TCC on November 29, 2025
+**Commit:** `3dea10c` (merged to main)
+**What was done:**
+- ✅ Enhanced session-start-display.sh to auto-process branches
+- ✅ Added automatic branch detection and processing workflow
+- ✅ Eliminated need for manual 'works ready' command
+- ✅ Merged branch `claude/cleanup-old-docs-01YbNHDNZnoPQDcv8hmN4CoK` to main
+
 ### ✅ COMPLETED: Cleanup old docs
 **Completed by:** TCC on November 29, 2025
 **Commit:** `81449c5` (merged to main)
