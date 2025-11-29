@@ -78,7 +78,6 @@ rm -f "$PENDING_FILE"
 
 # TCC activity buffer - deletions wait for board update
 TCC_PENDING_DELETIONS=""
-TCC_DELETION_TIME=0
 
 CYCLE=0
 while true; do
@@ -141,7 +140,6 @@ while true; do
     # CHECK TCC ACTIVITY (Board update triggers combined alert)
     # ═══════════════════════════════════════════════════════════
     CURRENT_BOARD_HASH=$(git rev-parse origin/main:$BOARD_FILE 2>/dev/null)
-    CURRENT_TIME=$(date +%s)
 
     # Buffer deleted branches (TCC merged them) - don't alert yet
     if [[ -n "$PREVIOUS_STATE" ]]; then
@@ -151,7 +149,6 @@ while true; do
                 # Only add if not already in buffer
                 if [[ ! "$TCC_PENDING_DELETIONS" =~ "$branch_short" ]]; then
                     TCC_PENDING_DELETIONS="$TCC_PENDING_DELETIONS$branch_short "
-                    TCC_DELETION_TIME=$CURRENT_TIME
                 fi
             fi
         done <<< "$PREVIOUS_STATE"
@@ -182,28 +179,6 @@ while true; do
 
         # Clear the deletion buffer
         TCC_PENDING_DELETIONS=""
-        TCC_DELETION_TIME=0
-    fi
-
-    # Fallback: If deletions buffered but no board update after 3 cycles, show anyway
-    if [[ -n "$TCC_PENDING_DELETIONS" ]] && [[ $TCC_DELETION_TIME -gt 0 ]]; then
-        TIME_SINCE_DELETION=$((CURRENT_TIME - TCC_DELETION_TIME))
-        if [[ $TIME_SINCE_DELETION -ge $((INTERVAL * 3)) ]]; then
-            CHANGES_FOUND=true
-            echo ""
-            echo -e "${BOLD}${YELLOW}┌─────────────────────────────────────────────────────────────┐${RESET}"
-            echo -e "${BOLD}${YELLOW}│  📋 [$(date +%H:%M:%S)] TCC ACTIVITY                                │${RESET}"
-            echo -e "${BOLD}${YELLOW}└─────────────────────────────────────────────────────────────┘${RESET}"
-            echo -e "  ${BOLD}Merged & Deleted:${RESET}"
-            for branch in $TCC_PENDING_DELETIONS; do
-                echo -e "    ✅ ${CYAN}$branch${RESET}"
-            done
-            echo -e "  ${BOLD}Action:${RESET} git pull origin main"
-            echo ""
-            play_board_alert
-            TCC_PENDING_DELETIONS=""
-            TCC_DELETION_TIME=0
-        fi
     fi
 
     # Show heartbeat if no changes
