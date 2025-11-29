@@ -1,0 +1,88 @@
+#!/bin/bash
+# AIM - AI-Collaboration-Management Launcher
+# Usage: aim [project_path] [command]
+
+set -e
+
+AIM_IMAGE="aim"
+STATE_VOLUME="aim-state"
+
+# Colors
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+BLUE='\033[0;34m'
+NC='\033[0m'
+
+show_help() {
+    echo "AIM - AI-Collaboration-Management"
+    echo ""
+    echo "Usage:"
+    echo "  aim [project_path]           Start AIM shell for project"
+    echo "  aim [project_path] validate  Validate branches"
+    echo "  aim [project_path] watch     Watch for new branches"
+    echo "  aim build                    Build/rebuild AIM image"
+    echo "  aim help                     Show this help"
+    echo ""
+    echo "Examples:"
+    echo "  aim /path/to/SimpleCP        Start AIM on SimpleCP"
+    echo "  aim .                        Start AIM on current directory"
+    echo "  aim                          Start AIM on current directory"
+}
+
+build_image() {
+    local aim_dir="$(cd "$(dirname "$0")" && pwd)"
+    echo -e "${BLUE}Building AIM Docker image...${NC}"
+    docker build -t "$AIM_IMAGE" "$aim_dir"
+    echo -e "${GREEN}AIM image built successfully${NC}"
+}
+
+run_aim() {
+    local project_path="$1"
+    local command="${2:-shell}"
+
+    # Resolve to absolute path
+    if [[ "$project_path" == "." ]]; then
+        project_path="$(pwd)"
+    elif [[ ! "$project_path" = /* ]]; then
+        project_path="$(cd "$project_path" 2>/dev/null && pwd)"
+    fi
+
+    # Verify path exists
+    if [[ ! -d "$project_path" ]]; then
+        echo -e "${RED}Error: Project path not found: $project_path${NC}"
+        exit 1
+    fi
+
+    # Check if image exists
+    if ! docker image inspect "$AIM_IMAGE" >/dev/null 2>&1; then
+        echo -e "${BLUE}AIM image not found. Building...${NC}"
+        build_image
+    fi
+
+    # Run container
+    docker run -it --rm \
+        -v "$project_path":/project \
+        -v "$STATE_VOLUME":/aim/state \
+        "$AIM_IMAGE" "$command"
+}
+
+# Main
+case "${1:-}" in
+    help|--help|-h)
+        show_help
+        ;;
+    build)
+        build_image
+        ;;
+    "")
+        run_aim "$(pwd)" "shell"
+        ;;
+    *)
+        if [[ -d "$1" ]] || [[ "$1" == "." ]]; then
+            run_aim "$1" "${2:-shell}"
+        else
+            # Assume it's a command for current directory
+            run_aim "$(pwd)" "$1"
+        fi
+        ;;
+esac
