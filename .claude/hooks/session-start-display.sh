@@ -133,6 +133,37 @@ if [ -f "$PENDING_FILE" ] && [ -s "$PENDING_FILE" ]; then
     PENDING_COUNT=$(wc -l < "$PENDING_FILE" | tr -d ' ')
 fi
 
+# Check for OCC tasks on the board (tasks TCC posted for OCC to fix)
+OCC_TASKS=""
+if [ -f "$BOARD_FILE" ]; then
+    # Extract content between "## Tasks FOR OCC" and "## Tasks FOR TCC"
+    OCC_SECTION=$(sed -n '/## Tasks FOR OCC/,/## Tasks FOR TCC/p' "$BOARD_FILE" | tail -n +2 | head -n -1)
+    # Check if there's actual content (not just "*No pending OCC tasks*")
+    if echo "$OCC_SECTION" | grep -qv "^\*No pending OCC tasks\*$" && echo "$OCC_SECTION" | grep -q "[A-Za-z]"; then
+        OCC_TASKS="$OCC_SECTION"
+    fi
+fi
+
+# Alert OCC if there are tasks waiting
+if [ -n "$OCC_TASKS" ]; then
+    echo "" >&2
+    echo -e "${BOLD}${RED}┌─────────────────────────────────────────────────────────────┐${RESET}" >&2
+    echo -e "${BOLD}${RED}│  🔧 OCC ALERT: TASKS WAITING FOR YOU                        │${RESET}" >&2
+    echo -e "${BOLD}${RED}├─────────────────────────────────────────────────────────────┤${RESET}" >&2
+    echo "$OCC_TASKS" | while IFS= read -r line; do
+        echo -e "${BOLD}${RED}│${RESET}  $line" >&2
+    done
+    echo -e "${BOLD}${RED}├─────────────────────────────────────────────────────────────┤${RESET}" >&2
+    echo -e "${BOLD}${RED}│${RESET}  ${BOLD}Action: Review and fix the issues above${RESET}" >&2
+    echo -e "${BOLD}${RED}└─────────────────────────────────────────────────────────────┘${RESET}" >&2
+
+    # Output for Claude to see (stdout)
+    echo ""
+    echo "OCC_TASK_ALERT: Tasks waiting for OCC"
+    echo "$OCC_TASKS"
+    echo "OCC should address these tasks before starting new work."
+fi
+
 echo "" >&2
 echo -e "${BOLD}================================================================================${RESET}" >&2
 echo -e "${BOLD}END OF BOARD${RESET}" >&2
