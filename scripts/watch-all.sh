@@ -76,10 +76,9 @@ LAST_BOARD_HASH=$(git rev-parse origin/main:$BOARD_FILE 2>/dev/null)
 # Clear pending file at start
 rm -f "$PENDING_FILE"
 
-# TCC activity buffer for combining alerts
+# TCC activity buffer - deletions wait for board update
 TCC_PENDING_DELETIONS=""
-TCC_PENDING_BOARD=false
-TCC_ACTIVITY_TIME=0
+TCC_DELETION_TIME=0
 
 CYCLE=0
 while true; do
@@ -139,61 +138,71 @@ while true; do
     fi
 
     # ═══════════════════════════════════════════════════════════
-    # CHECK TCC ACTIVITY (Board + Branch deletions combined)
+    # CHECK TCC ACTIVITY (Board update triggers combined alert)
     # ═══════════════════════════════════════════════════════════
     CURRENT_BOARD_HASH=$(git rev-parse origin/main:$BOARD_FILE 2>/dev/null)
     CURRENT_TIME=$(date +%s)
 
-    # Check for deleted branches (TCC merged them)
+    # Buffer deleted branches (TCC merged them) - don't alert yet
     if [[ -n "$PREVIOUS_STATE" ]]; then
         while read branch hash; do
             if [[ -n "$branch" ]] && ! echo "$CURRENT_STATE" | grep -q "$branch"; then
                 branch_short=$(echo "$branch" | sed 's|origin/||')
-                TCC_PENDING_DELETIONS="$TCC_PENDING_DELETIONS$branch_short "
-                TCC_ACTIVITY_TIME=$CURRENT_TIME
+                # Only add if not already in buffer
+                if [[ ! "$TCC_PENDING_DELETIONS" =~ "$branch_short" ]]; then
+                    TCC_PENDING_DELETIONS="$TCC_PENDING_DELETIONS$branch_short "
+                    TCC_DELETION_TIME=$CURRENT_TIME
+                fi
             fi
         done <<< "$PREVIOUS_STATE"
     fi
 
-    # Check for board updates
+    # Board update detected - show combined alert NOW (board update always comes last)
     if [[ "$CURRENT_BOARD_HASH" != "$LAST_BOARD_HASH" ]]; then
-        TCC_PENDING_BOARD=true
-        TCC_ACTIVITY_TIME=$CURRENT_TIME
+        CHANGES_FOUND=true
         LAST_BOARD_HASH="$CURRENT_BOARD_HASH"
+
+        echo ""
+        echo -e "${BOLD}${YELLOW}┌─────────────────────────────────────────────────────────────┐${RESET}"
+        echo -e "${BOLD}${YELLOW}│  📋 [$(date +%H:%M:%S)] TCC ACTIVITY                                │${RESET}"
+        echo -e "${BOLD}${YELLOW}└─────────────────────────────────────────────────────────────┘${RESET}"
+
+        # Show any buffered branch deletions
+        if [[ -n "$TCC_PENDING_DELETIONS" ]]; then
+            echo -e "  ${BOLD}Merged & Deleted:${RESET}"
+            for branch in $TCC_PENDING_DELETIONS; do
+                echo -e "    ✅ ${CYAN}$branch${RESET}"
+            done
+        fi
+
+        echo -e "  ${BOLD}Board Updated:${RESET} Check ${CYAN}docs/BOARD.md${RESET} for details"
+        echo -e "  ${BOLD}Action:${RESET} git pull origin main"
+        echo ""
+        play_board_alert
+
+        # Clear the deletion buffer
+        TCC_PENDING_DELETIONS=""
+        TCC_DELETION_TIME=0
     fi
 
-    # Show combined TCC activity after 1 cycle delay (to collect all changes)
-    if [[ -n "$TCC_PENDING_DELETIONS" ]] || [[ "$TCC_PENDING_BOARD" == true ]]; then
-        TIME_SINCE_ACTIVITY=$((CURRENT_TIME - TCC_ACTIVITY_TIME))
-
-        # Wait at least one interval to collect related changes, then show
-        if [[ $TIME_SINCE_ACTIVITY -ge $INTERVAL ]]; then
+    # Fallback: If deletions buffered but no board update after 3 cycles, show anyway
+    if [[ -n "$TCC_PENDING_DELETIONS" ]] && [[ $TCC_DELETION_TIME -gt 0 ]]; then
+        TIME_SINCE_DELETION=$((CURRENT_TIME - TCC_DELETION_TIME))
+        if [[ $TIME_SINCE_DELETION -ge $((INTERVAL * 3)) ]]; then
             CHANGES_FOUND=true
             echo ""
             echo -e "${BOLD}${YELLOW}┌─────────────────────────────────────────────────────────────┐${RESET}"
             echo -e "${BOLD}${YELLOW}│  📋 [$(date +%H:%M:%S)] TCC ACTIVITY                                │${RESET}"
             echo -e "${BOLD}${YELLOW}└─────────────────────────────────────────────────────────────┘${RESET}"
-
-            # Show deleted branches (TCC merged)
-            if [[ -n "$TCC_PENDING_DELETIONS" ]]; then
-                echo -e "  ${BOLD}Merged & Deleted:${RESET}"
-                for branch in $TCC_PENDING_DELETIONS; do
-                    echo -e "    ✅ ${CYAN}$branch${RESET}"
-                done
-            fi
-
-            # Show board update
-            if [[ "$TCC_PENDING_BOARD" == true ]]; then
-                echo -e "  ${BOLD}Board Updated:${RESET} Check ${CYAN}docs/BOARD.md${RESET} for details"
-            fi
-
+            echo -e "  ${BOLD}Merged & Deleted:${RESET}"
+            for branch in $TCC_PENDING_DELETIONS; do
+                echo -e "    ✅ ${CYAN}$branch${RESET}"
+            done
             echo -e "  ${BOLD}Action:${RESET} git pull origin main"
             echo ""
             play_board_alert
-
-            # Clear the buffer
             TCC_PENDING_DELETIONS=""
-            TCC_PENDING_BOARD=false
+            TCC_DELETION_TIME=0
         fi
     fi
 
