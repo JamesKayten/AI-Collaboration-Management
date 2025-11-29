@@ -158,11 +158,21 @@ if [ -n "$OCC_TASKS" ]; then
     echo -e "${BOLD}${RED}│${RESET}  ${BOLD}Action: Review and fix the issues above${RESET}" >&2
     echo -e "${BOLD}${RED}└─────────────────────────────────────────────────────────────┘${RESET}" >&2
 
-    # Output for Claude to see (stdout)
+    # Output for Claude to see (stdout) - directive for OCC to proceed automatically
     echo ""
-    echo "OCC_TASK_ALERT: Tasks waiting for OCC"
+    echo "═══════════════════════════════════════════════════════════════════════════════"
+    echo "OCC AUTO-TASK: TCC has posted diagnostic tasks for you to fix"
+    echo "═══════════════════════════════════════════════════════════════════════════════"
+    echo ""
+    echo "TASKS FROM TCC:"
     echo "$OCC_TASKS"
-    echo "OCC should address these tasks before starting new work."
+    echo ""
+    echo "ACTION REQUIRED: Proceed with these fixes immediately."
+    echo "1. Address each issue listed above"
+    echo "2. Make the necessary code changes"
+    echo "3. Commit and push to your feature branch"
+    echo "4. TCC will validate and merge when complete"
+    echo "═══════════════════════════════════════════════════════════════════════════════"
 fi
 
 echo "" >&2
