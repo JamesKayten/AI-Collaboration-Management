@@ -157,26 +157,110 @@ echo "" >&2
 echo -e "${BOLD}${GREEN}TCC AUTO-INITIALIZED${RESET}" >&2
 echo "" >&2
 
-# Auto-process directive if branches are pending
+# Auto-process if branches are pending - ACTUALLY EXECUTE, don't just instruct
 if [[ $PENDING_COUNT -gt 0 ]]; then
-    # Get first pending branch
     FIRST_BRANCH=$(head -1 "$PENDING_FILE" | cut -d' ' -f1)
+
     echo -e "${BOLD}${CYAN}═══════════════════════════════════════════════════════════════════════════════${RESET}" >&2
-    echo -e "${BOLD}${CYAN}AUTO-PROCESS MODE - $PENDING_COUNT BRANCH(ES) PENDING${RESET}" >&2
+    echo -e "${BOLD}${CYAN}AUTO-EXECUTING: Processing $FIRST_BRANCH${RESET}" >&2
     echo -e "${BOLD}${CYAN}═══════════════════════════════════════════════════════════════════════════════${RESET}" >&2
     echo "" >&2
-    echo "INSTRUCTION: You are TCC. Execute ALL steps below WITHOUT asking:" >&2
-    echo "" >&2
-    echo "1. Run: ./scripts/tcc-validate-branch.sh $FIRST_BRANCH" >&2
-    echo "2. If validation passes, merge to main" >&2
-    echo "3. Delete merged branch (local and remote)" >&2
-    echo "4. Update docs/BOARD.md with completion record" >&2
-    echo "5. Commit and push board update" >&2
-    echo "6. Report completion to user" >&2
-    echo "" >&2
-    echo "DO NOT ASK QUESTIONS. JUST EXECUTE." >&2
+
+    # Run validation
+    echo -e "${YELLOW}Running validation...${RESET}" >&2
+    VALIDATION_OUTPUT=$("$REPO_ROOT/scripts/tcc-validate-branch.sh" "$FIRST_BRANCH" 2>&1)
+    VALIDATION_EXIT=$?
+
+    echo "$VALIDATION_OUTPUT" >&2
+
+    if [[ $VALIDATION_EXIT -eq 0 ]] && echo "$VALIDATION_OUTPUT" | grep -q "RESULT: NOTHING TO MERGE\|already merged"; then
+        # Already merged - just clean up
+        echo "" >&2
+        echo -e "${GREEN}✓ Branch already merged or no new commits${RESET}" >&2
+
+        # Remove from pending file
+        if [[ -f "$PENDING_FILE" ]]; then
+            grep -v "$FIRST_BRANCH" "$PENDING_FILE" > "${PENDING_FILE}.tmp" 2>/dev/null || true
+            mv "${PENDING_FILE}.tmp" "$PENDING_FILE" 2>/dev/null || true
+        fi
+
+        # Output for Claude to report (stdout, not stderr)
+        echo ""
+        echo "AUTO-PROCESS RESULT: ALREADY_MERGED"
+        echo "Branch: $FIRST_BRANCH"
+        echo "Status: Branch was already merged or has no new commits"
+        echo "Action: Cleaned up pending list"
+        echo "Report this to the user."
+
+    elif [[ $VALIDATION_EXIT -eq 0 ]]; then
+        # Validation passed - do the merge
+        echo "" >&2
+        echo -e "${GREEN}✓ Validation passed - merging...${RESET}" >&2
+
+        # Ensure on main
+        git checkout main >&2 2>&1
+        git pull origin main >&2 2>&1
+
+        # Merge
+        MERGE_OUTPUT=$(git merge --no-ff "origin/$FIRST_BRANCH" -m "Auto-merge: $FIRST_BRANCH" 2>&1)
+        MERGE_EXIT=$?
+
+        if [[ $MERGE_EXIT -eq 0 ]]; then
+            # Push
+            git push origin main >&2 2>&1
+            MERGE_HASH=$(git rev-parse --short HEAD)
+
+            # Delete remote branch
+            git push origin --delete "$FIRST_BRANCH" >&2 2>&1 || true
+
+            # Remove from pending file
+            if [[ -f "$PENDING_FILE" ]]; then
+                grep -v "$FIRST_BRANCH" "$PENDING_FILE" > "${PENDING_FILE}.tmp" 2>/dev/null || true
+                mv "${PENDING_FILE}.tmp" "$PENDING_FILE" 2>/dev/null || true
+            fi
+
+            echo "" >&2
+            echo -e "${GREEN}✓ AUTO-MERGE COMPLETE: $FIRST_BRANCH → main (${MERGE_HASH})${RESET}" >&2
+
+            # Output for Claude to report (stdout)
+            echo ""
+            echo "AUTO-PROCESS RESULT: SUCCESS"
+            echo "Branch: $FIRST_BRANCH"
+            echo "Merged: commit $MERGE_HASH"
+            echo "Action: Validated, merged to main, deleted branch"
+            echo "Report this completion to the user and update BOARD.md."
+        else
+            echo "" >&2
+            echo -e "${RED}✗ Merge failed${RESET}" >&2
+            echo "$MERGE_OUTPUT" >&2
+
+            # Output for Claude
+            echo ""
+            echo "AUTO-PROCESS RESULT: MERGE_FAILED"
+            echo "Branch: $FIRST_BRANCH"
+            echo "Error: $MERGE_OUTPUT"
+            echo "Report this failure to the user."
+        fi
+    else
+        # Validation failed
+        echo "" >&2
+        echo -e "${RED}✗ Validation failed${RESET}" >&2
+
+        # Output for Claude
+        echo ""
+        echo "AUTO-PROCESS RESULT: VALIDATION_FAILED"
+        echo "Branch: $FIRST_BRANCH"
+        echo "Reason: Validation script returned non-zero exit"
+        echo "Report this failure to the user."
+    fi
 else
     echo -e "${GREEN}✓${RESET} No pending branches - standing by" >&2
+
+    # Output for Claude
+    echo ""
+    echo "AUTO-PROCESS RESULT: NO_BRANCHES"
+    echo "Status: No pending OCC branches to process"
+    echo "Action: Standing by for user requests"
 fi
 
 echo "" >&2
