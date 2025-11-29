@@ -59,8 +59,8 @@ echo -e "Repository: ${GREEN}${BOLD}$REPO_NAME${RESET}"
 echo -e "Polling:    Every ${INTERVAL}s"
 echo ""
 echo -e "${BOLD}Monitoring:${RESET}"
-echo -e "  🌿 OCC Branches (${CYAN}claude/*${RESET}) → ${GREEN}Hero${RESET} sound"
-echo -e "  📋 Board Changes (${CYAN}BOARD.md${RESET}) → ${YELLOW}Glass${RESET} sound"
+echo -e "  🌿 OCC pushes new branch  → ${GREEN}Hero${RESET} sound (work ready for TCC)"
+echo -e "  📋 TCC merges/updates     → ${YELLOW}Glass${RESET} sound (board + branch cleanup)"
 echo ""
 echo -e "Press ${BOLD}Ctrl+C${RESET} to stop"
 echo ""
@@ -88,6 +88,7 @@ while true; do
     fi
 
     CHANGES_FOUND=false
+    NEW_BRANCH_FOUND=false
 
     # ═══════════════════════════════════════════════════════════
     # CHECK BRANCHES
@@ -96,45 +97,82 @@ while true; do
     PREVIOUS_STATE=$(cat "$STATE_FILE" 2>/dev/null)
 
     if [[ "$CURRENT_STATE" != "$PREVIOUS_STATE" ]]; then
-        CHANGES_FOUND=true
-        echo ""
-        echo -e "${BOLD}${GREEN}┌─────────────────────────────────────────────────────────────┐${RESET}"
-        echo -e "${BOLD}${GREEN}│  🌿 [$(date +%H:%M:%S)] OCC BRANCH ACTIVITY                        │${RESET}"
-        echo -e "${BOLD}${GREEN}└─────────────────────────────────────────────────────────────┘${RESET}"
-
-        # Show current branches
-        echo "$CURRENT_STATE" | while read branch hash; do
-            branch_short=$(echo "$branch" | sed 's|origin/||')
-            if ! grep -q "$hash" "$STATE_FILE" 2>/dev/null; then
-                echo -e "  ${BOLD}${GREEN}⭐ NEW:${RESET} ${CYAN}$branch_short${RESET} (${YELLOW}$hash${RESET})"
-                echo "$branch_short $hash $(date +%Y-%m-%d_%H:%M:%S)" >> "$PENDING_FILE"
-                show_notification "🌿 OCC Branch Ready" "$branch_short"
-            else
-                echo -e "  → ${CYAN}$branch_short${RESET} (${YELLOW}$hash${RESET})"
+        # Check if there are NEW branches (not just deletions)
+        NEW_BRANCHES=""
+        while read branch hash; do
+            if [[ -n "$branch" ]] && ! grep -q "$hash" "$STATE_FILE" 2>/dev/null; then
+                NEW_BRANCHES="$NEW_BRANCHES$branch $hash\n"
+                NEW_BRANCH_FOUND=true
             fi
-        done
+        done <<< "$CURRENT_STATE"
 
-        echo -e "  ${BOLD}Action:${RESET} Start TCC session or run ${CYAN}/works-ready${RESET}"
-        echo ""
-        play_branch_alert
+        if [[ "$NEW_BRANCH_FOUND" == true ]]; then
+            CHANGES_FOUND=true
+            echo ""
+            echo -e "${BOLD}${GREEN}┌─────────────────────────────────────────────────────────────┐${RESET}"
+            echo -e "${BOLD}${GREEN}│  🌿 [$(date +%H:%M:%S)] OCC BRANCH READY FOR REVIEW                 │${RESET}"
+            echo -e "${BOLD}${GREEN}└─────────────────────────────────────────────────────────────┘${RESET}"
+
+            # Show new branches
+            echo "$CURRENT_STATE" | while read branch hash; do
+                branch_short=$(echo "$branch" | sed 's|origin/||')
+                if [[ -n "$branch" ]] && ! grep -q "$hash" "$STATE_FILE" 2>/dev/null; then
+                    echo -e "  ${BOLD}${GREEN}⭐ NEW:${RESET} ${CYAN}$branch_short${RESET} (${YELLOW}$hash${RESET})"
+                    echo "$branch_short $hash $(date +%Y-%m-%d_%H:%M:%S)" >> "$PENDING_FILE"
+                    show_notification "🌿 OCC Branch Ready" "$branch_short"
+                fi
+            done
+
+            echo -e "  ${BOLD}Action:${RESET} Start TCC session or run ${CYAN}/works-ready${RESET}"
+            echo ""
+            play_branch_alert
+        fi
+        # Branch deletions handled silently - TCC merge triggers board update
+
+        # Always update state
         echo "$CURRENT_STATE" > "$STATE_FILE"
     fi
 
     # ═══════════════════════════════════════════════════════════
-    # CHECK BOARD
+    # CHECK BOARD (TCC Activity)
     # ═══════════════════════════════════════════════════════════
     CURRENT_BOARD_HASH=$(git rev-parse origin/main:$BOARD_FILE 2>/dev/null)
 
-    if [[ "$CURRENT_BOARD_HASH" != "$LAST_BOARD_HASH" ]]; then
+    # Also check for deleted branches (TCC merged them)
+    DELETED_BRANCHES=""
+    if [[ -n "$PREVIOUS_STATE" ]]; then
+        while read branch hash; do
+            if [[ -n "$branch" ]] && ! echo "$CURRENT_STATE" | grep -q "$branch"; then
+                branch_short=$(echo "$branch" | sed 's|origin/||')
+                DELETED_BRANCHES="$DELETED_BRANCHES$branch_short "
+            fi
+        done <<< "$PREVIOUS_STATE"
+    fi
+
+    if [[ "$CURRENT_BOARD_HASH" != "$LAST_BOARD_HASH" ]] || [[ -n "$DELETED_BRANCHES" ]]; then
         CHANGES_FOUND=true
         echo ""
         echo -e "${BOLD}${YELLOW}┌─────────────────────────────────────────────────────────────┐${RESET}"
-        echo -e "${BOLD}${YELLOW}│  📋 [$(date +%H:%M:%S)] BOARD.MD UPDATED                           │${RESET}"
+        echo -e "${BOLD}${YELLOW}│  📋 [$(date +%H:%M:%S)] TCC ACTIVITY                                │${RESET}"
         echo -e "${BOLD}${YELLOW}└─────────────────────────────────────────────────────────────┘${RESET}"
-        echo -e "  ${BOLD}Action:${RESET} git pull && check ${CYAN}docs/BOARD.md${RESET}"
+
+        # Show deleted branches (TCC merged)
+        if [[ -n "$DELETED_BRANCHES" ]]; then
+            echo -e "  ${BOLD}Merged & Deleted:${RESET}"
+            for branch in $DELETED_BRANCHES; do
+                echo -e "    ✅ ${CYAN}$branch${RESET}"
+            done
+        fi
+
+        # Show board update
+        if [[ "$CURRENT_BOARD_HASH" != "$LAST_BOARD_HASH" ]]; then
+            echo -e "  ${BOLD}Board Updated:${RESET} Check ${CYAN}docs/BOARD.md${RESET} for details"
+            LAST_BOARD_HASH="$CURRENT_BOARD_HASH"
+        fi
+
+        echo -e "  ${BOLD}Action:${RESET} git pull origin main"
         echo ""
         play_board_alert
-        LAST_BOARD_HASH="$CURRENT_BOARD_HASH"
     fi
 
     # Show heartbeat if no changes
