@@ -8,6 +8,18 @@
 
 *No pending TCC tasks*
 
+### ✅ COMPLETED: TCC combined alert - trigger on board update
+**Completed by:** TCC on November 29, 2025
+**Commit:** `b763503` (merged to main)
+**What was done:**
+- ✅ Auto-processed branch `claude/examine-repo-issues-01YbNHDNZnoPQDcv8hmN4CoK` (alert trigger fix)
+- ✅ Fixed TCC combined alert to trigger on board update in scripts/watch-all.sh
+- ✅ Enhanced alert timing: buffer deletions silently, show combined alert when board updates
+- ✅ Added fallback to show deletions after 3 cycles if no board update detected
+- ✅ Validated file size compliance (all files within limits)
+- ✅ Successfully merged to main via auto-merge hook
+- ✅ Deleted merged branch from remote repository
+
 ### ✅ COMPLETED: Combined TCC alert notification test
 **Completed by:** TCC on November 29, 2025
 **Commit:** `cd604f3` (merged to main)
