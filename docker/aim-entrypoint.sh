@@ -64,6 +64,39 @@ show_status() {
     git fetch origin 2>/dev/null || true
     local branches=$(git branch -r 2>/dev/null | grep "origin/claude/" | wc -l)
     echo -e "${BLUE}Pending claude/* branches:${NC} ${branches}"
+
+    # List pending branches if any
+    if [[ $branches -gt 0 ]]; then
+        echo -e "${CYAN}Branches to validate:${NC}"
+        git branch -r 2>/dev/null | grep "origin/claude/" | sed 's/^/  /'
+    fi
+}
+
+tcc_context() {
+    # Output TCC context for Claude to read
+    local project_name=$(basename "$PROJECT_DIR")
+    local board_file="${STATE_DIR}/boards/${project_name}.md"
+    local pending=$(git branch -r 2>/dev/null | grep "origin/claude/" | wc -l | tr -d ' ')
+
+    echo ""
+    echo "═══════════════════════════════════════════════════════════════"
+    echo "TCC INITIALIZED - AI-Collaboration-Management"
+    echo "═══════════════════════════════════════════════════════════════"
+    echo "Project:  ${project_name}"
+    echo "Board:    ${board_file}"
+    echo "Branches: ${pending} pending claude/* branch(es)"
+    echo ""
+    echo "ROLE: You are TCC (Testing/Coordination Claude)"
+    echo "  - Validate OCC branches before merge"
+    echo "  - Run: ./aim/scripts/tcc-validate-branch.sh <branch>"
+    echo "  - Merge validated work to main"
+    echo "  - Update board after completing tasks"
+    echo ""
+    echo "Board contents:"
+    echo "───────────────────────────────────────────────────────────────"
+    cat "$board_file" 2>/dev/null || echo "(no board yet)"
+    echo "───────────────────────────────────────────────────────────────"
+    echo ""
 }
 
 case "${1:-shell}" in
@@ -71,9 +104,8 @@ case "${1:-shell}" in
         show_banner
         init_project
         show_status
-        echo ""
+        tcc_context
         echo -e "${GREEN}AIM ready. Project mounted at /project${NC}"
-        echo -e "${BLUE}Commands: aim-validate, aim-merge, aim-board${NC}"
         exec /bin/bash
         ;;
 
