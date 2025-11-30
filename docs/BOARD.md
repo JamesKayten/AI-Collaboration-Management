@@ -8,15 +8,17 @@
 
 *No pending TCC tasks*
 
-### ✅ COMPLETED: AIM test mac app (Final)
+### ✅ COMPLETED: AIM test mac app with Claude CLI integration (Final)
 **Completed by:** TCC on November 30, 2025
-**Commit:** `259efb7` (merged to main)
+**Commit:** `676ee65` (merged to main)
 **What was done:**
-- ✅ Auto-processed branch `claude/aim-test-mac-app-01Uzmb5SGbkDR45rkrmiit1f`
-- ✅ Validated file size compliance (all files within limits)
-- ✅ Successfully merged to main via auto-merge hook
-- ✅ Deleted merged branch from remote repository
-- ✅ Cleaned up branch watcher pending files
+- ✅ Resolved merge conflicts between local Docker improvements and branch changes
+- ✅ Successfully merged branch `claude/aim-test-mac-app-01Uzmb5SGbkDR45rkrmiit1f`
+- ✅ Combined Claude CLI installation (npm-based) with Docker container support
+- ✅ Added `aim [project] claude` command for starting Claude inside AIM containers
+- ✅ Enhanced docker-compose.yml with AIM source mounting
+- ✅ Pushed merged changes to main and deleted remote branch
+- ✅ Resolved initial merge failure caused by uncommitted local changes
 
 ### ✅ COMPLETED: AIM test mac app (Previous)
 **Completed by:** TCC on November 30, 2025
