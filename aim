@@ -13,27 +13,203 @@ GREEN='\033[0;32m'
 BLUE='\033[0;34m'
 NC='\033[0m'
 
+AIM_DIR="$(cd "$(dirname "$0")" && pwd)"
+
 show_help() {
     echo "AIM - AI-Collaboration-Management"
     echo ""
     echo "Usage:"
-    echo "  aim [project_path]           Start AIM shell for project"
+    echo "  aim init [project_path]      Initialize AIM workflow in a project"
+    echo "  aim [project_path]           Start AIM Docker shell for project"
     echo "  aim [project_path] validate  Validate branches"
     echo "  aim [project_path] watch     Watch for new branches"
     echo "  aim build                    Build/rebuild AIM image"
+    echo "  aim status                   Show AIM status"
     echo "  aim help                     Show this help"
     echo ""
     echo "Examples:"
+    echo "  aim init ~/my-project        Copy AIM workflow to project"
     echo "  aim /path/to/SimpleCP        Start AIM on SimpleCP"
     echo "  aim .                        Start AIM on current directory"
     echo "  aim                          Start AIM on current directory"
 }
 
 build_image() {
-    local aim_dir="$(cd "$(dirname "$0")" && pwd)"
     echo -e "${BLUE}Building AIM Docker image...${NC}"
-    docker build -t "$AIM_IMAGE" "$aim_dir"
+    docker build -t "$AIM_IMAGE" "$AIM_DIR"
     echo -e "${GREEN}AIM image built successfully${NC}"
+}
+
+init_project() {
+    local project_path="$1"
+
+    # Resolve to absolute path
+    if [[ "$project_path" == "." ]]; then
+        project_path="$(pwd)"
+    elif [[ ! "$project_path" = /* ]]; then
+        project_path="$(cd "$project_path" 2>/dev/null && pwd)"
+    fi
+
+    # Verify path exists
+    if [[ ! -d "$project_path" ]]; then
+        echo -e "${RED}Error: Project path not found: $project_path${NC}"
+        exit 1
+    fi
+
+    local project_name=$(basename "$project_path")
+
+    echo -e "${BLUE}Initializing AIM workflow in: ${project_name}${NC}"
+    echo ""
+
+    # Create .claude directory
+    if [[ ! -d "$project_path/.claude" ]]; then
+        mkdir -p "$project_path/.claude/commands"
+        echo -e "${GREEN}✓ Created .claude/ directory${NC}"
+    else
+        echo -e "${BLUE}• .claude/ already exists${NC}"
+    fi
+
+    # Copy settings.json
+    if [[ ! -f "$project_path/.claude/settings.json" ]]; then
+        cat > "$project_path/.claude/settings.json" << 'EOF'
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "allow": [
+      "Bash(git:*)"
+    ]
+  }
+}
+EOF
+        echo -e "${GREEN}✓ Created .claude/settings.json${NC}"
+    else
+        echo -e "${BLUE}• .claude/settings.json already exists${NC}"
+    fi
+
+    # Create docs directory and BOARD.md
+    if [[ ! -d "$project_path/docs" ]]; then
+        mkdir -p "$project_path/docs"
+        echo -e "${GREEN}✓ Created docs/ directory${NC}"
+    fi
+
+    if [[ ! -f "$project_path/docs/BOARD.md" ]]; then
+        cat > "$project_path/docs/BOARD.md" << EOF
+# AIM Task Board - ${project_name}
+
+## Tasks FOR OCC (TCC writes here, OCC reads)
+
+*No pending OCC tasks*
+
+## Tasks FOR TCC (OCC writes here, TCC reads)
+
+*No pending TCC tasks*
+
+---
+
+**Board Status:** Initialized
+**Project:** ${project_name}
+**Created:** $(date +%Y-%m-%d)
+EOF
+        echo -e "${GREEN}✓ Created docs/BOARD.md${NC}"
+    else
+        echo -e "${BLUE}• docs/BOARD.md already exists${NC}"
+    fi
+
+    # Create CLAUDE.md
+    if [[ ! -f "$project_path/CLAUDE.md" ]]; then
+        cat > "$project_path/CLAUDE.md" << 'EOF'
+# CLAUDE.md - AIM Workflow Instructions
+
+**This file defines the TCC/OCC workflow for AI collaboration.**
+
+---
+
+## Roles
+
+- **OCC** (Online Claude Code) = Developer
+  - Writes code on feature branches (claude/*)
+  - Commits and pushes to remote
+  - Updates BOARD.md when work is ready for review
+
+- **TCC** (Testing/Coordination Claude) = Project Manager
+  - Validates OCC branches before merge
+  - Runs tests and checks compliance
+  - Merges validated work to main
+  - Updates BOARD.md after completing tasks
+
+---
+
+## Workflow
+
+1. **OCC** creates feature branch: `claude/feature-name-<session-id>`
+2. **OCC** commits work and pushes to remote
+3. **OCC** writes task to BOARD.md under "Tasks FOR TCC"
+4. **TCC** validates the branch (tests, compliance)
+5. **TCC** merges to main if valid, or posts issues to BOARD.md
+6. **TCC** deletes merged branch and updates BOARD.md
+
+---
+
+## Board Location
+
+Task board: `docs/BOARD.md`
+
+---
+
+## Session Start
+
+When starting a session, check `docs/BOARD.md` for:
+- Tasks assigned to your role
+- Pending branches to process
+- Status of recent work
+EOF
+        echo -e "${GREEN}✓ Created CLAUDE.md${NC}"
+    else
+        echo -e "${BLUE}• CLAUDE.md already exists${NC}"
+    fi
+
+    echo ""
+    echo -e "${GREEN}═══════════════════════════════════════════════════════════════${NC}"
+    echo -e "${GREEN}AIM workflow initialized in: ${project_name}${NC}"
+    echo -e "${GREEN}═══════════════════════════════════════════════════════════════${NC}"
+    echo ""
+    echo "Files created:"
+    echo "  • CLAUDE.md            - AI role definitions"
+    echo "  • .claude/settings.json - Claude Code settings"
+    echo "  • docs/BOARD.md        - Task tracking board"
+    echo ""
+    echo "Next steps:"
+    echo "  1. cd $project_path"
+    echo "  2. git add CLAUDE.md .claude docs/BOARD.md"
+    echo "  3. git commit -m 'Add AIM workflow'"
+    echo "  4. Start Claude Code session"
+    echo ""
+    echo "Or use Docker isolation:"
+    echo "  aim $project_path"
+    echo ""
+}
+
+show_status() {
+    echo -e "${BLUE}AIM - AI-Collaboration-Management${NC}"
+    echo ""
+    echo "AIM Directory: $AIM_DIR"
+    echo ""
+
+    # Check Docker image
+    if docker image inspect "$AIM_IMAGE" >/dev/null 2>&1; then
+        echo -e "${GREEN}✓ Docker image 'aim' is built${NC}"
+    else
+        echo -e "${RED}✗ Docker image not built. Run: aim build${NC}"
+    fi
+
+    # Check Docker running
+    if docker info >/dev/null 2>&1; then
+        echo -e "${GREEN}✓ Docker is running${NC}"
+    else
+        echo -e "${RED}✗ Docker is not running${NC}"
+    fi
+
+    echo ""
 }
 
 run_aim() {
@@ -73,6 +249,16 @@ case "${1:-}" in
         ;;
     build)
         build_image
+        ;;
+    init)
+        if [[ -z "$2" ]]; then
+            init_project "$(pwd)"
+        else
+            init_project "$2"
+        fi
+        ;;
+    status)
+        show_status
         ;;
     "")
         run_aim "$(pwd)" "shell"
