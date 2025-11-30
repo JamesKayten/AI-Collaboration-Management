@@ -15,7 +15,12 @@ RUN apt-get update && apt-get install -y \
     bash \
     curl \
     jq \
+    nodejs \
+    npm \
     && rm -rf /var/lib/apt/lists/*
+
+# Install Claude Code CLI
+RUN npm install -g @anthropic-ai/claude-code
 
 # Create AIM directory structure
 RUN mkdir -p /aim/scripts /aim/state/boards /aim/.claude/commands

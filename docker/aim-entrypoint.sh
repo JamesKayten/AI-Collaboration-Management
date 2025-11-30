@@ -109,6 +109,15 @@ case "${1:-shell}" in
         exec /bin/bash
         ;;
 
+    claude)
+        show_banner
+        init_project
+        show_status
+        tcc_context
+        echo -e "${GREEN}Starting Claude Code CLI...${NC}"
+        exec claude
+        ;;
+
     validate)
         shift
         exec "${AIM_HOME}/scripts/tcc-validate-branch.sh" "$@"
@@ -127,7 +136,7 @@ case "${1:-shell}" in
         ;;
 
     *)
-        echo "Usage: aim [shell|validate|merge|watch]"
+        echo "Usage: aim [shell|claude|validate|merge|watch]"
         exit 1
         ;;
 esac

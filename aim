@@ -21,6 +21,7 @@ show_help() {
     echo "Usage:"
     echo "  aim init [project_path]      Initialize AIM workflow in a project"
     echo "  aim [project_path]           Start AIM Docker shell for project"
+    echo "  aim [project_path] claude    Start Claude Code inside AIM container"
     echo "  aim [project_path] validate  Validate branches"
     echo "  aim [project_path] watch     Watch for new branches"
     echo "  aim build                    Build/rebuild AIM image"
@@ -30,6 +31,7 @@ show_help() {
     echo "Examples:"
     echo "  aim init ~/my-project        Copy AIM workflow to project"
     echo "  aim /path/to/SimpleCP        Start AIM on SimpleCP"
+    echo "  aim ~/SimpleCP claude        Start Claude in AIM container"
     echo "  aim .                        Start AIM on current directory"
     echo "  aim                          Start AIM on current directory"
 }
