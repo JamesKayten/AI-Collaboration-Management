@@ -17,6 +17,10 @@ RUN apt-get update && apt-get install -y \
     jq \
     && rm -rf /var/lib/apt/lists/*
 
+# Install Claude Code CLI
+RUN curl -L https://claude.com/cli-install.sh | bash
+ENV PATH="/root/.local/bin:${PATH}"
+
 # Create AIM directory structure
 RUN mkdir -p /aim/scripts /aim/state/boards /aim/.claude/commands
 

@@ -21,6 +21,7 @@ show_help() {
     echo "Usage:"
     echo "  aim init [project_path]      Initialize AIM workflow in a project"
     echo "  aim [project_path]           Start AIM Docker shell for project"
+    echo "  aim [project_path] claude    Start Claude Code CLI in AIM container"
     echo "  aim [project_path] validate  Validate branches"
     echo "  aim [project_path] watch     Watch for new branches"
     echo "  aim build                    Build/rebuild AIM image"
@@ -30,6 +31,7 @@ show_help() {
     echo "Examples:"
     echo "  aim init ~/my-project        Copy AIM workflow to project"
     echo "  aim /path/to/SimpleCP        Start AIM on SimpleCP"
+    echo "  aim /path/to/SimpleCP claude Start Claude in AIM container"
     echo "  aim .                        Start AIM on current directory"
     echo "  aim                          Start AIM on current directory"
 }
@@ -313,11 +315,20 @@ run_aim() {
         build_image
     fi
 
-    # Run container
-    docker run -it --rm \
-        -v "$project_path":/project \
-        -v "$STATE_VOLUME":/aim/state \
-        "$AIM_IMAGE" "$command"
+    # Handle claude command specifically
+    if [[ "$command" == "claude" ]]; then
+        echo -e "${BLUE}Starting Claude Code CLI in AIM container for: $(basename "$project_path")${NC}"
+        docker run -it --rm \
+            -v "$project_path":/project \
+            -v "$STATE_VOLUME":/aim/state \
+            "$AIM_IMAGE" bash -c "cd /project && claude"
+    else
+        # Run container with specified command
+        docker run -it --rm \
+            -v "$project_path":/project \
+            -v "$STATE_VOLUME":/aim/state \
+            "$AIM_IMAGE" "$command"
+    fi
 }
 
 # Main
