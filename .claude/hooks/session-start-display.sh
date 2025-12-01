@@ -73,31 +73,41 @@ fi
 # Get branch after pull
 BRANCH=$(git branch --show-current 2>/dev/null || echo "UNKNOWN")
 
-# Launch AIM with visible iTerm2 tabs
+# Watcher management - check both iTerm launcher and background watcher PID files
 AIM_LAUNCHER="$REPO_ROOT/scripts/aim-launcher.sh"
-AIM_PID_FILE="/tmp/aim-launcher-${REPO_NAME}.pid"
+AIM_LAUNCHER_PID="/tmp/aim-launcher-${REPO_NAME}.pid"
+WATCHER_LOG="/tmp/aim-watcher-${REPO_NAME}.log"
 
-if [ -f "$AIM_LAUNCHER" ]; then
-    # Check if watchers are already running
-    if [ -f "$AIM_PID_FILE" ] && ps -p "$(cat "$AIM_PID_FILE")" > /dev/null 2>&1; then
-        echo -e "📺 AIM watchers ${GREEN}already running${RESET} in iTerm2" >&2
+# Check if ANY watcher is already running (iTerm or background)
+WATCHER_RUNNING=false
+WATCHER_PID=""
+if [ -f "$AIM_LAUNCHER_PID" ] && ps -p "$(cat "$AIM_LAUNCHER_PID" 2>/dev/null)" > /dev/null 2>&1; then
+    WATCHER_RUNNING=true
+    WATCHER_PID=$(cat "$AIM_LAUNCHER_PID")
+    echo -e "📺 AIM watchers ${GREEN}running${RESET} in iTerm2 (PID: $WATCHER_PID)" >&2
+elif [ -f "$UNIFIED_PID_FILE" ] && ps -p "$(cat "$UNIFIED_PID_FILE" 2>/dev/null)" > /dev/null 2>&1; then
+    WATCHER_RUNNING=true
+    WATCHER_PID=$(cat "$UNIFIED_PID_FILE")
+    echo -e "📡 AIM watcher ${GREEN}running${RESET} (background PID: $WATCHER_PID)" >&2
+fi
+
+if [ "$WATCHER_RUNNING" = false ]; then
+    # No watcher running - start one
+    if [[ "$OSTYPE" == "darwin"* ]] && [ -d "/Applications/iTerm.app" ] && [ -f "$AIM_LAUNCHER" ]; then
+        # macOS with iTerm - use launcher
+        "$AIM_LAUNCHER" "$REPO_ROOT" > /dev/null 2>&1 &
+        echo $! > "$AIM_LAUNCHER_PID"
+        echo -e "📺 ${GREEN}Launching iTerm2 watchers...${RESET}" >&2
+        echo -e "   🔨 Build Watcher - Basso (error) / Blow (success)" >&2
+        echo -e "   📡 AIM Watcher - ${CYAN}Hero${RESET} (branch) / ${YELLOW}Glass${RESET} (board)" >&2
+    elif [ -f "$UNIFIED_WATCHER" ]; then
+        # Fallback to background unified watcher
+        nohup "$UNIFIED_WATCHER" > "$WATCHER_LOG" 2>&1 &
+        echo $! > "$UNIFIED_PID_FILE"
+        echo -e "📡 AIM watcher ${GREEN}started${RESET} (background PID: $!)" >&2
+        echo -e "   📋 Logs: tail -f $WATCHER_LOG" >&2
     else
-        # Launch iTerm2 with watchers
-        if [[ "$OSTYPE" == "darwin"* ]] && [ -d "/Applications/iTerm.app" ]; then
-            "$AIM_LAUNCHER" "$REPO_ROOT" > /dev/null 2>&1 &
-            echo $! > "$AIM_PID_FILE"
-            echo -e "📺 ${GREEN}Launching iTerm2 watchers...${RESET}" >&2
-            echo -e "   🔨 Build Watcher - Basso (error) / Blow (success)" >&2
-            echo -e "   📡 AIM Watcher - ${CYAN}Hero${RESET} (branch) / ${YELLOW}Glass${RESET} (board)" >&2
-        else
-            # Fallback to background unified watcher if not on macOS/iTerm2
-            echo -e "${YELLOW}⚠️  iTerm2 not available, using background watcher${RESET}" >&2
-            if [ -f "$UNIFIED_WATCHER" ]; then
-                nohup "$UNIFIED_WATCHER" > /tmp/aim-watcher.log 2>&1 &
-                echo $! > "$UNIFIED_PID_FILE"
-                echo -e "📡 AIM watcher ${GREEN}started${RESET} (background)" >&2
-            fi
-        fi
+        echo -e "${YELLOW}⚠️  No watcher scripts found${RESET}" >&2
     fi
 fi
 

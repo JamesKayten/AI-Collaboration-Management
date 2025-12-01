@@ -19,21 +19,22 @@ show_help() {
     echo "AIM - AI-Collaboration-Management"
     echo ""
     echo "Usage:"
-    echo "  aim init [project_path]      Initialize AIM workflow in a project"
-    echo "  aim [project_path]           Start AIM Docker shell for project"
-    echo "  aim [project_path] claude    Start Claude Code inside AIM container"
-    echo "  aim [project_path] validate  Validate branches"
-    echo "  aim [project_path] watch     Watch for new branches"
-    echo "  aim build                    Build/rebuild AIM image"
-    echo "  aim status                   Show AIM status"
-    echo "  aim help                     Show this help"
+    echo "  aim init [--force] [project_path]  Initialize AIM workflow in a project"
+    echo "  aim [project_path]                 Start AIM Docker shell for project"
+    echo "  aim [project_path] claude          Start Claude Code inside AIM container"
+    echo "  aim [project_path] validate        Validate branches"
+    echo "  aim [project_path] watch           Watch for new branches"
+    echo "  aim build                          Build/rebuild AIM image"
+    echo "  aim status                         Show AIM status"
+    echo "  aim help                           Show this help"
     echo ""
     echo "Examples:"
-    echo "  aim init ~/my-project        Copy AIM workflow to project"
-    echo "  aim /path/to/my-project      Start AIM on project"
-    echo "  aim ~/my-project claude      Start Claude in AIM container"
-    echo "  aim .                        Start AIM on current directory"
-    echo "  aim                          Start AIM on current directory"
+    echo "  aim init ~/my-project              Copy AIM workflow to project"
+    echo "  aim init --force ~/my-project      Overwrite existing AIM files"
+    echo "  aim /path/to/my-project            Start AIM on project"
+    echo "  aim ~/my-project claude            Start Claude in AIM container"
+    echo "  aim .                              Start AIM on current directory"
+    echo "  aim                                Start AIM on current directory"
 }
 
 build_image() {
@@ -43,7 +44,19 @@ build_image() {
 }
 
 init_project() {
+    local force_mode=false
     local project_path="$1"
+
+    # Check for --force flag
+    if [[ "$1" == "--force" ]]; then
+        force_mode=true
+        project_path="$2"
+    fi
+
+    # Default to current directory if no path specified
+    if [[ -z "$project_path" ]]; then
+        project_path="$(pwd)"
+    fi
 
     # Resolve to absolute path
     if [[ "$project_path" == "." ]]; then
@@ -60,11 +73,15 @@ init_project() {
 
     local project_name=$(basename "$project_path")
 
-    echo -e "${BLUE}Initializing AIM workflow in: ${project_name}${NC}"
+    if [[ "$force_mode" == true ]]; then
+        echo -e "${BLUE}Initializing AIM workflow in: ${project_name} (FORCE MODE - overwriting)${NC}"
+    else
+        echo -e "${BLUE}Initializing AIM workflow in: ${project_name}${NC}"
+    fi
     echo ""
 
     # Create .claude directory
-    if [[ ! -d "$project_path/.claude" ]]; then
+    if [[ ! -d "$project_path/.claude" ]] || [[ "$force_mode" == true ]]; then
         mkdir -p "$project_path/.claude/commands"
         echo -e "${GREEN}✓ Created .claude/ directory${NC}"
     else
@@ -72,7 +89,7 @@ init_project() {
     fi
 
     # Copy settings.json with hooks
-    if [[ ! -f "$project_path/.claude/settings.json" ]]; then
+    if [[ ! -f "$project_path/.claude/settings.json" ]] || [[ "$force_mode" == true ]]; then
         cat > "$project_path/.claude/settings.json" << 'EOF'
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
@@ -111,11 +128,11 @@ init_project() {
 EOF
         echo -e "${GREEN}✓ Created .claude/settings.json${NC}"
     else
-        echo -e "${BLUE}• .claude/settings.json already exists${NC}"
+        echo -e "${BLUE}• .claude/settings.json already exists (use --force to overwrite)${NC}"
     fi
 
     # Create hooks directory and hook files
-    if [[ ! -d "$project_path/.claude/hooks" ]]; then
+    if [[ ! -d "$project_path/.claude/hooks" ]] || [[ "$force_mode" == true ]]; then
         mkdir -p "$project_path/.claude/hooks"
         echo -e "${GREEN}✓ Created .claude/hooks/ directory${NC}"
     else
@@ -123,7 +140,7 @@ EOF
     fi
 
     # Create session-start.sh hook
-    if [[ ! -f "$project_path/.claude/hooks/session-start.sh" ]]; then
+    if [[ ! -f "$project_path/.claude/hooks/session-start.sh" ]] || [[ "$force_mode" == true ]]; then
         cat > "$project_path/.claude/hooks/session-start.sh" << 'EOF'
 #!/bin/bash
 # SessionStart hook - Displays startup context and launches monitoring
@@ -143,7 +160,7 @@ EOF
     fi
 
     # Create session-start-display.sh hook
-    if [[ ! -f "$project_path/.claude/hooks/session-start-display.sh" ]]; then
+    if [[ ! -f "$project_path/.claude/hooks/session-start-display.sh" ]] || [[ "$force_mode" == true ]]; then
         cat > "$project_path/.claude/hooks/session-start-display.sh" << 'EOF'
 #!/bin/bash
 # Session Start Display - Informative status for deployed AIM repos
@@ -215,7 +232,7 @@ EOF
     fi
 
     # Create works-ready-hook.sh
-    if [[ ! -f "$project_path/.claude/hooks/works-ready-hook.sh" ]]; then
+    if [[ ! -f "$project_path/.claude/hooks/works-ready-hook.sh" ]] || [[ "$force_mode" == true ]]; then
         cat > "$project_path/.claude/hooks/works-ready-hook.sh" << 'EOF'
 #!/bin/bash
 # Works Ready Hook - AUTO-EXECUTES validation and merge
@@ -265,7 +282,7 @@ EOF
     fi
 
     # Create works-ready command
-    if [[ ! -f "$project_path/.claude/commands/works-ready.md" ]]; then
+    if [[ ! -f "$project_path/.claude/commands/works-ready.md" ]] || [[ "$force_mode" == true ]]; then
         cat > "$project_path/.claude/commands/works-ready.md" << 'EOF'
 ---
 description: TCC validates and merges OCC branch to main
@@ -328,7 +345,7 @@ EOF
     fi
 
     # Create scripts directory and copy essential scripts
-    if [[ ! -d "$project_path/scripts" ]]; then
+    if [[ ! -d "$project_path/scripts" ]] || [[ "$force_mode" == true ]]; then
         mkdir -p "$project_path/scripts"
         echo -e "${GREEN}✓ Created scripts/ directory${NC}"
     else
@@ -344,7 +361,7 @@ EOF
     )
 
     # Create watcher status script
-    if [[ ! -f "$project_path/scripts/watcher-status.sh" ]]; then
+    if [[ ! -f "$project_path/scripts/watcher-status.sh" ]] || [[ "$force_mode" == true ]]; then
         cat > "$project_path/scripts/watcher-status.sh" << 'EOF'
 #!/bin/bash
 # Show AIM watcher status for deployed repos
@@ -383,7 +400,7 @@ EOF
 
     for script in "${scripts_to_copy[@]}"; do
         if [[ -f "$AIM_DIR/scripts/$script" ]]; then
-            if [[ ! -f "$project_path/scripts/$script" ]]; then
+            if [[ ! -f "$project_path/scripts/$script" ]] || [[ "$force_mode" == true ]]; then
                 cp "$AIM_DIR/scripts/$script" "$project_path/scripts/"
                 chmod +x "$project_path/scripts/$script"
                 echo -e "${GREEN}✓ Copied scripts/$script${NC}"
@@ -394,12 +411,12 @@ EOF
     done
 
     # Create docs directory and BOARD.md
-    if [[ ! -d "$project_path/docs" ]]; then
+    if [[ ! -d "$project_path/docs" ]] || [[ "$force_mode" == true ]]; then
         mkdir -p "$project_path/docs"
         echo -e "${GREEN}✓ Created docs/ directory${NC}"
     fi
 
-    if [[ ! -f "$project_path/docs/BOARD.md" ]]; then
+    if [[ ! -f "$project_path/docs/BOARD.md" ]] || [[ "$force_mode" == true ]]; then
         cat > "$project_path/docs/BOARD.md" << EOF
 # AIM Task Board - ${project_name}
 
@@ -423,7 +440,7 @@ EOF
     fi
 
     # Create CLAUDE.md
-    if [[ ! -f "$project_path/CLAUDE.md" ]]; then
+    if [[ ! -f "$project_path/CLAUDE.md" ]] || [[ "$force_mode" == true ]]; then
         cat > "$project_path/CLAUDE.md" << 'EOF'
 # CLAUDE.md - AIM Workflow Instructions
 
@@ -607,7 +624,9 @@ case "${1:-}" in
         build_image
         ;;
     init)
-        if [[ -z "$2" ]]; then
+        if [[ "$2" == "--force" ]]; then
+            init_project "--force" "${3:-$(pwd)}"
+        elif [[ -z "$2" ]]; then
             init_project "$(pwd)"
         else
             init_project "$2"
