@@ -8,6 +8,16 @@
 
 *No pending TCC tasks*
 
+### ✅ COMPLETED: Repository reverted to v4.6-portable-templates
+**Completed by:** TCC on December 1, 2025
+**Commit:** `a759b54` (reverted to tagged build)
+**What was done:**
+- ✅ Located and verified tag v4.6-portable-templates at commit a759b54 (Dec 1, 09:17)
+- ✅ Reset repository HEAD to tagged commit using git reset --hard
+- ✅ Force pushed revert to origin/main with --force-with-lease
+- ✅ Confirmed local and remote main are synchronized at a759b54
+- ✅ Reverted 21 commits to restore portable templates build state
+
 ### ✅ COMPLETED: AIM test mac app with Claude CLI integration (Final)
 **Completed by:** TCC on November 30, 2025
 **Commit:** `676ee65` (merged to main)
