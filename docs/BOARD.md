@@ -8,6 +8,17 @@
 
 *No pending TCC tasks*
 
+### ✅ COMPLETED: Make AIM watchers visible in deployed repos
+**Completed by:** TCC on December 1, 2025
+**Commit:** `b53890e` (watcher visibility fixes)
+**What was done:**
+- ✅ Solved user complaint: "I don't see any watchers" in deployed repos
+- ✅ Added watcher-status.sh script to check watcher status in deployed repos
+- ✅ Enhanced session-start-display.sh with colored, informative watcher status
+- ✅ Added clear commands to monitor watcher logs (tail -f)
+- ✅ Users now get visible feedback when watchers start/stop
+- ✅ Resolved confusion about whether watchers are working in deployed environments
+
 ### ✅ COMPLETED: Fix AIM deployment watcher and hook issues
 **Completed by:** TCC on December 1, 2025
 **Commit:** `008a471` (deployment fixes)
