@@ -146,30 +146,40 @@ EOF
     if [[ ! -f "$project_path/.claude/hooks/session-start-display.sh" ]]; then
         cat > "$project_path/.claude/hooks/session-start-display.sh" << 'EOF'
 #!/bin/bash
-# Session Start Display - Shows current status and pending work
+# Session Start Display - Simple status check for deployed AIM repos
 
 REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null)
 REPO_NAME=$(basename "$REPO_ROOT" 2>/dev/null || echo "UNKNOWN")
-PENDING_FILE="/tmp/branch-watcher-${REPO_NAME}.pending"
 
 cd "$REPO_ROOT" || exit 1
 
-# Sync with GitHub
+# Quick sync check
 git fetch origin --quiet 2>/dev/null || true
 
 # Check for OCC branches
-OCC_BRANCHES=$(git branch -r | grep 'origin/claude/' | sed 's/.*origin\///' | xargs)
+OCC_BRANCHES=$(git branch -r | grep 'origin/claude/' 2>/dev/null | wc -l | xargs)
 
-echo "SessionStart:startup hook success: AUTO-PROCESS RESULT: NO_BRANCHES"
-echo "Status: No pending OCC branches to process"
-echo "Action: Standing by for user requests"
+# Simple status output
+if [ "$OCC_BRANCHES" -gt 0 ]; then
+    echo "SessionStart:startup hook success: FOUND_BRANCHES"
+    echo "Status: $OCC_BRANCHES OCC branch(es) found"
+    echo "Action: Use 'wr' or '/works-ready' to process"
+else
+    echo "SessionStart:startup hook success: NO_BRANCHES"
+    echo "Status: No pending OCC branches"
+    echo "Action: Standing by"
+fi
 
-if [ -n "$OCC_BRANCHES" ]; then
-    BRANCH_COUNT=$(echo "$OCC_BRANCHES" | wc -w | xargs)
-    echo "SessionStart:startup hook success: AUTO-PROCESS RESULT: FOUND_BRANCHES"
-    echo "Status: $BRANCH_COUNT OCC branch(es) found"
-    echo "Branches: $OCC_BRANCHES"
-    echo "Action: Standing by for validation commands"
+# Start watcher if available and not running
+if [ -f "$REPO_ROOT/scripts/watch-all.sh" ]; then
+    PID_FILE="/tmp/aim-watcher-${REPO_NAME}.pid"
+    if [ ! -f "$PID_FILE" ] || ! ps -p "$(cat "$PID_FILE" 2>/dev/null)" >/dev/null 2>&1; then
+        nohup "$REPO_ROOT/scripts/watch-all.sh" >/tmp/aim-watcher-${REPO_NAME}.log 2>&1 &
+        echo $! > "$PID_FILE"
+        echo "Watcher: Started in background" >&2
+    else
+        echo "Watcher: Already running" >&2
+    fi
 fi
 EOF
         chmod +x "$project_path/.claude/hooks/session-start-display.sh"
@@ -290,6 +300,34 @@ EOF
     else
         echo -e "${BLUE}• .claude/commands/works-ready.md already exists${NC}"
     fi
+
+    # Create scripts directory and copy essential scripts
+    if [[ ! -d "$project_path/scripts" ]]; then
+        mkdir -p "$project_path/scripts"
+        echo -e "${GREEN}✓ Created scripts/ directory${NC}"
+    else
+        echo -e "${BLUE}• scripts/ already exists${NC}"
+    fi
+
+    # Copy essential AIM scripts
+    local scripts_to_copy=(
+        "watch-all.sh"
+        "tcc-validate-branch.sh"
+        "tcc-file-compliance.sh"
+        "cleanup-watchers.sh"
+    )
+
+    for script in "${scripts_to_copy[@]}"; do
+        if [[ -f "$AIM_DIR/scripts/$script" ]]; then
+            if [[ ! -f "$project_path/scripts/$script" ]]; then
+                cp "$AIM_DIR/scripts/$script" "$project_path/scripts/"
+                chmod +x "$project_path/scripts/$script"
+                echo -e "${GREEN}✓ Copied scripts/$script${NC}"
+            else
+                echo -e "${BLUE}• scripts/$script already exists${NC}"
+            fi
+        fi
+    done
 
     # Create docs directory and BOARD.md
     if [[ ! -d "$project_path/docs" ]]; then
@@ -416,11 +454,15 @@ EOF
     echo "  • .claude/hooks/session-start-display.sh - Startup status display"
     echo "  • .claude/hooks/works-ready-hook.sh   - Auto-execution hook"
     echo "  • .claude/commands/works-ready.md     - TCC merge command"
+    echo "  • scripts/watch-all.sh                - Branch and board watcher"
+    echo "  • scripts/tcc-validate-branch.sh      - Branch validation"
+    echo "  • scripts/tcc-file-compliance.sh      - File size compliance"
+    echo "  • scripts/cleanup-watchers.sh         - Cleanup utilities"
     echo "  • docs/BOARD.md                       - Task tracking board"
     echo ""
     echo "Next steps:"
     echo "  1. cd $project_path"
-    echo "  2. git add CLAUDE.md .claude/commands .claude/hooks docs/BOARD.md .gitignore"
+    echo "  2. git add CLAUDE.md .claude/commands .claude/hooks scripts docs/BOARD.md .gitignore"
     echo "  3. git commit -m 'Add AIM workflow'"
     echo "  4. Start Claude Code session"
     echo ""
