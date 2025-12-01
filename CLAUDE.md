@@ -27,9 +27,9 @@ Every message to the user MUST include:
 
 | Required | Example |
 |----------|---------|
-| **Repository** | "In **SimpleCP**..." or "In **AI-Collaboration-Management**..." |
+| **Repository** | "In **ProjectName**..." or "In **current-project**..." |
 | **Branch** | "On branch `claude/fix-xyz-01abc...`" |
-| **File paths** | "Updated **SimpleCP/docs/BOARD.md**" |
+| **File paths** | "Updated **project-name/docs/BOARD.md**" |
 
 **NEVER say vague things like:**
 - "Two merges remain" (WHERE?)
@@ -170,6 +170,26 @@ git diff main...origin/claude/branch-name
 2. Check `docs/BOARD.md` for current status
 3. Identify which repository you're in
 4. Acknowledge your role (OCC or TCC)
+
+---
+
+## Pattern Propagation Rule
+
+When fixing ANY pattern (paths, APIs, configs):
+1. `grep -rn "<pattern>" .` to find ALL instances
+2. Fix ALL occurrences, not just the one encountered
+3. If pattern came from AIM init, fix the SOURCE TEMPLATE
+
+### Common Patterns to Check:
+- Hardcoded paths: `/home/user`, `/Users/`, `/Volumes/`
+- Project names: `SimpleCP`, `AI-Collaboration-Management`
+- Absolute paths that should be relative
+
+### Standard Path Detection (use in ALL shell scripts):
+```bash
+# Use relative paths - detect repo root from script location
+REPO_ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
+```
 
 ---
 

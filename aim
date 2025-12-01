@@ -30,8 +30,8 @@ show_help() {
     echo ""
     echo "Examples:"
     echo "  aim init ~/my-project        Copy AIM workflow to project"
-    echo "  aim /path/to/SimpleCP        Start AIM on SimpleCP"
-    echo "  aim ~/SimpleCP claude        Start Claude in AIM container"
+    echo "  aim /path/to/my-project      Start AIM on project"
+    echo "  aim ~/my-project claude      Start Claude in AIM container"
     echo "  aim .                        Start AIM on current directory"
     echo "  aim                          Start AIM on current directory"
 }
@@ -241,10 +241,41 @@ When starting a session, check `docs/BOARD.md` for:
 - Tasks assigned to your role
 - Pending branches to process
 - Status of recent work
+
+---
+
+## Pattern Propagation Rule
+
+When fixing ANY pattern (paths, APIs, configs):
+1. `grep -rn "<pattern>" .` to find ALL instances
+2. Fix ALL occurrences, not just the one encountered
+3. If pattern came from AIM init, fix the SOURCE TEMPLATE
+
+### Common Patterns to Check:
+- Hardcoded paths: `/home/user`, `/Users/`, `/Volumes/`
+- Project names: `SimpleCP`, `AI-Collaboration-Management`
+- Absolute paths that should be relative
+
+### Standard Path Detection (use in ALL shell scripts):
+```bash
+# Use relative paths - detect repo root from script location
+REPO_ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
+```
 EOF
         echo -e "${GREEN}✓ Created CLAUDE.md${NC}"
     else
         echo -e "${BLUE}• CLAUDE.md already exists${NC}"
+    fi
+
+    # Add .claude/settings.json to .gitignore
+    if [[ ! -f "$project_path/.gitignore" ]] || ! grep -q "\.claude/settings\.json" "$project_path/.gitignore"; then
+        if [[ ! -f "$project_path/.gitignore" ]]; then
+            touch "$project_path/.gitignore"
+        fi
+        echo -e "\n# Claude Code local settings (machine-specific)\n.claude/settings.json" >> "$project_path/.gitignore"
+        echo -e "${GREEN}✓ Added .claude/settings.json to .gitignore${NC}"
+    else
+        echo -e "${BLUE}• .claude/settings.json already in .gitignore${NC}"
     fi
 
     echo ""
@@ -254,13 +285,13 @@ EOF
     echo ""
     echo "Files created:"
     echo "  • CLAUDE.md                       - AI role definitions"
-    echo "  • .claude/settings.json           - Claude Code settings + hooks"
+    echo "  • .claude/settings.json           - Claude Code settings + hooks (gitignored)"
     echo "  • .claude/commands/works-ready.md - TCC merge command"
     echo "  • docs/BOARD.md                   - Task tracking board"
     echo ""
     echo "Next steps:"
     echo "  1. cd $project_path"
-    echo "  2. git add CLAUDE.md .claude docs/BOARD.md"
+    echo "  2. git add CLAUDE.md .claude/commands docs/BOARD.md .gitignore"
     echo "  3. git commit -m 'Add AIM workflow'"
     echo "  4. Start Claude Code session"
     echo ""

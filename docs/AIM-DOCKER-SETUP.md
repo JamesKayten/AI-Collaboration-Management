@@ -42,7 +42,7 @@ docker run -it \
 
 ```bash
 docker run -it \
-  -v /Users/yourname/Documents/SimpleCP:/project \
+  -v /path/to/your-project:/project \
   -v aim-state:/aim/state \
   aim
 ```
@@ -149,7 +149,7 @@ aim() {
 }
 ```
 
-Then use: `aim /path/to/SimpleCP` or just `aim` in a project directory.
+Then use: `aim /path/to/your-project` or just `aim` in a project directory.
 
 ## Complete Deployment Workflow
 

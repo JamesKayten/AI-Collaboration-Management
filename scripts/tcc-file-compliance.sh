@@ -6,6 +6,10 @@
 
 set -e
 
+# Detect repo root and ensure we're working from there
+REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null)
+cd "$REPO_ROOT"
+
 TARGET_BRANCH="${1:-main}"
 CURRENT_BRANCH=$(git branch --show-current)
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")

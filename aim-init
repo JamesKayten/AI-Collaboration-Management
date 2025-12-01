@@ -1,0 +1,4 @@
+#!/bin/bash
+# aim-init - Convenience wrapper for AIM initialization
+
+"$(dirname "$0")/aim" init "$@"
