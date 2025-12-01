@@ -8,6 +8,17 @@
 
 *No pending TCC tasks*
 
+### ✅ COMPLETED: Fix AIM deployment watcher and hook issues
+**Completed by:** TCC on December 1, 2025
+**Commit:** `008a471` (deployment fixes)
+**What was done:**
+- ✅ Fixed AIM deployment issue where watchers weren't working in deployed repos
+- ✅ Added essential watcher scripts copy to AIM init (watch-all.sh, tcc-validate-branch.sh, etc.)
+- ✅ Simplified session-start-display.sh to prevent "busy work" loops in deployed repos
+- ✅ Added lightweight background watcher startup for deployed environments
+- ✅ Verified AIM init creates complete functional environment with all required components
+- ✅ Resolved Claude getting stuck in complex startup processing in other repos
+
 ### ✅ COMPLETED: Fix AIM template permissions and hardcoded paths
 **Completed by:** TCC on December 1, 2025
 **Commit:** `a2b1440` (fixes applied to main)
