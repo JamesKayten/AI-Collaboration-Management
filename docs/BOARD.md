@@ -8,6 +8,17 @@
 
 *No pending TCC tasks*
 
+### ✅ COMPLETED: Framework configuration fixes
+**Completed by:** TCC on December 1, 2025
+**Commit:** `02b6036` (framework config fixes)
+**What was done:**
+- ✅ Auto-processed branch `claude/fix-framework-config-01L6kz7w4Fy8swoDwtCRisou`
+- ✅ Validated framework configuration updates and fixes
+- ✅ Passed file size compliance checks (all files within limits)
+- ✅ Successfully merged to main via auto-merge hook
+- ✅ Deleted merged branch from remote repository
+- ✅ Framework configuration improvements now live in main branch
+
 ### ✅ COMPLETED: Make AIM watchers visible in deployed repos
 **Completed by:** TCC on December 1, 2025
 **Commit:** `b53890e` (watcher visibility fixes)
