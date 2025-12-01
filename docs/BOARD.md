@@ -8,6 +8,17 @@
 
 *No pending TCC tasks*
 
+### ✅ COMPLETED: Fix AIM template permissions and hardcoded paths
+**Completed by:** TCC on December 1, 2025
+**Commit:** `a2b1440` (fixes applied to main)
+**What was done:**
+- ✅ Updated AIM init template with comprehensive Claude Code permissions
+- ✅ Added complete hook system (session-start, works-ready) to template
+- ✅ Removed hardcoded SimpleCP references from documentation examples
+- ✅ Applied pattern propagation rule to fix all instances across codebase
+- ✅ Resolved permission issues when deploying AIM to other repositories
+- ✅ Template now creates fully functional AIM setup with all required hooks
+
 ### ✅ COMPLETED: Repository reverted to v4.6-portable-templates
 **Completed by:** TCC on December 1, 2025
 **Commit:** `a759b54` (reverted to tagged build)
