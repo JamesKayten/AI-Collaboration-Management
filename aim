@@ -146,12 +146,25 @@ EOF
     if [[ ! -f "$project_path/.claude/hooks/session-start-display.sh" ]]; then
         cat > "$project_path/.claude/hooks/session-start-display.sh" << 'EOF'
 #!/bin/bash
-# Session Start Display - Simple status check for deployed AIM repos
+# Session Start Display - Informative status for deployed AIM repos
+
+# Colors for terminal output (to stderr)
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+BLUE='\033[0;34m'
+CYAN='\033[0;36m'
+BOLD='\033[1m'
+RESET='\033[0m'
 
 REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null)
 REPO_NAME=$(basename "$REPO_ROOT" 2>/dev/null || echo "UNKNOWN")
 
 cd "$REPO_ROOT" || exit 1
+
+echo "" >&2
+echo -e "${BOLD}${CYAN}═══════════════════════════════════════════════════════════${RESET}" >&2
+echo -e "${BOLD}${CYAN}    AIM DEPLOYED REPOSITORY: $REPO_NAME" >&2
+echo -e "${BOLD}${CYAN}═══════════════════════════════════════════════════════════${RESET}" >&2
 
 # Quick sync check
 git fetch origin --quiet 2>/dev/null || true
@@ -159,28 +172,41 @@ git fetch origin --quiet 2>/dev/null || true
 # Check for OCC branches
 OCC_BRANCHES=$(git branch -r | grep 'origin/claude/' 2>/dev/null | wc -l | xargs)
 
-# Simple status output
+# Show branch status
 if [ "$OCC_BRANCHES" -gt 0 ]; then
+    echo -e "${YELLOW}📋 $OCC_BRANCHES OCC branch(es) found - use 'wr' to process${RESET}" >&2
     echo "SessionStart:startup hook success: FOUND_BRANCHES"
     echo "Status: $OCC_BRANCHES OCC branch(es) found"
     echo "Action: Use 'wr' or '/works-ready' to process"
 else
+    echo -e "${GREEN}✓ No pending OCC branches${RESET}" >&2
     echo "SessionStart:startup hook success: NO_BRANCHES"
     echo "Status: No pending OCC branches"
     echo "Action: Standing by"
 fi
 
-# Start watcher if available and not running
+# Watcher management
 if [ -f "$REPO_ROOT/scripts/watch-all.sh" ]; then
     PID_FILE="/tmp/aim-watcher-${REPO_NAME}.pid"
+    LOG_FILE="/tmp/aim-watcher-${REPO_NAME}.log"
+
     if [ ! -f "$PID_FILE" ] || ! ps -p "$(cat "$PID_FILE" 2>/dev/null)" >/dev/null 2>&1; then
-        nohup "$REPO_ROOT/scripts/watch-all.sh" >/tmp/aim-watcher-${REPO_NAME}.log 2>&1 &
+        # Start watcher
+        nohup "$REPO_ROOT/scripts/watch-all.sh" >"$LOG_FILE" 2>&1 &
         echo $! > "$PID_FILE"
-        echo "Watcher: Started in background" >&2
+        echo -e "${GREEN}🚀 AIM Watcher STARTED (background)${RESET}" >&2
     else
-        echo "Watcher: Already running" >&2
+        echo -e "${GREEN}✓ AIM Watcher already running${RESET}" >&2
     fi
+
+    echo -e "${BLUE}📡 Monitor: ./scripts/watcher-status.sh${RESET}" >&2
+    echo -e "${BLUE}📋 Logs: tail -f $LOG_FILE${RESET}" >&2
+else
+    echo -e "${YELLOW}⚠️  No watcher scripts found${RESET}" >&2
 fi
+
+echo -e "${BOLD}${CYAN}═══════════════════════════════════════════════════════════${RESET}" >&2
+echo "" >&2
 EOF
         chmod +x "$project_path/.claude/hooks/session-start-display.sh"
         echo -e "${GREEN}✓ Created .claude/hooks/session-start-display.sh${NC}"
@@ -316,6 +342,44 @@ EOF
         "tcc-file-compliance.sh"
         "cleanup-watchers.sh"
     )
+
+    # Create watcher status script
+    if [[ ! -f "$project_path/scripts/watcher-status.sh" ]]; then
+        cat > "$project_path/scripts/watcher-status.sh" << 'EOF'
+#!/bin/bash
+# Show AIM watcher status for deployed repos
+
+REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null)
+REPO_NAME=$(basename "$REPO_ROOT" 2>/dev/null || echo "UNKNOWN")
+PID_FILE="/tmp/aim-watcher-${REPO_NAME}.pid"
+LOG_FILE="/tmp/aim-watcher-${REPO_NAME}.log"
+
+echo "AIM Watcher Status for $REPO_NAME:"
+echo "================================"
+
+if [ -f "$PID_FILE" ]; then
+    PID=$(cat "$PID_FILE")
+    if ps -p "$PID" > /dev/null 2>&1; then
+        echo "✅ Watcher is RUNNING (PID: $PID)"
+        echo "📋 Log: $LOG_FILE"
+        echo "🔗 View: tail -f $LOG_FILE"
+    else
+        echo "❌ Watcher process not found (stale PID file)"
+        rm -f "$PID_FILE"
+    fi
+else
+    echo "❌ No watcher PID file found"
+fi
+
+echo ""
+echo "Commands:"
+echo "  ./scripts/watch-all.sh          - Start watcher (foreground)"
+echo "  ./scripts/watcher-status.sh     - Show this status"
+echo "  ./scripts/cleanup-watchers.sh   - Stop all watchers"
+EOF
+        chmod +x "$project_path/scripts/watcher-status.sh"
+        echo -e "${GREEN}✓ Created scripts/watcher-status.sh${NC}"
+    fi
 
     for script in "${scripts_to_copy[@]}"; do
         if [[ -f "$AIM_DIR/scripts/$script" ]]; then
@@ -455,6 +519,7 @@ EOF
     echo "  • .claude/hooks/works-ready-hook.sh   - Auto-execution hook"
     echo "  • .claude/commands/works-ready.md     - TCC merge command"
     echo "  • scripts/watch-all.sh                - Branch and board watcher"
+    echo "  • scripts/watcher-status.sh           - Watcher status checker"
     echo "  • scripts/tcc-validate-branch.sh      - Branch validation"
     echo "  • scripts/tcc-file-compliance.sh      - File size compliance"
     echo "  • scripts/cleanup-watchers.sh         - Cleanup utilities"
