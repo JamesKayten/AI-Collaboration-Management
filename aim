@@ -78,18 +78,30 @@ init_project() {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "permissions": {
     "allow": [
-      "Bash(git:*)"
+      "Read", "Edit", "Write", "Glob", "Grep", "SlashCommand", "TodoWrite", "WebFetch", "WebSearch", "Task", "NotebookEdit", "BashOutput", "KillShell", "AskUserQuestion", "Skill", "ExitPlanMode", "Bash(git:*)", "Bash(wc:*)", "Bash(ls:*)", "Bash(rm:*)", "Bash(chmod:*)", "Bash(test:*)", "Bash(bash:*)", "Bash(./scripts/*)", "Bash(mkdir:*)", "Bash(cat:*)", "Bash(echo:*)", "Bash(ps:*)", "Bash(kill:*)", "Bash(pkill:*)", "Bash(sleep:*)", "Bash(find:*)", "Bash(grep:*)", "Bash(head:*)", "Bash(tail:*)", "Bash(sort:*)", "Bash(uniq:*)", "Bash(awk:*)", "Bash(sed:*)", "Bash(curl:*)", "Bash(wget:*)", "Bash(npm:*)", "Bash(yarn:*)", "Bash(pip:*)", "Bash(python:*)", "Bash(node:*)", "Bash(make:*)", "Bash(docker:*)", "Bash(xcode:*)", "Bash(open:*)", "Bash(pbcopy:*)", "Bash(pbpaste:*)", "Bash(defaults:*)", "Bash(osascript:*)", "Bash(afplay:*)", "Bash(./update-aicm.sh)", "Bash(./install.sh:*)", "Bash(source ~/.zshrc)", "Bash(./scripts/tcc-file-compliance.sh:*)", "Bash(./scripts/tcc-validate-branch.sh:*)", "Bash(./scripts/cleanup-watchers.sh:*)", "Bash(./scripts/aim-launcher.sh:*)", "Bash(xxd:*)", "Bash(aim-init:*)", "Bash(strace:*)", "Bash(timeout:*)", "SlashCommand(/works-ready)", "SlashCommand(/check-the-board)", "SlashCommand(/merge-to-main)", "SlashCommand(/verify)", "SlashCommand(/fix-violations)", "Read(//private/tmp/**)", "Bash(./scripts/:*)", "Bash(gh:*)", "Bash(./update-aicm.sh)", "Bash(./install.sh:*)", "Bash(source ~/.zshrc)", "Bash(./scripts/tcc-file-compliance.sh:*)", "Bash(./scripts/tcc-validate-branch.sh:*)", "Bash(bash:*)", "Bash(pkill:*)", "Bash(./scripts/cleanup-watchers.sh:*)", "Bash(./scripts/aim-launcher.sh:*)", "Bash(xxd:*)", "Bash(aim-init:*)", "Bash(chmod:*)", "Bash(git fetch:*)", "Bash(git checkout:*)", "Bash(test:*)", "Bash(git merge:*)", "Bash(git rev-parse:*)", "Bash(git push:*)", "Bash(git branch:*)", "Bash(git pull:*)", "Bash(git add:*)", "Bash(git commit:*)", "Bash(/tmp/branch-watcher-*.pid)", "Bash(/tmp/board-watcher-*.pid)", "Bash(git tag:*)", "Bash(recent-commits.txt)", "Bash(cat:*)", "Bash(git show:*)", "Bash(scripts/watch-branches.sh:*)", "Bash(scripts/watch-board.sh:*)", "Bash(/tmp/branch-watcher-*.state)", "Bash(kill:*)", "Bash(strace:*)", "Bash(timeout 3s cat:*)", "Bash(./scripts/watch-all.sh:*)", "Bash(./aim help:*)", "Bash(mv:*)"
     ]
   },
   "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/session-start.sh",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
     "UserPromptSubmit": [
       {
         "matcher": "^(wr|works ready)$",
         "hooks": [
           {
             "type": "command",
-            "command": "echo 'WORKS READY: Execute /works-ready command now'",
-            "timeout": 5
+            "command": ".claude/hooks/works-ready-hook.sh",
+            "timeout": 15
           }
         ]
       }
@@ -100,6 +112,120 @@ EOF
         echo -e "${GREEN}✓ Created .claude/settings.json${NC}"
     else
         echo -e "${BLUE}• .claude/settings.json already exists${NC}"
+    fi
+
+    # Create hooks directory and hook files
+    if [[ ! -d "$project_path/.claude/hooks" ]]; then
+        mkdir -p "$project_path/.claude/hooks"
+        echo -e "${GREEN}✓ Created .claude/hooks/ directory${NC}"
+    else
+        echo -e "${BLUE}• .claude/hooks/ already exists${NC}"
+    fi
+
+    # Create session-start.sh hook
+    if [[ ! -f "$project_path/.claude/hooks/session-start.sh" ]]; then
+        cat > "$project_path/.claude/hooks/session-start.sh" << 'EOF'
+#!/bin/bash
+# SessionStart hook - Displays startup context and launches monitoring
+
+REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null)
+REPO_NAME=$(basename "$REPO_ROOT" 2>/dev/null || echo "UNKNOWN")
+
+cd "$REPO_ROOT" || exit 1
+
+# Execute the session-start display script
+"$REPO_ROOT/.claude/hooks/session-start-display.sh"
+EOF
+        chmod +x "$project_path/.claude/hooks/session-start.sh"
+        echo -e "${GREEN}✓ Created .claude/hooks/session-start.sh${NC}"
+    else
+        echo -e "${BLUE}• .claude/hooks/session-start.sh already exists${NC}"
+    fi
+
+    # Create session-start-display.sh hook
+    if [[ ! -f "$project_path/.claude/hooks/session-start-display.sh" ]]; then
+        cat > "$project_path/.claude/hooks/session-start-display.sh" << 'EOF'
+#!/bin/bash
+# Session Start Display - Shows current status and pending work
+
+REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null)
+REPO_NAME=$(basename "$REPO_ROOT" 2>/dev/null || echo "UNKNOWN")
+PENDING_FILE="/tmp/branch-watcher-${REPO_NAME}.pending"
+
+cd "$REPO_ROOT" || exit 1
+
+# Sync with GitHub
+git fetch origin --quiet 2>/dev/null || true
+
+# Check for OCC branches
+OCC_BRANCHES=$(git branch -r | grep 'origin/claude/' | sed 's/.*origin\///' | xargs)
+
+echo "SessionStart:startup hook success: AUTO-PROCESS RESULT: NO_BRANCHES"
+echo "Status: No pending OCC branches to process"
+echo "Action: Standing by for user requests"
+
+if [ -n "$OCC_BRANCHES" ]; then
+    BRANCH_COUNT=$(echo "$OCC_BRANCHES" | wc -w | xargs)
+    echo "SessionStart:startup hook success: AUTO-PROCESS RESULT: FOUND_BRANCHES"
+    echo "Status: $BRANCH_COUNT OCC branch(es) found"
+    echo "Branches: $OCC_BRANCHES"
+    echo "Action: Standing by for validation commands"
+fi
+EOF
+        chmod +x "$project_path/.claude/hooks/session-start-display.sh"
+        echo -e "${GREEN}✓ Created .claude/hooks/session-start-display.sh${NC}"
+    else
+        echo -e "${BLUE}• .claude/hooks/session-start-display.sh already exists${NC}"
+    fi
+
+    # Create works-ready-hook.sh
+    if [[ ! -f "$project_path/.claude/hooks/works-ready-hook.sh" ]]; then
+        cat > "$project_path/.claude/hooks/works-ready-hook.sh" << 'EOF'
+#!/bin/bash
+# Works Ready Hook - AUTO-EXECUTES validation and merge
+
+REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null)
+REPO_NAME=$(basename "$REPO_ROOT")
+PENDING_FILE="/tmp/branch-watcher-${REPO_NAME}.pending"
+
+cd "$REPO_ROOT" 2>/dev/null || exit 0
+
+# Find OCC branch to validate
+BRANCH=""
+if [ -f "$PENDING_FILE" ] && [ -s "$PENDING_FILE" ]; then
+    BRANCH=$(head -1 "$PENDING_FILE" | awk '{print $1}')
+fi
+
+if [ -z "$BRANCH" ]; then
+    # Check for remote OCC branches
+    git fetch origin --quiet 2>/dev/null
+    CURRENT=$(git branch --show-current)
+    BRANCH=$(git branch -r | grep 'origin/claude/' | grep -v "origin/$CURRENT" | head -1 | sed 's/.*origin\///' | xargs)
+fi
+
+echo ""
+echo "═══════════════════════════════════════════════════════════════════════════════"
+echo "WORKS READY - AUTO-EXECUTE MODE"
+echo "═══════════════════════════════════════════════════════════════════════════════"
+echo ""
+
+if [ -z "$BRANCH" ]; then
+    echo "STATUS: No OCC branches found to merge."
+    echo ""
+    echo "INSTRUCTION: Report to user that there are no pending branches to validate."
+    echo "Do NOT ask questions. Just report the status."
+    echo "═══════════════════════════════════════════════════════════════════════════════"
+    exit 0
+fi
+
+echo "INSTRUCTION: Execute /works-ready IMMEDIATELY for branch: $BRANCH"
+echo "Do NOT ask questions. Just execute the slash command."
+echo "═══════════════════════════════════════════════════════════════════════════════"
+EOF
+        chmod +x "$project_path/.claude/hooks/works-ready-hook.sh"
+        echo -e "${GREEN}✓ Created .claude/hooks/works-ready-hook.sh${NC}"
+    else
+        echo -e "${BLUE}• .claude/hooks/works-ready-hook.sh already exists${NC}"
     fi
 
     # Create works-ready command
@@ -284,14 +410,17 @@ EOF
     echo -e "${GREEN}═══════════════════════════════════════════════════════════════${NC}"
     echo ""
     echo "Files created:"
-    echo "  • CLAUDE.md                       - AI role definitions"
-    echo "  • .claude/settings.json           - Claude Code settings + hooks (gitignored)"
-    echo "  • .claude/commands/works-ready.md - TCC merge command"
-    echo "  • docs/BOARD.md                   - Task tracking board"
+    echo "  • CLAUDE.md                           - AI role definitions"
+    echo "  • .claude/settings.json               - Claude Code settings + hooks (gitignored)"
+    echo "  • .claude/hooks/session-start.sh      - Session initialization hook"
+    echo "  • .claude/hooks/session-start-display.sh - Startup status display"
+    echo "  • .claude/hooks/works-ready-hook.sh   - Auto-execution hook"
+    echo "  • .claude/commands/works-ready.md     - TCC merge command"
+    echo "  • docs/BOARD.md                       - Task tracking board"
     echo ""
     echo "Next steps:"
     echo "  1. cd $project_path"
-    echo "  2. git add CLAUDE.md .claude/commands docs/BOARD.md .gitignore"
+    echo "  2. git add CLAUDE.md .claude/commands .claude/hooks docs/BOARD.md .gitignore"
     echo "  3. git commit -m 'Add AIM workflow'"
     echo "  4. Start Claude Code session"
     echo ""

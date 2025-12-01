@@ -38,7 +38,7 @@ docker run -it \
   aim
 ```
 
-### 3. Example: Working on SimpleCP
+### 3. Example: Working on Your Project
 
 ```bash
 docker run -it \
@@ -197,24 +197,24 @@ Reload: `source ~/.zshrc`
 
 ```bash
 # Start AIM on a project
-aim ~/Documents/SimpleCP
+aim ~/Documents/my-project
 
 # Or from within project directory
-cd ~/Documents/SimpleCP
+cd ~/Documents/my-project
 aim
 ```
 
 ## Typical Session
 
 ```bash
-$ aim ~/Documents/SimpleCP
+$ aim ~/Documents/my-project
 
 ╔═══════════════════════════════════════════════════════╗
 ║           AIM - AI-Collaboration-Management           ║
 ║              Docker Isolated Environment              ║
 ╚═══════════════════════════════════════════════════════╝
 
-Project: SimpleCP
+Project: my-project
 Git Branch: main
 AIM Home: /aim
 
