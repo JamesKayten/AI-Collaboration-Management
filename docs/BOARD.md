@@ -8,6 +8,16 @@
 
 *No pending TCC tasks*
 
+### ✅ COMPLETED: AIM framework deployment analysis
+**Completed by:** TCC on December 2, 2025
+**Branch:** `claude/audit-build-structure-017dA2Xak7M3fVpiRGCLpYv1`
+**Commit:** `ac92bd7`
+**What was done:**
+- ✅ Analyzed AIM framework deployment across all repos
+- ✅ Confirmed simple-cp-test watchers working correctly
+- ✅ Generated comprehensive deployment documentation
+- ✅ Identified watcher misconception (they run silently in background)
+
 ### ✅ COMPLETED: Framework enhancements build tagging
 **Completed by:** TCC on December 1, 2025
 **Commit:** `de979e5` (current HEAD)
