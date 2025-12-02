@@ -8,6 +8,19 @@
 
 *No pending TCC tasks*
 
+### ✅ COMPLETED: Framework enhancements build tagging
+**Completed by:** TCC on December 1, 2025
+**Commit:** `de979e5` (current HEAD)
+**Tag:** `v4.9-framework-enhancements`
+**What was done:**
+- ✅ Tagged build v4.9 with comprehensive framework enhancements
+- ✅ Includes 7 commits of improvements since v4.8-schema-fixes
+- ✅ Framework configuration fixes and auto-merge improvements
+- ✅ Enhanced watcher status output for better Claude reporting
+- ✅ Fixed embedded session-start-display.sh template for deployed repos
+- ✅ Board tracking and workflow improvements
+- ✅ Pushed annotated tag to GitHub repository
+
 ### ✅ COMPLETED: Framework configuration fixes (Latest)
 **Completed by:** TCC on December 1, 2025
 **Commit:** `d80e3a7` (auto-merge: claude/fix-framework-config-01L6kz7w4Fy8swoDwtCRisou)
