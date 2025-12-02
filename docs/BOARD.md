@@ -8,6 +8,16 @@
 
 *No pending TCC tasks*
 
+### ✅ COMPLETED: Abstraction plan for generic AI/terminal support
+**Completed by:** TCC on December 2, 2025
+**Branch:** `claude/audit-build-structure-017dA2Xak7M3fVpiRGCLpYv1`
+**Commit:** `1cab846` (merged to main)
+**What was done:**
+- ✅ Created comprehensive abstraction plan for generic AI assistant support
+- ✅ Documented current Claude Code/iTerm2 specific implementation
+- ✅ Outlined migration path to support multiple AI assistants
+- ✅ Defined configuration system for AI assistant and terminal selection
+
 ### ✅ COMPLETED: AIM framework deployment analysis + watcher fixes
 **Completed by:** TCC on December 2, 2025
 **Branch:** `claude/audit-build-structure-017dA2Xak7M3fVpiRGCLpYv1`
