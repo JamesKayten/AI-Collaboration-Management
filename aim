@@ -388,8 +388,10 @@ EOF
         "watch-all.sh"
         "tcc-validate-branch.sh"
         "tcc-file-compliance.sh"
+        "tcc-pre-merge-check.sh"
         "cleanup-watchers.sh"
         "aim-launcher.sh"
+        "watch-build.sh"
     )
 
     # Create watcher status script
