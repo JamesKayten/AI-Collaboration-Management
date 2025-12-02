@@ -216,6 +216,7 @@ if [ -f "$UNIFIED_PID_FILE" ]; then
         WATCHER_RUNNING=true
         WATCHER_PID="$STORED_PID"
         echo -e "📡 AIM watcher ${GREEN}running${RESET} (background PID: $WATCHER_PID)" >&2
+        echo "Watcher: RUNNING (PID: $WATCHER_PID)"
     fi
 fi
 
@@ -231,9 +232,11 @@ if [ "$WATCHER_RUNNING" = false ]; then
         sleep 0.5
         if ps -p "$NEW_PID" > /dev/null 2>&1; then
             echo -e "📡 AIM watcher ${GREEN}started${RESET} (background PID: $NEW_PID)" >&2
-            echo -e "   📋 Logs: tail -f $WATCHER_LOG" >&2
+            echo "Watcher: STARTED (PID: $NEW_PID)"
+            echo "Logs: $WATCHER_LOG"
         else
             echo -e "${RED}⚠️  Watcher failed to start - check $WATCHER_LOG${RESET}" >&2
+            echo "Watcher: FAILED TO START - check $WATCHER_LOG"
         fi
     elif [ -f "$UNIFIED_WATCHER" ]; then
         # Script exists but not executable
@@ -242,9 +245,11 @@ if [ "$WATCHER_RUNNING" = false ]; then
         NEW_PID=$!
         echo "$NEW_PID" > "$UNIFIED_PID_FILE"
         echo -e "📡 AIM watcher ${GREEN}started${RESET} (fixed permissions, PID: $NEW_PID)" >&2
+        echo "Watcher: STARTED (fixed permissions, PID: $NEW_PID)"
     else
         echo -e "${YELLOW}⚠️  No watcher script at: $UNIFIED_WATCHER${RESET}" >&2
-        echo -e "${YELLOW}   Run 'aim init --force' from AIM repo to install scripts${RESET}" >&2
+        echo "Watcher: NOT FOUND at $UNIFIED_WATCHER"
+        echo "Fix: Run 'aim init --force' from AIM repo"
     fi
 fi
 
