@@ -8,6 +8,16 @@
 
 *No pending TCC tasks*
 
+### ✅ COMPLETED: Docker removal - local iTerm approach only
+**Completed by:** TCC on December 2, 2025
+**Branch:** `claude/audit-build-structure-017dA2Xak7M3fVpiRGCLpYv1`
+**Commit:** `aef688f` (merged to main)
+**What was done:**
+- ✅ Removed Docker integration completely from AIM script
+- ✅ Restored local iTerm approach only
+- ✅ Auto-processed via works-ready hook
+- ✅ Branch deleted from remote repository
+
 ### ✅ COMPLETED: Build structure audit (Latest)
 **Completed by:** TCC on December 2, 2025
 **Branch:** `claude/audit-build-structure-017dA2Xak7M3fVpiRGCLpYv1`
