@@ -102,13 +102,6 @@ aim help
 aim init ~/Code/ACTIVE/my-project
 ```
 
-### Option B: Use Docker isolation
-
-```bash
-aim build
-aim ~/Code/ACTIVE/my-project
-```
-
 ---
 
 ## Creating a Test Copy
@@ -165,6 +158,5 @@ This keeps personal settings out of shared repos.
 
 ## Next Steps
 
-- Read `docs/AIM-DOCKER-SETUP.md` for Docker usage
 - Check `CLAUDE.md` for TCC/OCC workflow details
 - Run `aim help` for available commands
