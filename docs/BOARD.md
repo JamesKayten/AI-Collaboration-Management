@@ -8,6 +8,17 @@
 
 *No pending TCC tasks*
 
+### ✅ COMPLETED: Schema fixes and build tagging
+**Completed by:** TCC on December 1, 2025
+**Commit:** `c42daa1` (schema fixes)
+**Tag:** `v4.8-schema-fixes`
+**What was done:**
+- ✅ Fixed invalid .claude/settings.json schema fields (removed allowedCommands, allowedTools)
+- ✅ Added comprehensive Claude Code permissions to settings.json
+- ✅ Schema now conforms to official Claude Code specification
+- ✅ Tagged build as v4.8-schema-fixes with annotated tag
+- ✅ Pushed changes and tag to GitHub repository
+
 ### ✅ COMPLETED: Framework configuration fixes
 **Completed by:** TCC on December 1, 2025
 **Commit:** `02b6036` (framework config fixes)
