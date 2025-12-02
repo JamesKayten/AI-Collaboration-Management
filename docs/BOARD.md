@@ -8,6 +8,15 @@
 
 *No pending TCC tasks*
 
+### ✅ COMPLETED: macOS Launch Agent for auto-starting iTerm watchers
+**Completed by:** TCC on December 2, 2025
+**Branch:** `claude/audit-build-structure-017dA2Xak7M3fVpiRGCLpYv1`
+**Commit:** `b8a530a` (merged to main)
+**What was done:**
+- ✅ Added macOS Launch Agent for auto-starting iTerm watchers
+- ✅ Auto-processed via works-ready hook
+- ✅ Branch deleted from remote repository
+
 ### ✅ COMPLETED: Docker removal - local iTerm approach only
 **Completed by:** TCC on December 2, 2025
 **Branch:** `claude/audit-build-structure-017dA2Xak7M3fVpiRGCLpYv1`
