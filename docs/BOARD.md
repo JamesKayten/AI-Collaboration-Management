@@ -8,15 +8,18 @@
 
 *No pending TCC tasks*
 
-### ✅ COMPLETED: AIM framework deployment analysis
+### ✅ COMPLETED: AIM framework deployment analysis + watcher fixes
 **Completed by:** TCC on December 2, 2025
 **Branch:** `claude/audit-build-structure-017dA2Xak7M3fVpiRGCLpYv1`
 **Commit:** `ac92bd7`
+**Tag:** `v4.10-deployment-analysis`
 **What was done:**
 - ✅ Analyzed AIM framework deployment across all repos
-- ✅ Confirmed simple-cp-test watchers working correctly
+- ✅ Fixed simple-cp-test watcher deployment (missing aim-launcher.sh)
+- ✅ Updated session-start-display.sh hook with iTerm launcher logic
+- ✅ Resolved deployment inconsistency between AIM repo and simple-cp-test
 - ✅ Generated comprehensive deployment documentation
-- ✅ Identified watcher misconception (they run silently in background)
+- ✅ Confirmed watchers now properly open visible iTerm windows
 
 ### ✅ COMPLETED: Framework enhancements build tagging
 **Completed by:** TCC on December 1, 2025
