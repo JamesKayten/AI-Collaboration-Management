@@ -182,7 +182,7 @@ When fixing ANY pattern (paths, APIs, configs):
 
 ### Common Patterns to Check:
 - Hardcoded paths: `/home/user`, `/Users/`, `/Volumes/`
-- Project names: `SimpleCP`, `AI-Collaboration-Management`
+- Hardcoded project names in templates
 - Absolute paths that should be relative
 
 ### Standard Path Detection (use in ALL shell scripts):
