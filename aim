@@ -389,6 +389,7 @@ EOF
         "tcc-validate-branch.sh"
         "tcc-file-compliance.sh"
         "cleanup-watchers.sh"
+        "aim-launcher.sh"
     )
 
     # Create watcher status script
