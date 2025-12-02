@@ -8,6 +8,38 @@
 
 *No pending TCC tasks*
 
+### ✅ COMPLETED: Build structure audit (Latest)
+**Completed by:** TCC on December 2, 2025
+**Branch:** `claude/audit-build-structure-017dA2Xak7M3fVpiRGCLpYv1`
+**Commit:** `9d57c36` (merged to main)
+**What was done:**
+- ✅ Validated and merged build structure audit updates
+- ✅ Auto-processed via works-ready hook
+- ✅ Branch deleted from remote repository
+
+### ✅ COMPLETED: Abstraction plan for generic AI/terminal support
+**Completed by:** TCC on December 2, 2025
+**Branch:** `claude/audit-build-structure-017dA2Xak7M3fVpiRGCLpYv1`
+**Commit:** `1cab846` (merged to main)
+**What was done:**
+- ✅ Created comprehensive abstraction plan for generic AI assistant support
+- ✅ Documented current Claude Code/iTerm2 specific implementation
+- ✅ Outlined migration path to support multiple AI assistants
+- ✅ Defined configuration system for AI assistant and terminal selection
+
+### ✅ COMPLETED: AIM framework deployment analysis + watcher fixes
+**Completed by:** TCC on December 2, 2025
+**Branch:** `claude/audit-build-structure-017dA2Xak7M3fVpiRGCLpYv1`
+**Commit:** `ac92bd7`
+**Tag:** `v4.10-deployment-analysis`
+**What was done:**
+- ✅ Analyzed AIM framework deployment across all repos
+- ✅ Fixed simple-cp-test watcher deployment (missing aim-launcher.sh)
+- ✅ Updated session-start-display.sh hook with iTerm launcher logic
+- ✅ Resolved deployment inconsistency between AIM repo and simple-cp-test
+- ✅ Generated comprehensive deployment documentation
+- ✅ Confirmed watchers now properly open visible iTerm windows
+
 ### ✅ COMPLETED: Repository reverted to v4.9-framework-enhancements
 **Completed by:** TCC on December 2, 2025
 **Commit:** `de979e5` (reverted to tagged build)
@@ -18,6 +50,19 @@
 - ✅ Force pushed revert to origin/main with --force-with-lease
 - ✅ Confirmed local and remote main are synchronized at de979e5
 - ✅ Repository restored to v4.9-framework-enhancements tagged build state
+
+### ✅ COMPLETED: Framework enhancements build tagging
+**Completed by:** TCC on December 1, 2025
+**Commit:** `de979e5` (current HEAD)
+**Tag:** `v4.9-framework-enhancements`
+**What was done:**
+- ✅ Tagged build v4.9 with comprehensive framework enhancements
+- ✅ Includes 7 commits of improvements since v4.8-schema-fixes
+- ✅ Framework configuration fixes and auto-merge improvements
+- ✅ Enhanced watcher status output for better Claude reporting
+- ✅ Fixed embedded session-start-display.sh template for deployed repos
+- ✅ Board tracking and workflow improvements
+- ✅ Pushed annotated tag to GitHub repository
 
 ### ✅ COMPLETED: Framework configuration fixes (Latest)
 **Completed by:** TCC on December 1, 2025
