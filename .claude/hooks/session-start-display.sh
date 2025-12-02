@@ -103,10 +103,9 @@ if [ "$WATCHER_RUNNING" = false ]; then
     if [[ "$OSTYPE" == "darwin"* ]] && [ -d "/Applications/iTerm.app" ] && [ -f "$AIM_LAUNCHER" ]; then
         # macOS with iTerm - use launcher (opens visible iTerm tabs)
         touch "$WATCHER_LOCK"
-        "$AIM_LAUNCHER" "$REPO_ROOT" 2>&1 | head -20 >&2
+        "$AIM_LAUNCHER" "$REPO_ROOT" &
+        sleep 1  # Give iTerm time to open
         echo -e "📺 ${GREEN}Launched iTerm2 watchers${RESET}" >&2
-        echo -e "   🔨 Build Watcher - Basso (error) / Blow (success)" >&2
-        echo -e "   📡 AIM Watcher - ${CYAN}Hero${RESET} (branch) / ${YELLOW}Glass${RESET} (board)" >&2
     elif [ -f "$UNIFIED_WATCHER" ]; then
         # Fallback to background unified watcher
         touch "$WATCHER_LOCK"
