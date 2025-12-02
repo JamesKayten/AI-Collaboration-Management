@@ -206,23 +206,20 @@ else
     echo "Action: Standing by"
 fi
 
-# Watcher management - check if watcher is already running
+# Watcher management - detect by process name (more reliable than PID files)
 WATCHER_RUNNING=false
-WATCHER_PID=""
 
-if [ -f "$UNIFIED_PID_FILE" ]; then
-    STORED_PID=$(cat "$UNIFIED_PID_FILE" 2>/dev/null)
-    if [ -n "$STORED_PID" ] && ps -p "$STORED_PID" > /dev/null 2>&1; then
-        WATCHER_RUNNING=true
-        WATCHER_PID="$STORED_PID"
-        echo -e "📡 AIM watcher ${GREEN}running${RESET} (background PID: $WATCHER_PID)" >&2
-        echo "Watcher: RUNNING (PID: $WATCHER_PID)"
-    fi
+# Check if watch-all.sh is already running (by process name)
+if pgrep -f "watch-all.sh" > /dev/null 2>&1; then
+    WATCHER_RUNNING=true
+    echo -e "📡 AIM watcher ${GREEN}already running${RESET}" >&2
+    echo "Watcher: ALREADY RUNNING"
 fi
 
 # Start watcher if not running and script exists
 if [ "$WATCHER_RUNNING" = false ]; then
-    if [ -f "$UNIFIED_WATCHER" ] && [ -x "$UNIFIED_WATCHER" ]; then
+    if [ -f "$UNIFIED_WATCHER" ]; then
+        [ ! -x "$UNIFIED_WATCHER" ] && chmod +x "$UNIFIED_WATCHER"
         # Start watcher in background, fully detached
         nohup "$UNIFIED_WATCHER" > "$WATCHER_LOG" 2>&1 &
         NEW_PID=$!
@@ -238,14 +235,6 @@ if [ "$WATCHER_RUNNING" = false ]; then
             echo -e "${RED}⚠️  Watcher failed to start - check $WATCHER_LOG${RESET}" >&2
             echo "Watcher: FAILED TO START - check $WATCHER_LOG"
         fi
-    elif [ -f "$UNIFIED_WATCHER" ]; then
-        # Script exists but not executable
-        chmod +x "$UNIFIED_WATCHER"
-        nohup "$UNIFIED_WATCHER" > "$WATCHER_LOG" 2>&1 &
-        NEW_PID=$!
-        echo "$NEW_PID" > "$UNIFIED_PID_FILE"
-        echo -e "📡 AIM watcher ${GREEN}started${RESET} (fixed permissions, PID: $NEW_PID)" >&2
-        echo "Watcher: STARTED (fixed permissions, PID: $NEW_PID)"
     else
         echo -e "${YELLOW}⚠️  No watcher script at: $UNIFIED_WATCHER${RESET}" >&2
         echo "Watcher: NOT FOUND at $UNIFIED_WATCHER"
