@@ -8,6 +8,17 @@
 
 *No pending TCC tasks*
 
+### ✅ COMPLETED: Framework configuration fixes (Additional)
+**Completed by:** TCC on December 1, 2025
+**Commit:** `6430ecb` (auto-merge: claude/fix-framework-config-01L6kz7w4Fy8swoDwtCRisou)
+**What was done:**
+- ✅ Auto-processed additional framework configuration fixes
+- ✅ Enhanced embedded session-start-display.sh template for deployed repos
+- ✅ Improved AIM script with 60 lines of enhancements (43 additions, 17 deletions)
+- ✅ Validated file size compliance (all files within limits)
+- ✅ Successfully auto-merged to main via works-ready hook
+- ✅ Deleted merged branch from remote repository
+
 ### ✅ COMPLETED: Schema fixes and build tagging
 **Completed by:** TCC on December 1, 2025
 **Commit:** `c42daa1` (schema fixes)
