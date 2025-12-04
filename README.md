@@ -179,6 +179,45 @@ GET  /watchers        # Watcher status
 
 ---
 
+
+---
+
+## Utility Tools
+
+### `claude-release`
+
+AI-powered git release automation for OCC workflow.
+
+**Usage:**
+```bash
+cd your-project
+claude-release
+```
+
+**Features:**
+- Analyzes git changes via Claude
+- Generates descriptive commit messages
+- Auto-increments version tags (v1.2024.12.04)
+- Interactive approval/editing
+- Pushes to main with tags
+
+**Installation:**
+Automatically available when AICM is in PATH. Requires `ANTHROPIC_API_KEY`.
+
+**Example:**
+```bash
+# Make changes to code
+# Run release automation
+claude-release
+
+# Output:
+# 🤖 AICM: Analyzing git changes with Claude...
+# 📊 Changes detected: 3 files changed, 42 insertions(+)
+# 🤖 Claude suggests: Add file export with smart extensions
+# [y] Use / [e] Edit / [n] Cancel
+# ✅ AICM: Released v2.2024.12.04
+```
+
 ## What This Is NOT
 
 - ❌ No proof-of-completion systems
