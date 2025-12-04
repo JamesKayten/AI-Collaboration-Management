@@ -73,35 +73,42 @@ fi
 # Get branch after pull
 BRANCH=$(git branch --show-current 2>/dev/null || echo "UNKNOWN")
 
-# Watcher management - check both iTerm launcher and background watcher PID files
+# Watcher management - detect running watchers by process name (more reliable than PID files)
 AIM_LAUNCHER="$REPO_ROOT/scripts/aim-launcher.sh"
-AIM_LAUNCHER_PID="/tmp/aim-launcher-${REPO_NAME}.pid"
 WATCHER_LOG="/tmp/aim-watcher-${REPO_NAME}.log"
+WATCHER_LOCK="/tmp/aim-watcher-${REPO_NAME}.lock"
 
-# Check if ANY watcher is already running (iTerm or background)
+# Check if watch-all.sh is already running for this repo (by process name, not PID file)
 WATCHER_RUNNING=false
-WATCHER_PID=""
-if [ -f "$AIM_LAUNCHER_PID" ] && ps -p "$(cat "$AIM_LAUNCHER_PID" 2>/dev/null)" > /dev/null 2>&1; then
+if pgrep -f "watch-all.sh.*${REPO_NAME}" > /dev/null 2>&1 || pgrep -f "watch-all.sh" > /dev/null 2>&1; then
     WATCHER_RUNNING=true
-    WATCHER_PID=$(cat "$AIM_LAUNCHER_PID")
-    echo -e "📺 AIM watchers ${GREEN}running${RESET} in iTerm2 (PID: $WATCHER_PID)" >&2
-elif [ -f "$UNIFIED_PID_FILE" ] && ps -p "$(cat "$UNIFIED_PID_FILE" 2>/dev/null)" > /dev/null 2>&1; then
-    WATCHER_RUNNING=true
-    WATCHER_PID=$(cat "$UNIFIED_PID_FILE")
-    echo -e "📡 AIM watcher ${GREEN}running${RESET} (background PID: $WATCHER_PID)" >&2
+    echo -e "📡 AIM watcher ${GREEN}already running${RESET}" >&2
+elif [ -f "$WATCHER_LOCK" ]; then
+    # Lock file exists - check if it's stale (older than 5 minutes = watcher crashed)
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        LOCK_AGE=$(( $(date +%s) - $(stat -f %m "$WATCHER_LOCK") ))
+    else
+        LOCK_AGE=$(( $(date +%s) - $(stat -c %Y "$WATCHER_LOCK") ))
+    fi
+    if [ "$LOCK_AGE" -lt 300 ]; then
+        WATCHER_RUNNING=true
+        echo -e "📡 AIM watcher ${GREEN}running${RESET} (lock file present)" >&2
+    else
+        rm -f "$WATCHER_LOCK"
+    fi
 fi
 
 if [ "$WATCHER_RUNNING" = false ]; then
     # No watcher running - start one
     if [[ "$OSTYPE" == "darwin"* ]] && [ -d "/Applications/iTerm.app" ] && [ -f "$AIM_LAUNCHER" ]; then
-        # macOS with iTerm - use launcher
-        "$AIM_LAUNCHER" "$REPO_ROOT" > /dev/null 2>&1 &
-        echo $! > "$AIM_LAUNCHER_PID"
-        echo -e "📺 ${GREEN}Launching iTerm2 watchers...${RESET}" >&2
-        echo -e "   🔨 Build Watcher - Basso (error) / Blow (success)" >&2
-        echo -e "   📡 AIM Watcher - ${CYAN}Hero${RESET} (branch) / ${YELLOW}Glass${RESET} (board)" >&2
+        # macOS with iTerm - use launcher (opens visible iTerm tabs)
+        touch "$WATCHER_LOCK"
+        "$AIM_LAUNCHER" "$REPO_ROOT" &
+        sleep 1  # Give iTerm time to open
+        echo -e "📺 ${GREEN}Launched iTerm2 watchers${RESET}" >&2
     elif [ -f "$UNIFIED_WATCHER" ]; then
         # Fallback to background unified watcher
+        touch "$WATCHER_LOCK"
         nohup "$UNIFIED_WATCHER" > "$WATCHER_LOG" 2>&1 &
         echo $! > "$UNIFIED_PID_FILE"
         echo -e "📡 AIM watcher ${GREEN}started${RESET} (background PID: $!)" >&2
